@@ -1,7 +1,7 @@
 import Combine
 import Foundation
-import HsExtensions
-import HsToolKit
+import WWExtensions
+import WWToolKit
 
 protocol ISchedulerProvider {
     var id: String { get }

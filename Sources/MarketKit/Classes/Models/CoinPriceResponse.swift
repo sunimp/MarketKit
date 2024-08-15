@@ -1,5 +1,5 @@
 import Foundation
-import HsToolKit
+import WWToolKit
 import ObjectMapper
 
 struct CoinPriceResponse: ImmutableMappable {

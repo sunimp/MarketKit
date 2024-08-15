@@ -1,6 +1,6 @@
 import Alamofire
 import Foundation
-import HsToolKit
+import WWToolKit
 import ObjectMapper
 
 class HsProvider {

@@ -1,4 +1,4 @@
-import HsExtensions
+import WWExtensions
 
 class HsDataSyncer {
     private let coinSyncer: CoinSyncer

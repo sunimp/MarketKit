@@ -1,6 +1,6 @@
 import Combine
 import Foundation
-import HsExtensions
+import WWExtensions
 
 class CoinSyncer {
     private let keyCoinsLastSyncTimestamp = "coin-syncer-coins-last-sync-timestamp"

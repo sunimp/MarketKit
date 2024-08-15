@@ -1,6 +1,6 @@
 import Foundation
 import GRDB
-import HsToolKit
+import WWToolKit
 
 extension Kit {
     private static let dataDirectoryName = "market-kit"

@@ -1,5 +1,5 @@
 import Alamofire
-import HsToolKit
+import WWToolKit
 
 class CryptoCompareProvider {
     private let baseUrl = "https://min-api.cryptocompare.com"
