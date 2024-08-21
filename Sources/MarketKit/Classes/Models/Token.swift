@@ -1,3 +1,12 @@
+//
+//  Token.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 public struct Token {
     public let coin: Coin
     public let blockchain: Blockchain

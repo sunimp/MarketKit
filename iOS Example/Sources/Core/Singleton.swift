@@ -1,7 +1,16 @@
+//
+//  Singleton.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 import MarketKit
 
 class Singleton {
-    static let instance = Singleton()
+    static let shared = Singleton()
 
     let kit: Kit
 

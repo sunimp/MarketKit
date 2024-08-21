@@ -107,7 +107,7 @@ class MiscController: UIViewController {
     }
 
     @objc private func onTapCoinPrices() {
-        Singleton.instance.kit.coinPriceMapPublisher(coinUids: ["bitcoin", "ethereum"], currencyCode: "USD")
+        Singleton.shared.kit.coinPriceMapPublisher(coinUids: ["bitcoin", "ethereum"], currencyCode: "USD")
             .receive(on: DispatchQueue.main)
             .sink { coinPriceMap in
                 print("COIN PRICE MAP FETCHED: \(coinPriceMap)")
@@ -123,33 +123,33 @@ class MiscController: UIViewController {
         }
 
         Task {
-            let value = try await Singleton.instance.kit.coinHistoricalPriceValue(coinUid: "bitcoin", currencyCode: "USD", timestamp: date.timeIntervalSince1970)
+            let value = try await Singleton.shared.kit.coinHistoricalPriceValue(coinUid: "bitcoin", currencyCode: "USD", timestamp: date.timeIntervalSince1970)
             print("Historical Price: \(value)")
         }
     }
 
     @objc private func onTapGlobalMarketInfo() {
         Task {
-            let points = try await Singleton.instance.kit.globalMarketPoints(currencyCode: "USD", timePeriod: .day1)
+            let points = try await Singleton.shared.kit.globalMarketPoints(currencyCode: "USD", timePeriod: .day1)
             print("SUCCESS: count: \(points.count)\n\(points.map { "\($0)" }.joined(separator: "\n"))")
         }
     }
 
     @objc private func onTapDumpCoins() {
-        dump { try Singleton.instance.kit.coinsDump() }
+        dump { try Singleton.shared.kit.coinsDump() }
     }
 
     @objc private func onTapDumpBlockchains() {
-        dump { try Singleton.instance.kit.blockchainsDump() }
+        dump { try Singleton.shared.kit.blockchainsDump() }
     }
 
     @objc private func onTapDumpTokens() {
-        dump { try Singleton.instance.kit.tokenRecordsDump() }
+        dump { try Singleton.shared.kit.tokenRecordsDump() }
     }
 
     @objc private func onTapPlatforms() {
         Task {
-            let topPlatforms = try await Singleton.instance.kit.topPlatforms(currencyCode: "USD")
+            let topPlatforms = try await Singleton.shared.kit.topPlatforms(currencyCode: "USD")
             print("SUCCESS: count: \(topPlatforms.count)\n\(topPlatforms.map { "\($0)" }.joined(separator: "\n"))")
         }
     }

@@ -1,4 +1,12 @@
+//
+//  KitFactory.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import GRDB
 import WWToolKit
 
@@ -18,42 +26,42 @@ extension Kit {
         let syncerStateStorage = try SyncerStateStorage(dbPool: dbPool)
 
         let cryptoCompareProvider = CryptoCompareProvider(networkManager: networkManager, apiKey: cryptoCompareApiKey)
-        let hsProvider = HsProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
-        let hsNftProvider = HsNftProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
+        let provider = WWProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
+        let hsNftProvider = WWNftProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
 
-        let coinManager = CoinManager(storage: coinStorage, hsProvider: hsProvider)
+        let coinManager = CoinManager(storage: coinStorage, provider: provider)
         let nftManager = NftManager(coinManager: coinManager, provider: hsNftProvider)
-        let marketOverviewManager = MarketOverviewManager(nftManager: nftManager, hsProvider: hsProvider)
+        let marketOverviewManager = MarketOverviewManager(nftManager: nftManager, provider: provider)
 
-        let coinSyncer = CoinSyncer(storage: coinStorage, hsProvider: hsProvider, syncerStateStorage: syncerStateStorage)
-        let hsDataSyncer = HsDataSyncer(coinSyncer: coinSyncer, hsProvider: hsProvider)
+        let coinSyncer = CoinSyncer(storage: coinStorage, provider: provider, syncerStateStorage: syncerStateStorage)
+        let dataSyncer = WWDataSyncer(coinSyncer: coinSyncer, provider: provider)
 
         let coinPriceStorage = try CoinPriceStorage(dbPool: dbPool)
         let coinPriceManager = CoinPriceManager(storage: coinPriceStorage)
-        let coinPriceSchedulerFactory = CoinPriceSchedulerFactory(manager: coinPriceManager, provider: hsProvider, reachabilityManager: reachabilityManager, logger: logger)
+        let coinPriceSchedulerFactory = CoinPriceSchedulerFactory(manager: coinPriceManager, provider: provider, reachabilityManager: reachabilityManager, logger: logger)
         let coinPriceSyncManager = CoinPriceSyncManager(schedulerFactory: coinPriceSchedulerFactory)
         coinPriceManager.delegate = coinPriceSyncManager
 
         let coinHistoricalPriceStorage = try CoinHistoricalPriceStorage(dbPool: dbPool)
-        let coinHistoricalPriceManager = CoinHistoricalPriceManager(storage: coinHistoricalPriceStorage, hsProvider: hsProvider)
+        let coinHistoricalPriceManager = CoinHistoricalPriceManager(storage: coinHistoricalPriceStorage, provider: provider)
 
         let postManager = PostManager(provider: cryptoCompareProvider)
 
         let globalMarketInfoStorage = try GlobalMarketInfoStorage(dbPool: dbPool)
-        let globalMarketInfoManager = GlobalMarketInfoManager(provider: hsProvider, storage: globalMarketInfoStorage)
+        let globalMarketInfoManager = GlobalMarketInfoManager(provider: provider, storage: globalMarketInfoStorage)
 
         return Kit(
             coinManager: coinManager,
             nftManager: nftManager,
             marketOverviewManager: marketOverviewManager,
-            hsDataSyncer: hsDataSyncer,
+            dataSyncer: dataSyncer,
             coinSyncer: coinSyncer,
             coinPriceManager: coinPriceManager,
             coinPriceSyncManager: coinPriceSyncManager,
             coinHistoricalPriceManager: coinHistoricalPriceManager,
             postManager: postManager,
             globalMarketInfoManager: globalMarketInfoManager,
-            hsProvider: hsProvider
+            provider: provider
         )
     }
 

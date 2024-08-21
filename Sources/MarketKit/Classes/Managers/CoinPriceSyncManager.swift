@@ -1,5 +1,12 @@
-import Combine
+//
+//  CoinPriceKey.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+import Combine
 
 struct CoinPriceKey: Hashable {
     let coinUids: [String]
@@ -22,7 +29,7 @@ struct CoinPriceKey: Hashable {
 }
 
 class CoinPriceSyncManager {
-    private let queue = DispatchQueue(label: "io.horizontalsystems.market_kit.coin_price_sync_manager", qos: .userInitiated)
+    private let queue = DispatchQueue(label: "com.sunimp.market_kit.coin_price_sync_manager", qos: .userInitiated)
 
     private let schedulerFactory: CoinPriceSchedulerFactory
     private var schedulers = [String: Scheduler]()

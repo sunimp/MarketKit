@@ -1,4 +1,12 @@
+//
+//  MarketInfoOverviewResponse.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import ObjectMapper
 
 class MarketInfoOverviewResponse: ImmutableMappable {
@@ -42,7 +50,7 @@ class MarketInfoOverviewResponse: ImmutableMappable {
                 return nil
             }
 
-            var performanceChanges = [HsTimePeriod: Decimal]()
+            var performanceChanges = [WWTimePeriod: Decimal]()
             for (timePeriodStr, change) in changes {
                 if let changeStr = change,
                    let changeDecimal = Decimal(string: changeStr),
@@ -75,7 +83,7 @@ class MarketInfoOverviewResponse: ImmutableMappable {
         )
     }
 
-    static func timePeriod(_ timePeriod: String) -> HsTimePeriod? {
+    static func timePeriod(_ timePeriod: String) -> WWTimePeriod? {
         switch timePeriod {
         case "24h": return .day1
         case "7d": return .week1

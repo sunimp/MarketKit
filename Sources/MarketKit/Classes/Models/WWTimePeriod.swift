@@ -1,6 +1,13 @@
+//
+//  WWTimePeriod.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
-public enum HsTimePeriod: String, CaseIterable {
+public enum WWTimePeriod: String, CaseIterable {
     case hour24 = "24h"
     case day1 = "1d"
     case week1 = "1w"
@@ -37,12 +44,12 @@ public enum HsTimePeriod: String, CaseIterable {
     }
 }
 
-extension HsTimePeriod: Comparable {
-    public static func < (lhs: HsTimePeriod, rhs: HsTimePeriod) -> Bool {
+extension WWTimePeriod: Comparable {
+    public static func < (lhs: WWTimePeriod, rhs: WWTimePeriod) -> Bool {
         lhs.range < rhs.range
     }
 
-    public static func == (lhs: HsTimePeriod, rhs: HsTimePeriod) -> Bool {
+    public static func == (lhs: WWTimePeriod, rhs: WWTimePeriod) -> Bool {
         lhs.range == rhs.range
     }
 }

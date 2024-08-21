@@ -1,6 +1,13 @@
+//
+//  WWPointTimePeriod.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
-public enum HsPointTimePeriod: String, CaseIterable {
+public enum WWPointTimePeriod: String, CaseIterable {
     case minute30 = "30m"
     case hour1 = "1h"
     case hour4 = "4h"

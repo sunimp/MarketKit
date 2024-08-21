@@ -1,3 +1,12 @@
+//
+//  TokenQuery.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 public struct TokenQuery {
     public let blockchainType: BlockchainType
     public let tokenType: TokenType

@@ -44,7 +44,7 @@ class FullCoinsController: UIViewController {
         tableView.delegate = self
         tableView.keyboardDismissMode = .onDrag
 
-        Singleton.instance.kit.fullCoinsUpdatedPublisher
+        Singleton.shared.kit.fullCoinsUpdatedPublisher
             .receive(on: DispatchQueue.main)
             .sink { [weak self] in
                 self?.syncCoins()
@@ -56,7 +56,7 @@ class FullCoinsController: UIViewController {
 
     private func syncCoins() {
         do {
-            fullCoins = try Singleton.instance.kit.fullCoins(filter: currentFilter)
+            fullCoins = try Singleton.shared.kit.fullCoins(filter: currentFilter)
             tableView.reloadData()
         } catch {
             print("Failed to sync coins: \(error)")

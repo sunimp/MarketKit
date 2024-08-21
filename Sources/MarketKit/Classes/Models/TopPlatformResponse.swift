@@ -1,4 +1,12 @@
+//
+//  TopPlatformResponse.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import ObjectMapper
 
 struct TopPlatformResponse: ImmutableMappable {
@@ -19,12 +27,12 @@ struct TopPlatformResponse: ImmutableMappable {
     }
 
     var topPlatform: TopPlatform {
-        var ranks = [HsTimePeriod: Int]()
+        var ranks = [WWTimePeriod: Int]()
         ranks[.week1] = stats.rank1w
         ranks[.month1] = stats.rank1m
         ranks[.month3] = stats.rank3m
 
-        var changes = [HsTimePeriod: Decimal]()
+        var changes = [WWTimePeriod: Decimal]()
         changes[.week1] = stats.change1w
         changes[.month1] = stats.change1m
         changes[.month3] = stats.change3m

@@ -1,9 +1,17 @@
-import Alamofire
+//
+//  CoinPriceKey.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import Alamofire
 import WWToolKit
 import ObjectMapper
 
-class HsProvider {
+class WWProvider {
     private let baseUrl: String
     private let networkManager: NetworkManager
     private let apiKey: String?
@@ -37,7 +45,7 @@ class HsProvider {
     }
 }
 
-extension HsProvider {
+extension WWProvider {
     func marketGlobal(currencyCode: String) async throws -> MarketGlobal {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
@@ -65,7 +73,7 @@ extension HsProvider {
 
     // Status
 
-    func status() async throws -> HsStatus {
+    func status() async throws -> WWStatus {
         try await networkManager.fetch(url: "\(baseUrl)/v1/status/updates", method: .get, headers: headers)
     }
 
@@ -148,7 +156,7 @@ extension HsProvider {
         return try await networkManager.fetch(url: "\(baseUrl)/v1/coins/\(coinUid)", method: .get, parameters: parameters, headers: headers)
     }
 
-    func marketInfoTvl(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) async throws -> [ChartPoint] {
+    func marketInfoTvl(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [ChartPoint] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
@@ -158,7 +166,7 @@ extension HsProvider {
         return response.compactMap(\.marketInfoTvl)
     }
 
-    func marketInfoGlobalTvl(platform: String, currencyCode: String, timePeriod: HsTimePeriod) async throws -> [ChartPoint] {
+    func marketInfoGlobalTvl(platform: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [ChartPoint] {
         var parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
@@ -191,7 +199,7 @@ extension HsProvider {
         return try await networkManager.fetch(url: "\(baseUrl)/v1/categories", method: .get, parameters: parameters, headers: headers)
     }
 
-    func coinCategoryMarketCapChart(category: String, currencyCode: String?, timePeriod: HsTimePeriod) async throws -> [CategoryMarketPoint] {
+    func coinCategoryMarketCapChart(category: String, currencyCode: String?, timePeriod: WWTimePeriod) async throws -> [CategoryMarketPoint] {
         var parameters: Parameters = [:]
         if let currencyCode {
             parameters["currency"] = currencyCode.lowercased()
@@ -235,7 +243,7 @@ extension HsProvider {
         try await networkManager.fetch(url: "\(baseUrl)/v1/top-platforms/\(platform)/market_chart_start", method: .get, headers: headers)
     }
 
-    func coinPriceChart(coinUid: String, currencyCode: String, interval: HsPointTimePeriod, fromTimestamp: TimeInterval? = nil) async throws -> [ChartCoinPriceResponse] {
+    func coinPriceChart(coinUid: String, currencyCode: String, interval: WWPointTimePeriod, fromTimestamp: TimeInterval? = nil) async throws -> [ChartCoinPriceResponse] {
         var parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": interval.rawValue,
@@ -290,7 +298,7 @@ extension HsProvider {
         return response.username
     }
 
-    func globalMarketPoints(currencyCode: String, timePeriod: HsTimePeriod) async throws -> [GlobalMarketPoint] {
+    func globalMarketPoints(currencyCode: String, timePeriod: WWTimePeriod) async throws -> [GlobalMarketPoint] {
         let parameters: Parameters = [
             "interval": timePeriod.rawValue,
             "currency": currencyCode,
@@ -327,7 +335,7 @@ extension HsProvider {
         return try await networkManager.fetch(url: "\(baseUrl)/v1/top-platforms/\(blockchain)/list", method: .get, parameters: parameters, headers: headers)
     }
 
-    func topPlatformMarketCapChart(platform: String, currencyCode: String?, interval: HsPointTimePeriod, fromTimestamp: TimeInterval? = nil) async throws -> [CategoryMarketPoint] {
+    func topPlatformMarketCapChart(platform: String, currencyCode: String?, interval: WWPointTimePeriod, fromTimestamp: TimeInterval? = nil) async throws -> [CategoryMarketPoint] {
         var parameters: Parameters = [
             "interval": interval.rawValue,
         ]
@@ -361,7 +369,7 @@ extension HsProvider {
 
     // Pro Charts
 
-    private func proData<T: ImmutableMappable>(path: String, currencyCode: String, timePeriod: HsTimePeriod) async throws -> [T] {
+    private func proData<T: ImmutableMappable>(path: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [T] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
@@ -370,7 +378,7 @@ extension HsProvider {
         return try await networkManager.fetch(url: "\(baseUrl)/v1/analytics/\(path)", method: .get, parameters: parameters, headers: proHeaders)
     }
 
-    private func proData<T: ImmutableMappable>(path: String, timePeriod: HsTimePeriod) async throws -> [T] {
+    private func proData<T: ImmutableMappable>(path: String, timePeriod: WWTimePeriod) async throws -> [T] {
         let parameters: Parameters = [
             "interval": timePeriod.rawValue,
         ]
@@ -401,19 +409,19 @@ extension HsProvider {
         try await networkManager.fetch(url: "\(baseUrl)/v1/analytics/\(coinUid)/preview", method: .get, headers: headers)
     }
 
-    func dexVolumes(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) async throws -> [VolumePoint] {
+    func dexVolumes(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [VolumePoint] {
         try await proData(path: "\(coinUid)/dex-volumes", currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
-    func dexLiquidity(coinUid: String, currencyCode: String, timePeriod: HsTimePeriod) async throws -> [VolumePoint] {
+    func dexLiquidity(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [VolumePoint] {
         try await proData(path: "\(coinUid)/dex-liquidity", currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
-    func activeAddresses(coinUid: String, timePeriod: HsTimePeriod) async throws -> [CountPoint] {
+    func activeAddresses(coinUid: String, timePeriod: WWTimePeriod) async throws -> [CountPoint] {
         try await proData(path: "\(coinUid)/addresses", timePeriod: timePeriod)
     }
 
-    func transactions(coinUid: String, timePeriod: HsTimePeriod) async throws -> [CountVolumePoint] {
+    func transactions(coinUid: String, timePeriod: WWTimePeriod) async throws -> [CountVolumePoint] {
         try await proData(path: "\(coinUid)/transactions", timePeriod: timePeriod)
     }
 
@@ -526,7 +534,7 @@ extension HsProvider {
     }
 }
 
-extension HsProvider {
+extension WWProvider {
     struct SignalResponse: ImmutableMappable {
         let uid: String
         let signal: TechnicalAdvice.Advice?

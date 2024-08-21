@@ -1,12 +1,19 @@
+//
+//  CoinManager.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
 class CoinManager {
     private let storage: CoinStorage
-    private let hsProvider: HsProvider
+    private let provider: WWProvider
 
-    init(storage: CoinStorage, hsProvider: HsProvider) {
+    init(storage: CoinStorage, provider: WWProvider) {
         self.storage = storage
-        self.hsProvider = hsProvider
+        self.provider = provider
     }
 }
 

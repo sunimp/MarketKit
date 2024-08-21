@@ -36,7 +36,7 @@ class PostsController: UIViewController {
 
     private func syncPosts() {
         Task { [weak self] in
-            self?.posts = try await Singleton.instance.kit.posts()
+            self?.posts = try await Singleton.shared.kit.posts()
             self?.tableView.reloadData()
         }
     }

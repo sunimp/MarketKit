@@ -1,3 +1,12 @@
+//
+//  GlobalMarketInfoStorage.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 import GRDB
 
 class GlobalMarketInfoStorage {
@@ -28,7 +37,7 @@ class GlobalMarketInfoStorage {
 }
 
 extension GlobalMarketInfoStorage {
-    func globalMarketInfo(currencyCode: String, timePeriod: HsTimePeriod) throws -> GlobalMarketInfo? {
+    func globalMarketInfo(currencyCode: String, timePeriod: WWTimePeriod) throws -> GlobalMarketInfo? {
         try dbPool.read { db in
             try GlobalMarketInfo
                 .filter(GlobalMarketInfo.Columns.currencyCode == currencyCode && GlobalMarketInfo.Columns.timePeriod == timePeriod.rawValue)

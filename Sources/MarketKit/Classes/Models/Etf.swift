@@ -1,4 +1,12 @@
+//
+//  Etf.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import ObjectMapper
 
 public struct Etf: ImmutableMappable {
@@ -7,7 +15,7 @@ public struct Etf: ImmutableMappable {
     public let date: Date?
     public let totalAssets: Decimal?
     public let totalInflow: Decimal?
-    public let inflows: [HsTimePeriod: Decimal]
+    public let inflows: [WWTimePeriod: Decimal]
 
     public init(map: Map) throws {
         ticker = try map.value("ticker")
@@ -16,7 +24,7 @@ public struct Etf: ImmutableMappable {
         totalAssets = try? map.value("total_assets", using: Transform.stringToDecimalTransform)
         totalInflow = try? map.value("total_inflow", using: Transform.stringToDecimalTransform)
 
-        var inflows = [HsTimePeriod: Decimal]()
+        var inflows = [WWTimePeriod: Decimal]()
 
         inflows[.day1] = try? map.value("inflow_1d", using: Transform.stringToDecimalTransform)
         inflows[.week1] = try? map.value("inflow_1w", using: Transform.stringToDecimalTransform)

@@ -1,8 +1,15 @@
+//
+//  PerformanceRow.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
 public struct PerformanceRow {
     public let base: PerformanceBase
-    public let changes: [HsTimePeriod: Decimal]
+    public let changes: [WWTimePeriod: Decimal]
 }
 
 public enum PerformanceBase: String, CaseIterable {

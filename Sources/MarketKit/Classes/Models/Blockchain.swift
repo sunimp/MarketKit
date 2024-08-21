@@ -1,4 +1,14 @@
+//
+//  Blockchain.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 public struct Blockchain {
+    
     public let type: BlockchainType
     public let name: String
     public let explorerUrl: String?

@@ -1,6 +1,15 @@
+//
+//  WWStatus.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
+import Foundation
+
 import ObjectMapper
 
-struct HsStatus: ImmutableMappable {
+struct WWStatus: ImmutableMappable {
     let coins: Int
     let blockchains: Int
     let tokens: Int

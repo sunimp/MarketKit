@@ -1,8 +1,17 @@
-import Combine
+//
+//  CoinSyncer.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+import Combine
+
 import WWExtensions
 
 class CoinSyncer {
+    
     private let keyCoinsLastSyncTimestamp = "coin-syncer-coins-last-sync-timestamp"
     private let keyBlockchainsLastSyncTimestamp = "coin-syncer-blockchains-last-sync-timestamp"
     private let keyTokensLastSyncTimestamp = "coin-syncer-tokens-last-sync-timestamp"
@@ -11,15 +20,15 @@ class CoinSyncer {
     private let currentVersion = 2
 
     private let storage: CoinStorage
-    private let hsProvider: HsProvider
+    private let provider: WWProvider
     private let syncerStateStorage: SyncerStateStorage
     private var tasks = Set<AnyTask>()
 
     private let fullCoinsUpdatedSubject = PassthroughSubject<Void, Never>()
 
-    init(storage: CoinStorage, hsProvider: HsProvider, syncerStateStorage: SyncerStateStorage) {
+    init(storage: CoinStorage, provider: WWProvider, syncerStateStorage: SyncerStateStorage) {
         self.storage = storage
-        self.hsProvider = hsProvider
+        self.provider = provider
         self.syncerStateStorage = syncerStateStorage
     }
 
@@ -146,11 +155,11 @@ extension CoinSyncer {
             return
         }
 
-        Task { [weak self, hsProvider] in
+        Task { [weak self, provider] in
             do {
-                async let coins = try hsProvider.allCoins()
-                async let blockchainRecords = try hsProvider.allBlockchainRecords()
-                async let tokenRecords = try hsProvider.allTokenRecords()
+                async let coins = try provider.allCoins()
+                async let blockchainRecords = try provider.allBlockchainRecords()
+                async let tokenRecords = try provider.allTokenRecords()
 
                 try await self?.handleFetched(coins: coins, blockchainRecords: blockchainRecords, tokenRecords: tokenRecords)
                 self?.saveLastSyncTimestamps(coins: coinsTimestamp, blockchains: blockchainsTimestamp, tokens: tokensTimestamp)

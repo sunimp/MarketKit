@@ -10,7 +10,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
         window?.rootViewController = MainController()
 
-        _ = Singleton.instance
+        _ = Singleton.shared
 
         return true
     }
@@ -20,7 +20,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationDidEnterBackground(_: UIApplication) {}
 
     func applicationWillEnterForeground(_: UIApplication) {
-        Singleton.instance.kit.refreshCoinPrices(currencyCode: "USD")
+        Singleton.shared.kit.refreshCoinPrices(currencyCode: "USD")
     }
 
     func applicationDidBecomeActive(_: UIApplication) {}

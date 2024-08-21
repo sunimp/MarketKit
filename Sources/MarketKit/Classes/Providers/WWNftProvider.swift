@@ -1,9 +1,17 @@
-import Alamofire
+//
+//  WWNftProvider.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
+import Alamofire
 import WWToolKit
 import ObjectMapper
 
-class HsNftProvider {
+class WWNftProvider {
     private let baseUrl: String
     private let networkManager: NetworkManager
     private let headers: HTTPHeaders?
@@ -17,7 +25,7 @@ class HsNftProvider {
     }
 }
 
-extension HsNftProvider {
+extension WWNftProvider {
     func topCollections() async throws -> [NftTopCollectionResponse] {
         let parameters: Parameters = [
             "simplified": true,

@@ -31,7 +31,7 @@ class CoinCategoryController: UIViewController {
         tableView.keyboardDismissMode = .onDrag
 
         Task { [weak self] in
-            self?.coinCategories = try await Singleton.instance.kit.coinCategories(currencyCode: "usd")
+            self?.coinCategories = try await Singleton.shared.kit.coinCategories(currencyCode: "usd")
             self?.tableView.reloadData()
         }
     }

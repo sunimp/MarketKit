@@ -1,3 +1,10 @@
+//
+//  Extensions.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
 extension Decimal {
@@ -12,20 +19,21 @@ extension Decimal {
     }
 }
 
-public extension TimeInterval {
-    static func minutes(_ count: Self) -> Self {
+extension TimeInterval {
+    
+    public static func minutes(_ count: Self) -> Self {
         count * 60
     }
 
-    static func hours(_ count: Self) -> Self {
+    public static func hours(_ count: Self) -> Self {
         count * minutes(60)
     }
 
-    static func days(_ count: Self) -> Self {
+    public static func days(_ count: Self) -> Self {
         count * hours(24)
     }
 
-    static func midnightUTC() -> Self {
+    public static func midnightUTC() -> Self {
         let now = Date()
         let calendar = Calendar(identifier: .gregorian)
 

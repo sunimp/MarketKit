@@ -1,4 +1,12 @@
+//
+//  TechnicalAdvice.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import ObjectMapper
 
 public struct TechnicalAdvice: ImmutableMappable {
@@ -28,8 +36,8 @@ public struct TechnicalAdvice: ImmutableMappable {
     }
 }
 
-public extension TechnicalAdvice {
-    enum Advice: String, CaseIterable {
+extension TechnicalAdvice {
+    public enum Advice: String, CaseIterable {
         case oversold
         case strongBuy = "buy_signal"
         case buy

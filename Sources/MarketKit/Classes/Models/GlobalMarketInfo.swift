@@ -1,10 +1,18 @@
+//
+//  GlobalMarketInfo.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
+
 import GRDB
 import ObjectMapper
 
 public class GlobalMarketInfo: Record {
     let currencyCode: String
-    let timePeriod: HsTimePeriod
+    let timePeriod: WWTimePeriod
     public let points: [GlobalMarketPoint]
     let timestamp: TimeInterval
 
@@ -16,7 +24,7 @@ public class GlobalMarketInfo: Record {
         "globalMarketInfo"
     }
 
-    init(currencyCode: String, timePeriod: HsTimePeriod, points: [GlobalMarketPoint]) {
+    init(currencyCode: String, timePeriod: WWTimePeriod, points: [GlobalMarketPoint]) {
         self.currencyCode = currencyCode
         self.timePeriod = timePeriod
         self.points = points
@@ -27,7 +35,7 @@ public class GlobalMarketInfo: Record {
 
     required init(row: Row) throws {
         currencyCode = row[Columns.currencyCode]
-        timePeriod = HsTimePeriod(rawValue: row[Columns.timePeriod]) ?? .day1
+        timePeriod = WWTimePeriod(rawValue: row[Columns.timePeriod]) ?? .day1
         points = [GlobalMarketPoint](JSONString: row[Columns.points]) ?? []
         timestamp = row[Columns.timestamp]
 

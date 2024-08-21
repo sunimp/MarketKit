@@ -1,18 +1,25 @@
+//
+//  MarketOverviewManager.swift
+//  MarketKit
+//
+//  Created by Sun on 2024/8/21.
+//
+
 import Foundation
 
 class MarketOverviewManager {
     private let nftManager: NftManager
-    private let hsProvider: HsProvider
+    private let provider: WWProvider
 
-    init(nftManager: NftManager, hsProvider: HsProvider) {
+    init(nftManager: NftManager, provider: WWProvider) {
         self.nftManager = nftManager
-        self.hsProvider = hsProvider
+        self.provider = provider
     }
 }
 
 extension MarketOverviewManager {
     func marketOverview(currencyCode: String) async throws -> MarketOverview {
-        let response = try await hsProvider.marketOverview(currencyCode: currencyCode)
+        let response = try await provider.marketOverview(currencyCode: currencyCode)
 
         return MarketOverview(
             globalMarketPoints: response.globalMarketPoints,
