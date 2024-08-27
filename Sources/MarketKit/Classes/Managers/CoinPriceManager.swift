@@ -16,7 +16,7 @@ protocol ICoinPriceManagerDelegate: AnyObject {
 // MARK: - CoinPriceManager
 
 class CoinPriceManager {
-    weak var delegate: ICoinPriceManagerDelegate? = nil
+    weak var delegate: ICoinPriceManagerDelegate?
 
     private let storage: CoinPriceStorage
 

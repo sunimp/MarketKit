@@ -291,7 +291,7 @@ extension Kit {
     {
         let interval: WWPointTimePeriod
 
-        var fromTimestamp: TimeInterval? = nil
+        var fromTimestamp: TimeInterval?
         var visibleTimestamp: TimeInterval = 0 // start timestamp for visible part of chart. Will change only for .byCustomPoints
 
         switch periodType {
@@ -359,11 +359,11 @@ extension Kit {
                 target: response.target,
                 targetCoinUid: response.targetCoinUid,
                 marketName: response.marketName,
-                marketImageURL: response.marketImageURL,
+                marketImageUrl: response.marketImageUrl,
                 rank: response.rank,
                 volume: response.volume,
                 price: response.price,
-                tradeURL: response.tradeURL,
+                tradeUrl: response.tradeUrl,
                 baseCoin: response.baseCoinUid.flatMap { coinsDictionary[$0]?.first },
                 targetCoin: response.targetCoinUid.flatMap { coinsDictionary[$0]?.first }
             )
@@ -568,8 +568,8 @@ extension Kit {
 
     // Stats
 
-    public func send(stats: Any, appVersion: String, appID: String?) async throws {
-        try await provider.send(stats: stats, appVersion: appVersion, appID: appID)
+    public func send(stats: Any, appVersion: String, appId: String?) async throws {
+        try await provider.send(stats: stats, appVersion: appVersion, appId: appId)
     }
 }
 

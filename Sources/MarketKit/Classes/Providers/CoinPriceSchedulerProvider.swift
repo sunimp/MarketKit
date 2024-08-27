@@ -21,7 +21,7 @@ class CoinPriceSchedulerProvider {
     private let manager: CoinPriceManager
     private let provider: WWProvider
 
-    weak var dataSource: ICoinPriceCoinUidDataSource? = nil
+    weak var dataSource: ICoinPriceCoinUidDataSource?
 
     init(manager: CoinPriceManager, provider: WWProvider, currencyCode: String) {
         self.manager = manager

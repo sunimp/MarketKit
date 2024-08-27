@@ -216,14 +216,14 @@ public struct Analytics: ImmutableMappable {
         public let name: String
         public let date: String
         public let techIssues: Int?
-        public let auditURL: String?
+        public let auditUrl: String?
         public let partnerName: String?
 
         public init(map: Map) throws {
             name = try map.value("name")
             date = try map.value("date")
             techIssues = try? map.value("tech_issues")
-            auditURL = try? map.value("audit_url")
+            auditUrl = try? map.value("audit_url")
             partnerName = try? map.value("partner_name")
         }
     }

@@ -16,11 +16,11 @@ public struct MarketPair {
     public let target: String
     public let targetCoinUid: String?
     public let marketName: String
-    public let marketImageURL: String?
+    public let marketImageUrl: String?
     public let rank: Int
     public let volume: Decimal?
     public let price: Decimal?
-    public let tradeURL: String?
+    public let tradeUrl: String?
     public let baseCoin: Coin?
     public let targetCoin: Coin?
 

@@ -13,12 +13,12 @@ public struct Blockchain {
     
     public let type: BlockchainType
     public let name: String
-    public let explorerURL: String?
+    public let explorerUrl: String?
 
-    public init(type: BlockchainType, name: String, explorerURL: String?) {
+    public init(type: BlockchainType, name: String, explorerUrl: String?) {
         self.type = type
         self.name = name
-        self.explorerURL = explorerURL
+        self.explorerUrl = explorerUrl
     }
 
     public var uid: String {
@@ -46,6 +46,6 @@ extension Blockchain: Equatable {
 
 extension Blockchain: CustomStringConvertible {
     public var description: String {
-        "Blockchain [type: \(type); name: \(name); explorerUrl: \(explorerURL ?? "nil")]"
+        "Blockchain [type: \(type); name: \(name); explorerUrl: \(explorerUrl ?? "nil")]"
     }
 }

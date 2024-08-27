@@ -11,12 +11,12 @@ import ObjectMapper
 
 public struct TokenHolders: ImmutableMappable {
     public let count: Decimal
-    public let holdersURL: String?
+    public let holdersUrl: String?
     public let topHolders: [Holder]
 
     public init(map: Map) throws {
         count = try map.value("count", using: Transform.stringToDecimalTransform)
-        holdersURL = try? map.value("holders_url")
+        holdersUrl = try? map.value("holders_url")
         topHolders = try map.value("top_holders")
     }
 

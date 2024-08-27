@@ -10,13 +10,14 @@ import Foundation
 import MarketKit
 
 class Singleton {
+    
     static let shared = Singleton()
 
     let kit: Kit
 
     init() {
         kit = try! Kit.instance(
-            hsApiBaseURL: "https://api-dev.blocksdecoded.com",
+            hsApiBaseUrl: "https://api-dev.blocksdecoded.com",
             minLogLevel: .error
         )
 

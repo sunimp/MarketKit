@@ -19,7 +19,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
     public let name: String
     public let code: String
     public let marketCapRank: Int?
-    public let coinGeckoID: String?
+    public let coinGeckoId: String?
     public let image: String?
 
     override open class var databaseTableName: String {
@@ -27,7 +27,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
     }
 
     enum Columns: String, ColumnExpression {
-        case uid, name, code, marketCapRank, coinGeckoID, image
+        case uid, name, code, marketCapRank, coinGeckoId, image
     }
 
     public init(
@@ -35,14 +35,14 @@ public class Coin: Record, Decodable, ImmutableMappable {
         name: String,
         code: String,
         marketCapRank: Int? = nil,
-        coinGeckoID: String? = nil,
+        coinGeckoId: String? = nil,
         image: String? = nil
     ) {
         self.uid = uid
         self.name = name
         self.code = code
         self.marketCapRank = marketCapRank
-        self.coinGeckoID = coinGeckoID
+        self.coinGeckoId = coinGeckoId
         self.image = image
 
         super.init()
@@ -54,7 +54,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
         let code: String = try map.value("code")
         self.code = code.uppercased()
         marketCapRank = try? map.value("market_cap_rank")
-        coinGeckoID = try? map.value("coingecko_id")
+        coinGeckoId = try? map.value("coingecko_id")
         image = try? map.value("image")
 
         super.init()
@@ -65,7 +65,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
         name >>> map["name"]
         code >>> map["code"]
         marketCapRank >>> map["market_cap_rank"]
-        coinGeckoID >>> map["coingecko_id"]
+        coinGeckoId >>> map["coingecko_id"]
         image >>> map["image"]
     }
 
@@ -74,7 +74,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
         name = row[Columns.name]
         code = row[Columns.code]
         marketCapRank = row[Columns.marketCapRank]
-        coinGeckoID = row[Columns.coinGeckoID]
+        coinGeckoId = row[Columns.coinGeckoId]
         image = row[Columns.image]
 
         try super.init(row: row)
@@ -85,7 +85,7 @@ public class Coin: Record, Decodable, ImmutableMappable {
         container[Columns.name] = name
         container[Columns.code] = code
         container[Columns.marketCapRank] = marketCapRank
-        container[Columns.coinGeckoID] = coinGeckoID
+        container[Columns.coinGeckoId] = coinGeckoId
         container[Columns.image] = image
     }
 }
@@ -110,6 +110,6 @@ extension Coin: Equatable {
 
 extension Coin: CustomStringConvertible {
     public var description: String {
-        "Coin [uid: \(uid); name: \(name); code: \(code); marketCapRank: \(marketCapRank.map { "\($0)" } ?? "nil"); coinGeckoId: \(coinGeckoID.map { "\($0)" } ?? "nil")]"
+        "Coin [uid: \(uid); name: \(name); code: \(code); marketCapRank: \(marketCapRank.map { "\($0)" } ?? "nil"); coinGeckoId: \(coinGeckoId.map { "\($0)" } ?? "nil")]"
     }
 }

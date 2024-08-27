@@ -30,11 +30,11 @@ class Scheduler {
 
     private let provider: ISchedulerProvider
     private let reachabilityManager: ReachabilityManager
-    private var logger: Logger? = nil
+    private var logger: Logger?
 
     private var cancellables = Set<AnyCancellable>()
     private var tasks = Set<AnyTask>()
-    private var scheduledTask: Task<Void, Error>? = nil
+    private var scheduledTask: Task<Void, Error>?
 
     private var syncInProgress = false
     private var expirationNotified = false

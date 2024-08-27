@@ -16,7 +16,7 @@ extension Kit {
     private static let databaseFileName = "market-kit"
 
     public static func instance(
-        hsApiBaseURL: String,
+        hsApiBaseUrl: String,
         cryptoCompareApiKey: String? = nil,
         hsProviderApiKey: String? = nil,
         minLogLevel: Logger.Level = .error
@@ -25,15 +25,15 @@ extension Kit {
         let reachabilityManager = ReachabilityManager()
         let networkManager = NetworkManager(logger: logger)
 
-        let databaseURL = try dataDirectoryURL().appendingPathComponent("\(databaseFileName).sqlite")
-        let dbPool = try DatabasePool(path: databaseURL.path)
+        let databaseUrl = try dataDirectoryUrl().appendingPathComponent("\(databaseFileName).sqlite")
+        let dbPool = try DatabasePool(path: databaseUrl.path)
         let coinStorage = try CoinStorage(dbPool: dbPool)
 
         let syncerStateStorage = try SyncerStateStorage(dbPool: dbPool)
 
         let cryptoCompareProvider = CryptoCompareProvider(networkManager: networkManager, apiKey: cryptoCompareApiKey)
-        let provider = WWProvider(baseURL: hsApiBaseURL, networkManager: networkManager, apiKey: hsProviderApiKey)
-        let hsNftProvider = WWNftProvider(baseURL: hsApiBaseURL, networkManager: networkManager, apiKey: hsProviderApiKey)
+        let provider = WWProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
+        let hsNftProvider = WWNftProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
 
         let coinManager = CoinManager(storage: coinStorage, provider: provider)
         let nftManager = NftManager(coinManager: coinManager, provider: hsNftProvider)
@@ -76,7 +76,7 @@ extension Kit {
         )
     }
 
-    private static func dataDirectoryURL() throws -> URL {
+    private static func dataDirectoryUrl() throws -> URL {
         let fileManager = FileManager.default
 
         let url = try fileManager

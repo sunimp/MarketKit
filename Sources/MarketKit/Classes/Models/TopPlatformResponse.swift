@@ -40,7 +40,7 @@ struct TopPlatformResponse: ImmutableMappable {
         changes[.month3] = stats.change3m
 
         return TopPlatform(
-            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerURL: nil),
+            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerUrl: nil),
             rank: rank,
             protocolsCount: protocolsCount,
             marketCap: marketCap,

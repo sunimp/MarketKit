@@ -62,7 +62,7 @@ class NftManager {
             blockchainType: blockchainType,
             providerUid: response.providerUid,
             name: response.name,
-            thumbnailImageURL: response.thumbnailImageURL,
+            thumbnailImageUrl: response.thumbnailImageUrl,
             floorPrice: nftPrice(token: baseToken, value: response.floorPrice),
             volumes: volumes.compactMapValues { $0 },
             changes: changes.compactMapValues { $0 }

@@ -14,7 +14,7 @@ import GRDB
 public class ChartPoint {
     public let timestamp: TimeInterval
     public let value: Decimal
-    public var volume: Decimal? = nil
+    public var volume: Decimal?
 
     public init(timestamp: TimeInterval, value: Decimal, volume: Decimal? = nil) {
         self.timestamp = timestamp

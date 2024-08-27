@@ -4,7 +4,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.1.1"))
+    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.1.2"))
 ]
 ```
 

@@ -15,20 +15,20 @@ import ObjectMapper
 public class Exchange: Record, ImmutableMappable {
     public let id: String
     public let name: String
-    public let imageURL: String
+    public let imageUrl: String
 
     override open class var databaseTableName: String {
         "exchanges"
     }
 
     enum Columns: String, ColumnExpression {
-        case id, name, imageURL
+        case id, name, imageUrl
     }
 
     public required init(map: Map) throws {
         id = try map.value("id")
         name = try map.value("name")
-        imageURL = try map.value("image")
+        imageUrl = try map.value("image")
 
         super.init()
     }
@@ -36,7 +36,7 @@ public class Exchange: Record, ImmutableMappable {
     required init(row: Row) throws {
         id = row[Columns.id]
         name = row[Columns.name]
-        imageURL = row[Columns.imageURL]
+        imageUrl = row[Columns.imageUrl]
 
         try super.init(row: row)
     }
@@ -44,7 +44,7 @@ public class Exchange: Record, ImmutableMappable {
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.id] = id
         container[Columns.name] = name
-        container[Columns.imageURL] = imageURL
+        container[Columns.imageUrl] = imageUrl
     }
 }
 
@@ -52,6 +52,6 @@ public class Exchange: Record, ImmutableMappable {
 
 extension Exchange: CustomStringConvertible {
     public var description: String {
-        "Exchange [id: \(id); name: \(name); imageUrl: \(imageURL)]"
+        "Exchange [id: \(id); name: \(name); imageUrl: \(imageUrl)]"
     }
 }

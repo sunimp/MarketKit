@@ -15,11 +15,11 @@ public struct MarketPairResponse: ImmutableMappable {
     public let target: String
     public let targetCoinUid: String?
     public let marketName: String
-    public let marketImageURL: String?
+    public let marketImageUrl: String?
     public let rank: Int
     public let volume: Decimal?
     public let price: Decimal?
-    public let tradeURL: String?
+    public let tradeUrl: String?
 
     public init(map: Map) throws {
         base = try map.value("base")
@@ -27,11 +27,11 @@ public struct MarketPairResponse: ImmutableMappable {
         target = try map.value("target")
         targetCoinUid = try? map.value("target_uid")
         marketName = try map.value("market_name")
-        marketImageURL = try? map.value("market_logo")
+        marketImageUrl = try? map.value("market_logo")
         rank = try map.value("rank")
         volume = try? map.value("volume", using: Transform.stringToDecimalTransform)
         price = try? map.value("price", using: Transform.stringToDecimalTransform)
-        tradeURL = try? map.value("trade_url")
+        tradeUrl = try? map.value("trade_url")
     }
 
     public var uid: String {

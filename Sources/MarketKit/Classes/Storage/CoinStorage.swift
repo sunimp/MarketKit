@@ -36,7 +36,7 @@ class CoinStorage {
                 t.column(Coin.Columns.name.name, .text).notNull()
                 t.column(Coin.Columns.code.name, .text).notNull()
                 t.column(Coin.Columns.marketCapRank.name, .integer)
-                t.column(Coin.Columns.coinGeckoID.name, .text)
+                t.column(Coin.Columns.coinGeckoId.name, .text)
             }
 
             try db.create(table: BlockchainRecord.databaseTableName) { t in
@@ -78,7 +78,7 @@ class CoinStorage {
 
         migrator.registerMigration("Rename 'eip3091url' column to 'explorerUrl' in Blockchains") { db in
             try db.alter(table: BlockchainRecord.databaseTableName) { t in
-                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerURL.name)
+                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerUrl.name)
             }
         }
 
