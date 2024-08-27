@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - CoinCategory
+
 public class CoinCategory: ImmutableMappable {
     public let uid: String
     public let name: String
@@ -34,14 +36,15 @@ extension CoinCategory {
     
     public func diff(timePeriod: WWTimePeriod) -> Decimal? {
         switch timePeriod {
-        case .day1: return diff24H
-        case .week1: return diff1W
-        case .month1: return diff1M
-
-        default: return diff24H
+        case .day1: diff24H
+        case .week1: diff1W
+        case .month1: diff1M
+        default: diff24H
         }
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension CoinCategory: CustomStringConvertible {
     public var description: String {

@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - SyncerStateStorage
+
 class SyncerStateStorage {
     private let dbPool: DatabasePool
 

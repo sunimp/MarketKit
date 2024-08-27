@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - TopPlatformResponse
+
 struct TopPlatformResponse: ImmutableMappable {
     let uid: String
     let name: String
@@ -38,7 +40,7 @@ struct TopPlatformResponse: ImmutableMappable {
         changes[.month3] = stats.change3m
 
         return TopPlatform(
-            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerUrl: nil),
+            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerURL: nil),
             rank: rank,
             protocolsCount: protocolsCount,
             marketCap: marketCap,
@@ -47,6 +49,8 @@ struct TopPlatformResponse: ImmutableMappable {
         )
     }
 }
+
+// MARK: TopPlatformResponse.StatsResponse
 
 extension TopPlatformResponse {
     struct StatsResponse: ImmutableMappable {

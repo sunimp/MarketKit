@@ -21,13 +21,15 @@ public enum WWPeriodType: Hashable {
         }
         let chunks = rawValue.split(separator: "_")
         if chunks.count == 2 {
-            if chunks[0] == Self.keyAll,
-               let timestamp = Int(chunks[1])
+            if
+                chunks[0] == Self.keyAll,
+                let timestamp = Int(chunks[1])
             {
                 self = .byStartTime(TimeInterval(timestamp))
                 return
-            } else if let period = WWTimePeriod(rawValue: String(chunks[0])),
-                      let pointCount = Int(chunks[1])
+            } else if
+                let period = WWTimePeriod(rawValue: String(chunks[0])),
+                let pointCount = Int(chunks[1])
             {
                 self = .byCustomPoints(period, pointCount)
                 return
@@ -38,17 +40,17 @@ public enum WWPeriodType: Hashable {
 
     public var rawValue: String {
         switch self {
-        case let .byPeriod(interval): return interval.rawValue
-        case let .byStartTime(timeStart): return [Self.keyAll, Int(timeStart).description].joined(separator: "_")
-        case let .byCustomPoints(interval, pointCount): return [interval.rawValue, pointCount.description].joined(separator: "_")
+        case .byPeriod(let interval): interval.rawValue
+        case .byStartTime(let timeStart): [Self.keyAll, Int(timeStart).description].joined(separator: "_")
+        case .byCustomPoints(let interval, let pointCount): [interval.rawValue, pointCount.description].joined(separator: "_")
         }
     }
 
     public func hash(into hasher: inout Hasher) {
         switch self {
-        case let .byPeriod(interval): hasher.combine(interval)
-        case let .byStartTime(startTime): hasher.combine(startTime)
-        case let .byCustomPoints(interval, pointCount):
+        case .byPeriod(let interval): hasher.combine(interval)
+        case .byStartTime(let startTime): hasher.combine(startTime)
+        case .byCustomPoints(let interval, let pointCount):
             hasher.combine(interval)
             hasher.combine(pointCount)
         }
@@ -56,10 +58,10 @@ public enum WWPeriodType: Hashable {
 
     public static func == (lhs: WWPeriodType, rhs: WWPeriodType) -> Bool {
         switch (lhs, rhs) {
-        case let (.byPeriod(lhsPeriod), .byPeriod(rhsPeriod)): return lhsPeriod == rhsPeriod
-        case let (.byStartTime(lhsStartTime), .byStartTime(rhsStartTime)): return lhsStartTime == rhsStartTime
-        case let (.byCustomPoints(lhsI, lhsC), .byCustomPoints(rhsI, rhsC)): return lhsI == rhsI && lhsC == rhsC
-        default: return false
+        case (.byPeriod(let lhsPeriod), .byPeriod(let rhsPeriod)): lhsPeriod == rhsPeriod
+        case (.byStartTime(let lhsStartTime), .byStartTime(let rhsStartTime)): lhsStartTime == rhsStartTime
+        case (.byCustomPoints(let lhsI, let lhsC), .byCustomPoints(let rhsI, let rhsC)): lhsI == rhsI && lhsC == rhsC
+        default: false
         }
     }
 }

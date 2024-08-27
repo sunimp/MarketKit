@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - SyncerState
+
 class SyncerState: Record {
     let key: String
     let value: String
@@ -40,6 +42,8 @@ class SyncerState: Record {
         container[Columns.value] = value
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension SyncerState: CustomStringConvertible {
     public var description: String {

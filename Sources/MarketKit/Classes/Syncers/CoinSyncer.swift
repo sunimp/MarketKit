@@ -5,10 +5,12 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import WWExtensions
+
+// MARK: - CoinSyncer
 
 class CoinSyncer {
     
@@ -40,7 +42,11 @@ class CoinSyncer {
 
     private func handleFetched(coins: [Coin], blockchainRecords: [BlockchainRecord], tokenRecords: [TokenRecord]) {
         do {
-            try storage.update(coins: coins, blockchainRecords: blockchainRecords, tokenRecords: transform(tokenRecords: tokenRecords))
+            try storage.update(
+                coins: coins,
+                blockchainRecords: blockchainRecords,
+                tokenRecords: transform(tokenRecords: tokenRecords)
+            )
             fullCoinsUpdatedSubject.send()
         } catch {
             print("Fetched data error: \(error)")
@@ -54,7 +60,8 @@ class CoinSyncer {
             let record = tokenRecords[index]
             tokenRecords.remove(at: index)
 
-            tokenRecords.append(contentsOf:
+            tokenRecords.append(
+                contentsOf:
                 types.map {
                     TokenRecord(
                         coinUid: record.coinUid,
@@ -73,7 +80,11 @@ class CoinSyncer {
         let derivationTypes = TokenType.Derivation.allCases.map { "derived:\($0.rawValue)" }
         let addressTypes = TokenType.AddressType.allCases.map { "address_type:\($0.rawValue)" }
 
-        var tokenRecords = transform(tokenRecords: tokenRecords, blockchainUid: BlockchainType.bitcoin.uid, types: derivationTypes)
+        var tokenRecords = transform(
+            tokenRecords: tokenRecords,
+            blockchainUid: BlockchainType.bitcoin.uid,
+            types: derivationTypes
+        )
         tokenRecords = transform(tokenRecords: tokenRecords, blockchainUid: BlockchainType.litecoin.uid, types: derivationTypes)
         return transform(tokenRecords: tokenRecords, blockchainUid: BlockchainType.bitcoinCash.uid, types: addressTypes)
     }
@@ -86,14 +97,20 @@ extension CoinSyncer {
 
     func initialSync() {
         do {
-            if let versionString = try syncerStateStorage.value(key: keyInitialSyncVersion), let version = Int(versionString), currentVersion == version {
+            if
+                let versionString = try syncerStateStorage.value(key: keyInitialSyncVersion), let version = Int(versionString),
+                currentVersion == version
+            {
                 return
             }
 
             guard let coinsPath = Bundle.module.url(forResource: "coins", withExtension: "json", subdirectory: "Dumps") else {
                 return
             }
-            guard let blockchainsPath = Bundle.module.url(forResource: "blockchains", withExtension: "json", subdirectory: "Dumps") else {
+            guard
+                let blockchainsPath = Bundle.module
+                    .url(forResource: "blockchains", withExtension: "json", subdirectory: "Dumps")
+            else {
                 return
             }
             guard let tokensPath = Bundle.module.url(forResource: "tokens", withExtension: "json", subdirectory: "Dumps") else {
@@ -103,14 +120,21 @@ extension CoinSyncer {
             guard let coins = try [Coin](JSONString: String(contentsOf: coinsPath, encoding: .utf8)) else {
                 return
             }
-            guard let blockchainRecords = try [BlockchainRecord](JSONString: String(contentsOf: blockchainsPath, encoding: .utf8)) else {
+            guard
+                let blockchainRecords =
+                try [BlockchainRecord](JSONString: String(contentsOf: blockchainsPath, encoding: .utf8))
+            else {
                 return
             }
             guard let tokenRecords = try [TokenRecord](JSONString: String(contentsOf: tokensPath, encoding: .utf8)) else {
                 return
             }
 
-            try storage.update(coins: coins, blockchainRecords: blockchainRecords, tokenRecords: transform(tokenRecords: tokenRecords))
+            try storage.update(
+                coins: coins,
+                blockchainRecords: blockchainRecords,
+                tokenRecords: transform(tokenRecords: tokenRecords)
+            )
 
             try syncerStateStorage.save(value: "\(currentVersion)", key: keyInitialSyncVersion)
             try syncerStateStorage.delete(key: keyCoinsLastSyncTimestamp)
@@ -141,13 +165,22 @@ extension CoinSyncer {
         var blockchainsOutdated = true
         var tokensOutdated = true
 
-        if let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyCoinsLastSyncTimestamp), let lastSyncTimestamp = Int(rawLastSyncTimestamp), coinsTimestamp == lastSyncTimestamp {
+        if
+            let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyCoinsLastSyncTimestamp),
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), coinsTimestamp == lastSyncTimestamp
+        {
             coinsOutdated = false
         }
-        if let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyBlockchainsLastSyncTimestamp), let lastSyncTimestamp = Int(rawLastSyncTimestamp), blockchainsTimestamp == lastSyncTimestamp {
+        if
+            let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyBlockchainsLastSyncTimestamp),
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), blockchainsTimestamp == lastSyncTimestamp
+        {
             blockchainsOutdated = false
         }
-        if let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyTokensLastSyncTimestamp), let lastSyncTimestamp = Int(rawLastSyncTimestamp), tokensTimestamp == lastSyncTimestamp {
+        if
+            let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyTokensLastSyncTimestamp),
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), tokensTimestamp == lastSyncTimestamp
+        {
             tokensOutdated = false
         }
 

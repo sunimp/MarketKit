@@ -7,12 +7,16 @@
 
 import Foundation
 
+// MARK: - ICoinPriceManagerDelegate
+
 protocol ICoinPriceManagerDelegate: AnyObject {
     func didUpdate(coinPriceMap: [String: CoinPrice], currencyCode: String)
 }
 
+// MARK: - CoinPriceManager
+
 class CoinPriceManager {
-    weak var delegate: ICoinPriceManagerDelegate?
+    weak var delegate: ICoinPriceManagerDelegate? = nil
 
     private let storage: CoinPriceStorage
 
@@ -59,7 +63,7 @@ extension CoinPriceManager {
             for coinPrice in try storage.coinPrices(coinUids: coinUids, currencyCode: currencyCode) {
                 map[coinPrice.coinUid] = coinPrice
             }
-        } catch {}
+        } catch { }
 
         return map
     }

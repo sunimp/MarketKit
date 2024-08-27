@@ -7,8 +7,8 @@
 
 import Foundation
 
-import WWToolKit
 import ObjectMapper
+import WWToolKit
 
 struct CoinPriceResponse: ImmutableMappable {
     let uid: String
@@ -17,7 +17,14 @@ struct CoinPriceResponse: ImmutableMappable {
     let priceChange1d: Decimal?
     let lastUpdated: TimeInterval
 
-    init(uid: String, price: Decimal, priceChange: Decimal?, priceChange24h: Decimal?, priceChange1d: Decimal?, lastUpdated: TimeInterval) {
+    init(
+        uid: String,
+        price: Decimal,
+        priceChange _: Decimal?,
+        priceChange24h: Decimal?,
+        priceChange1d: Decimal?,
+        lastUpdated: TimeInterval
+    ) {
         self.uid = uid
         self.price = price
         self.priceChange24h = priceChange24h

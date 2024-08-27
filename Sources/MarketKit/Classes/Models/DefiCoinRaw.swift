@@ -45,13 +45,12 @@ class DefiCoinRaw: ImmutableMappable {
     }
 
     func defiCoin(uid: String, fullCoin: FullCoin?) -> DefiCoin {
-        let type: DefiCoin.DefiCoinType
-
-        if let fullCoin {
-            type = .fullCoin(fullCoin: fullCoin)
-        } else {
-            type = .defiCoin(name: name, logo: logo)
-        }
+        let type: DefiCoin.DefiCoinType =
+            if let fullCoin {
+                .fullCoin(fullCoin: fullCoin)
+            } else {
+                .defiCoin(name: name, logo: logo)
+            }
 
         return DefiCoin(
             uid: uid,

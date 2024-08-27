@@ -18,13 +18,13 @@ public enum WWPointTimePeriod: String, CaseIterable {
 
     var interval: TimeInterval {
         switch self {
-        case .minute30: return .minutes(30)
-        case .hour1: return .hours(1)
-        case .hour4: return .hours(4)
-        case .hour8: return .hours(8)
-        case .day1: return .days(1)
-        case .week1: return .days(7)
-        case .month1: return .days(30)
+        case .minute30: .minutes(30)
+        case .hour1: .hours(1)
+        case .hour4: .hours(4)
+        case .hour8: .hours(8)
+        case .day1: .days(1)
+        case .week1: .days(7)
+        case .month1: .days(30)
         }
     }
 }

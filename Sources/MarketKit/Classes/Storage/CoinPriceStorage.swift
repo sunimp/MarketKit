@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - CoinPriceStorage
+
 class CoinPriceStorage {
     private let dbPool: DatabasePool
 
@@ -54,13 +56,15 @@ class CoinPriceStorage {
 extension CoinPriceStorage {
     func coinPrice(coinUid: String, currencyCode: String) throws -> CoinPrice? {
         try dbPool.read { db in
-            try CoinPrice.filter(CoinPrice.Columns.coinUid == coinUid && CoinPrice.Columns.currencyCode == currencyCode).fetchOne(db)
+            try CoinPrice.filter(CoinPrice.Columns.coinUid == coinUid && CoinPrice.Columns.currencyCode == currencyCode)
+                .fetchOne(db)
         }
     }
 
     func coinPrices(coinUids: [String], currencyCode: String) throws -> [CoinPrice] {
         try dbPool.read { db in
-            try CoinPrice.filter(coinUids.contains(CoinPrice.Columns.coinUid) && CoinPrice.Columns.currencyCode == currencyCode).fetchAll(db)
+            try CoinPrice.filter(coinUids.contains(CoinPrice.Columns.coinUid) && CoinPrice.Columns.currencyCode == currencyCode)
+                .fetchAll(db)
         }
     }
 

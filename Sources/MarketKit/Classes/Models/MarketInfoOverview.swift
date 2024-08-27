@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - MarketInfoOverview
+
 public struct MarketInfoOverview {
     public let fullCoin: FullCoin
     public let marketCap: Decimal?
@@ -21,6 +23,8 @@ public struct MarketInfoOverview {
     public let description: String
     public let links: [LinkType: String]
 }
+
+// MARK: - LinkType
 
 public enum LinkType: String {
     case guide

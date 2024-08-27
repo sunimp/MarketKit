@@ -10,23 +10,25 @@ import Foundation
 import GRDB
 import ObjectMapper
 
+// MARK: - Exchange
+
 public class Exchange: Record, ImmutableMappable {
     public let id: String
     public let name: String
-    public let imageUrl: String
+    public let imageURL: String
 
     override open class var databaseTableName: String {
         "exchanges"
     }
 
     enum Columns: String, ColumnExpression {
-        case id, name, imageUrl
+        case id, name, imageURL
     }
 
     public required init(map: Map) throws {
         id = try map.value("id")
         name = try map.value("name")
-        imageUrl = try map.value("image")
+        imageURL = try map.value("image")
 
         super.init()
     }
@@ -34,7 +36,7 @@ public class Exchange: Record, ImmutableMappable {
     required init(row: Row) throws {
         id = row[Columns.id]
         name = row[Columns.name]
-        imageUrl = row[Columns.imageUrl]
+        imageURL = row[Columns.imageURL]
 
         try super.init(row: row)
     }
@@ -42,12 +44,14 @@ public class Exchange: Record, ImmutableMappable {
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.id] = id
         container[Columns.name] = name
-        container[Columns.imageUrl] = imageUrl
+        container[Columns.imageURL] = imageURL
     }
 }
 
+// MARK: CustomStringConvertible
+
 extension Exchange: CustomStringConvertible {
     public var description: String {
-        "Exchange [id: \(id); name: \(name); imageUrl: \(imageUrl)]"
+        "Exchange [id: \(id); name: \(name); imageUrl: \(imageURL)]"
     }
 }

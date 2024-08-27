@@ -5,8 +5,10 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
+
+// MARK: - CoinPriceKey
 
 struct CoinPriceKey: Hashable {
     let coinUids: [String]
@@ -27,6 +29,8 @@ struct CoinPriceKey: Hashable {
         lhs.ids == rhs.ids && lhs.currencyCode == rhs.currencyCode
     }
 }
+
+// MARK: - CoinPriceSyncManager
 
 class CoinPriceSyncManager {
     private let queue = DispatchQueue(label: "com.sunimp.market_kit.coin_price_sync_manager", qos: .userInitiated)
@@ -116,6 +120,8 @@ class CoinPriceSyncManager {
     }
 }
 
+// MARK: ICoinPriceCoinUidDataSource
+
 extension CoinPriceSyncManager: ICoinPriceCoinUidDataSource {
     func allCoinUids(currencyCode: String) -> [String] {
         queue.sync {
@@ -163,6 +169,8 @@ extension CoinPriceSyncManager {
     }
 }
 
+// MARK: ICoinPriceManagerDelegate
+
 extension CoinPriceSyncManager: ICoinPriceManagerDelegate {
     func didUpdate(coinPriceMap: [String: CoinPrice], currencyCode: String) {
         queue.async {
@@ -181,6 +189,8 @@ extension CoinPriceSyncManager: ICoinPriceManagerDelegate {
         }
     }
 }
+
+// MARK: - CountedPassthroughSubject
 
 class CountedPassthroughSubject<Output, Failure>: Subject where Failure: Error {
     private(set) var subscribersCount = 0

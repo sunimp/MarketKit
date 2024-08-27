@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - CoinManager
+
 class CoinManager {
     private let storage: CoinStorage
     private let provider: WWProvider

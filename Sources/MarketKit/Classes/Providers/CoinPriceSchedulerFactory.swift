@@ -13,7 +13,7 @@ class CoinPriceSchedulerFactory {
     private let manager: CoinPriceManager
     private let provider: WWProvider
     private let reachabilityManager: ReachabilityManager
-    private var logger: Logger?
+    private var logger: Logger? = nil
 
     init(manager: CoinPriceManager, provider: WWProvider, reachabilityManager: ReachabilityManager, logger: Logger? = nil) {
         self.manager = manager

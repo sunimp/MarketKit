@@ -52,9 +52,10 @@ class MarketInfoOverviewResponse: ImmutableMappable {
 
             var performanceChanges = [WWTimePeriod: Decimal]()
             for (timePeriodStr, change) in changes {
-                if let changeStr = change,
-                   let changeDecimal = Decimal(string: changeStr),
-                   let timePeriod = Self.timePeriod(timePeriodStr)
+                if
+                    let changeStr = change,
+                    let changeDecimal = Decimal(string: changeStr),
+                    let timePeriod = Self.timePeriod(timePeriodStr)
                 {
                     performanceChanges[timePeriod] = changeDecimal
                 }
@@ -85,13 +86,13 @@ class MarketInfoOverviewResponse: ImmutableMappable {
 
     static func timePeriod(_ timePeriod: String) -> WWTimePeriod? {
         switch timePeriod {
-        case "24h": return .day1
-        case "7d": return .week1
-        case "14d": return .week2
-        case "30d": return .month1
-        case "200d": return .month6
-        case "1y": return .year1
-        default: return nil
+        case "24h": .day1
+        case "7d": .week1
+        case "14d": .week2
+        case "30d": .month1
+        case "200d": .month6
+        case "1y": .year1
+        default: nil
         }
     }
 }

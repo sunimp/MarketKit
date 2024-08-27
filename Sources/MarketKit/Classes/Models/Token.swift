@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - Token
+
 public struct Token {
     public let coin: Coin
     public let blockchain: Blockchain
@@ -33,6 +35,8 @@ public struct Token {
     }
 }
 
+// MARK: Hashable
+
 extension Token: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(coin)
@@ -42,6 +46,8 @@ extension Token: Hashable {
     }
 }
 
+// MARK: Equatable
+
 extension Token: Equatable {
     public static func == (lhs: Token, rhs: Token) -> Bool {
         lhs.coin == rhs.coin
@@ -50,6 +56,8 @@ extension Token: Equatable {
             && lhs.decimals == rhs.decimals
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension Token: CustomStringConvertible {
     public var description: String {

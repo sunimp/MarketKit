@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - MarketOverviewManager
+
 class MarketOverviewManager {
     private let nftManager: NftManager
     private let provider: WWProvider

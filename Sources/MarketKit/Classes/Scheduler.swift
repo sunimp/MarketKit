@@ -5,11 +5,13 @@
 //  Created by Sun on 2024/8/21.
 //
 
-import Foundation
 import Combine
+import Foundation
 
 import WWExtensions
 import WWToolKit
+
+// MARK: - ISchedulerProvider
 
 protocol ISchedulerProvider {
     var id: String { get }
@@ -19,6 +21,8 @@ protocol ISchedulerProvider {
     func notifyExpired()
 }
 
+// MARK: - Scheduler
+
 class Scheduler {
     private static let retryInterval: TimeInterval = 5
 
@@ -26,18 +30,23 @@ class Scheduler {
 
     private let provider: ISchedulerProvider
     private let reachabilityManager: ReachabilityManager
-    private var logger: Logger?
+    private var logger: Logger? = nil
 
     private var cancellables = Set<AnyCancellable>()
     private var tasks = Set<AnyTask>()
-    private var scheduledTask: Task<Void, Error>?
+    private var scheduledTask: Task<Void, Error>? = nil
 
     private var syncInProgress = false
     private var expirationNotified = false
 
     private let queue = DispatchQueue(label: "com.sunimp.market_kit.scheduler", qos: .utility)
 
-    init(provider: ISchedulerProvider, reachabilityManager: ReachabilityManager, bufferInterval: TimeInterval = 5, logger: Logger? = nil) {
+    init(
+        provider: ISchedulerProvider,
+        reachabilityManager: ReachabilityManager,
+        bufferInterval: TimeInterval = 5,
+        logger: Logger? = nil
+    ) {
         self.provider = provider
         self.reachabilityManager = reachabilityManager
         self.bufferInterval = bufferInterval
@@ -128,7 +137,10 @@ class Scheduler {
         }
 
         let currentTimestamp = Date().timeIntervalSince1970
-        if let lastSyncTimestamp = provider.lastSyncTimestamp, currentTimestamp - lastSyncTimestamp < provider.expirationInterval {
+        if
+            let lastSyncTimestamp = provider.lastSyncTimestamp,
+            currentTimestamp - lastSyncTimestamp < provider.expirationInterval
+        {
             return
         }
 

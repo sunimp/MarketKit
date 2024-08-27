@@ -8,17 +8,19 @@
 import Foundation
 
 import Alamofire
-import WWToolKit
 import ObjectMapper
+import WWToolKit
+
+// MARK: - WWNftProvider
 
 class WWNftProvider {
-    private let baseUrl: String
+    private let baseURL: String
     private let networkManager: NetworkManager
     private let headers: HTTPHeaders?
     private let encoding: ParameterEncoding = URLEncoding(boolEncoding: .literal)
 
-    init(baseUrl: String, networkManager: NetworkManager, apiKey: String?) {
-        self.baseUrl = baseUrl
+    init(baseURL: String, networkManager: NetworkManager, apiKey: String?) {
+        self.baseURL = baseURL
         self.networkManager = networkManager
 
         headers = apiKey.flatMap { HTTPHeaders([HTTPHeader(name: "apikey", value: $0)]) }
@@ -31,15 +33,22 @@ extension WWNftProvider {
             "simplified": true,
         ]
 
-        return try await networkManager.fetch(url: "\(baseUrl)/v1/nft/collections", parameters: parameters, encoding: encoding, headers: headers)
+        return try await networkManager.fetch(
+            url: "\(baseURL)/v1/nft/collections",
+            parameters: parameters,
+            encoding: encoding,
+            headers: headers
+        )
     }
 }
+
+// MARK: - NftTopCollectionResponse
 
 struct NftTopCollectionResponse: ImmutableMappable {
     let blockchainUid: String
     let providerUid: String
     let name: String
-    let thumbnailImageUrl: String?
+    let thumbnailImageURL: String?
     let floorPrice: Decimal?
     let volume1d: Decimal?
     let change1d: Decimal?
@@ -52,7 +61,7 @@ struct NftTopCollectionResponse: ImmutableMappable {
         blockchainUid = try map.value("blockchain_uid")
         providerUid = try map.value("opensea_uid")
         name = try map.value("name")
-        thumbnailImageUrl = try? map.value("thumbnail_url")
+        thumbnailImageURL = try? map.value("thumbnail_url")
         floorPrice = try? map.value("floor_price", using: Transform.doubleToDecimalTransform)
         volume1d = try? map.value("volume_1d", using: Transform.doubleToDecimalTransform)
         change1d = try? map.value("change_1d", using: Transform.doubleToDecimalTransform)

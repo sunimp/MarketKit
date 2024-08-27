@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - CoinHistoricalPriceStorage
+
 class CoinHistoricalPriceStorage {
     private let dbPool: DatabasePool
 
@@ -28,7 +30,14 @@ class CoinHistoricalPriceStorage {
                 t.column(CoinHistoricalPrice.Columns.timestamp.name, .double).notNull()
                 t.column(CoinHistoricalPrice.Columns.value.name, .text)
 
-                t.primaryKey([CoinHistoricalPrice.Columns.coinUid.name, CoinHistoricalPrice.Columns.currencyCode.name, CoinHistoricalPrice.Columns.timestamp.name], onConflict: .replace)
+                t.primaryKey(
+                    [
+                        CoinHistoricalPrice.Columns.coinUid.name,
+                        CoinHistoricalPrice.Columns.currencyCode.name,
+                        CoinHistoricalPrice.Columns.timestamp.name,
+                    ],
+                    onConflict: .replace
+                )
             }
         }
 
@@ -40,7 +49,10 @@ extension CoinHistoricalPriceStorage {
     func coinHistoricalPrice(coinUid: String, currencyCode: String, timestamp: TimeInterval) throws -> CoinHistoricalPrice? {
         try dbPool.read { db in
             try CoinHistoricalPrice
-                .filter(CoinHistoricalPrice.Columns.coinUid == coinUid && CoinHistoricalPrice.Columns.currencyCode == currencyCode && CoinHistoricalPrice.Columns.timestamp == timestamp)
+                .filter(
+                    CoinHistoricalPrice.Columns.coinUid == coinUid && CoinHistoricalPrice.Columns
+                        .currencyCode == currencyCode && CoinHistoricalPrice.Columns.timestamp == timestamp
+                )
                 .fetchOne(db)
         }
     }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - GlobalMarketInfoManager
+
 class GlobalMarketInfoManager {
     private let expirationInterval: TimeInterval = 600 // 6 mins
 
@@ -23,7 +25,10 @@ extension GlobalMarketInfoManager {
     func globalMarketPoints(currencyCode: String, timePeriod: WWTimePeriod) async throws -> [GlobalMarketPoint] {
         let currentTimestamp = Date().timeIntervalSince1970
 
-        if let storedInfo = try? storage.globalMarketInfo(currencyCode: currencyCode, timePeriod: timePeriod), currentTimestamp - storedInfo.timestamp < expirationInterval {
+        if
+            let storedInfo = try? storage.globalMarketInfo(currencyCode: currencyCode, timePeriod: timePeriod),
+            currentTimestamp - storedInfo.timestamp < expirationInterval
+        {
             return storedInfo.points
         }
 

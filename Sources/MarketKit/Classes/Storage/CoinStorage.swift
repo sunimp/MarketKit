@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - CoinStorage
+
 class CoinStorage {
     private let dbPool: DatabasePool
 
@@ -34,7 +36,7 @@ class CoinStorage {
                 t.column(Coin.Columns.name.name, .text).notNull()
                 t.column(Coin.Columns.code.name, .text).notNull()
                 t.column(Coin.Columns.marketCapRank.name, .integer)
-                t.column(Coin.Columns.coinGeckoId.name, .text)
+                t.column(Coin.Columns.coinGeckoID.name, .text)
             }
 
             try db.create(table: BlockchainRecord.databaseTableName) { t in
@@ -43,13 +45,22 @@ class CoinStorage {
             }
 
             try db.create(table: TokenRecord.databaseTableName) { t in
-                t.column(TokenRecord.Columns.coinUid.name, .text).notNull().indexed().references(Coin.databaseTableName, onDelete: .cascade)
-                t.column(TokenRecord.Columns.blockchainUid.name, .text).notNull().indexed().references(BlockchainRecord.databaseTableName, onDelete: .cascade)
+                t.column(TokenRecord.Columns.coinUid.name, .text).notNull().indexed().references(
+                    Coin.databaseTableName,
+                    onDelete: .cascade
+                )
+                t.column(TokenRecord.Columns.blockchainUid.name, .text).notNull().indexed().references(
+                    BlockchainRecord.databaseTableName,
+                    onDelete: .cascade
+                )
                 t.column(TokenRecord.Columns.type.name, .text).notNull()
                 t.column(TokenRecord.Columns.decimals.name, .integer)
                 t.column(TokenRecord.Columns.reference.name, .text)
 
-                t.primaryKey([TokenRecord.Columns.coinUid.name, TokenRecord.Columns.blockchainUid.name, TokenRecord.Columns.type.name], onConflict: .replace)
+                t.primaryKey(
+                    [TokenRecord.Columns.coinUid.name, TokenRecord.Columns.blockchainUid.name, TokenRecord.Columns.type.name],
+                    onConflict: .replace
+                )
             }
         }
 
@@ -67,25 +78,47 @@ class CoinStorage {
 
         migrator.registerMigration("Rename 'eip3091url' column to 'explorerUrl' in Blockchains") { db in
             try db.alter(table: BlockchainRecord.databaseTableName) { t in
-                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerUrl.name)
+                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerURL.name)
             }
         }
 
         migrator.registerMigration("Transform token types for bitcoin, litecoin and bitcoin cash") { db in
             for blockchainUid in ["bitcoin", "litecoin"] {
-                if let record = try TokenRecord.filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native").fetchOne(db) {
-                    try TokenRecord.filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native").deleteAll(db)
+                if
+                    let record = try TokenRecord
+                        .filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native")
+                        .fetchOne(db)
+                {
+                    try TokenRecord
+                        .filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native")
+                        .deleteAll(db)
                     for derivation in ["bip44", "bip49", "bip84", "bip86"] {
-                        let newRecord = TokenRecord(coinUid: record.coinUid, blockchainUid: record.blockchainUid, type: "derived:\(derivation)", decimals: record.decimals)
+                        let newRecord = TokenRecord(
+                            coinUid: record.coinUid,
+                            blockchainUid: record.blockchainUid,
+                            type: "derived:\(derivation)",
+                            decimals: record.decimals
+                        )
                         try newRecord.insert(db)
                     }
                 }
             }
 
-            if let record = try TokenRecord.filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native").fetchOne(db) {
-                try TokenRecord.filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native").deleteAll(db)
+            if
+                let record = try TokenRecord
+                    .filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native")
+                    .fetchOne(db)
+            {
+                try TokenRecord
+                    .filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native")
+                    .deleteAll(db)
                 for type in ["type0", "type145"] {
-                    let newRecord = TokenRecord(coinUid: record.coinUid, blockchainUid: record.blockchainUid, type: "address_type:\(type)", decimals: record.decimals)
+                    let newRecord = TokenRecord(
+                        coinUid: record.coinUid,
+                        blockchainUid: record.blockchainUid,
+                        type: "address_type:\(type)",
+                        decimals: record.decimals
+                    )
                     try newRecord.insert(db)
                 }
             }
@@ -101,16 +134,18 @@ class CoinStorage {
     }
 
     private func searchOrder(filter: String) -> SQL {
-        SQL(sql: """
-            CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.code) LIKE ? THEN 1 
-            WHEN \(Coin.databaseTableName).\(Coin.Columns.code) LIKE ? THEN 2 
-            WHEN \(Coin.databaseTableName).\(Coin.Columns.name) LIKE ? THEN 3
-            ELSE 4 END,
-            CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) IS NULL THEN 1 ELSE 0 END,
-            \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) ASC, 
-            \(Coin.databaseTableName).\(Coin.Columns.name) ASC
-            """,
-            arguments: [filter, "\(filter)%", "\(filter)%"])
+        SQL(
+            sql: """
+                CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.code) LIKE ? THEN 1 
+                WHEN \(Coin.databaseTableName).\(Coin.Columns.code) LIKE ? THEN 2 
+                WHEN \(Coin.databaseTableName).\(Coin.Columns.name) LIKE ? THEN 3
+                ELSE 4 END,
+                CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) IS NULL THEN 1 ELSE 0 END,
+                \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) ASC, 
+                \(Coin.databaseTableName).\(Coin.Columns.name) ASC
+                """,
+            arguments: [filter, "\(filter)%", "\(filter)%"]
+        )
     }
 
     private func filter(tokenQuery: TokenQuery) -> SQLSpecificExpressible {
@@ -152,10 +187,11 @@ extension CoinStorage {
         try dbPool.read { db in
             let request = Coin
                 .including(all: Coin.tokens.including(required: TokenRecord.blockchain))
-                .order(literal: SQL(sql: """
-                    CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) IS NULL THEN 1 ELSE 0 END,
-                    \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) ASC
-                    """
+                .order(literal: SQL(
+                    sql: """
+                        CASE WHEN \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) IS NULL THEN 1 ELSE 0 END,
+                        \(Coin.databaseTableName).\(Coin.Columns.marketCapRank) ASC
+                        """
                 ))
                 .limit(limit)
 
@@ -231,7 +267,10 @@ extension CoinStorage {
     func tokenInfoRecords(blockchainType: BlockchainType, filter: String, limit: Int) throws -> [TokenInfoRecord] {
         try dbPool.read { db in
             let request = TokenRecord
-                .including(required: TokenRecord.coin.filter(Coin.Columns.name.like("%\(filter)%") || Coin.Columns.code.like("%\(filter)%")))
+                .including(
+                    required: TokenRecord.coin
+                        .filter(Coin.Columns.name.like("%\(filter)%") || Coin.Columns.code.like("%\(filter)%"))
+                )
                 .including(required: TokenRecord.blockchain.filter(BlockchainRecord.Columns.uid == blockchainType.uid))
                 .order(literal: searchOrder(filter: filter))
                 .limit(limit)
@@ -289,6 +328,8 @@ extension CoinStorage {
     }
 }
 
+// MARK: - CoinTokensRecord
+
 struct CoinTokensRecord: FetchableRecord, Decodable {
     let coin: Coin
     let tokens: [TokenBlockchainRecord]
@@ -297,13 +338,12 @@ struct CoinTokensRecord: FetchableRecord, Decodable {
         FullCoin(
             coin: coin,
             tokens: tokens.map { record in
-                let tokenType: TokenType
-
-                if record.token.decimals != nil {
-                    tokenType = TokenType(type: record.token.type, reference: record.token.reference)
-                } else {
-                    tokenType = .unsupported(type: record.token.type, reference: record.token.reference)
-                }
+                let tokenType: TokenType =
+                    if record.token.decimals != nil {
+                        TokenType(type: record.token.type, reference: record.token.reference)
+                    } else {
+                        .unsupported(type: record.token.type, reference: record.token.reference)
+                    }
 
                 return Token(
                     coin: coin,
@@ -316,10 +356,14 @@ struct CoinTokensRecord: FetchableRecord, Decodable {
     }
 }
 
+// MARK: - TokenBlockchainRecord
+
 struct TokenBlockchainRecord: FetchableRecord, Decodable {
     let token: TokenRecord
     let blockchain: BlockchainRecord
 }
+
+// MARK: - TokenInfoRecord
 
 struct TokenInfoRecord: FetchableRecord, Decodable {
     let tokenRecord: TokenRecord
@@ -327,13 +371,12 @@ struct TokenInfoRecord: FetchableRecord, Decodable {
     let blockchain: BlockchainRecord
 
     var token: Token {
-        let tokenType: TokenType
-
-        if tokenRecord.decimals != nil {
-            tokenType = TokenType(type: tokenRecord.type, reference: tokenRecord.reference)
-        } else {
-            tokenType = .unsupported(type: tokenRecord.type, reference: tokenRecord.reference)
-        }
+        let tokenType: TokenType =
+            if tokenRecord.decimals != nil {
+                TokenType(type: tokenRecord.type, reference: tokenRecord.reference)
+            } else {
+                .unsupported(type: tokenRecord.type, reference: tokenRecord.reference)
+            }
 
         return Token(
             coin: coin,

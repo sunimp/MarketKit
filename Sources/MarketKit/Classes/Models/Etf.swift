@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - Etf
+
 public struct Etf: ImmutableMappable {
     public let ticker: String
     public let name: String

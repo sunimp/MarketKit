@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - CategoryMarketPoint
+
 public class CategoryMarketPoint: ImmutableMappable {
     public let timestamp: TimeInterval
     public let marketCap: Decimal
@@ -18,6 +20,8 @@ public class CategoryMarketPoint: ImmutableMappable {
         marketCap = try map.value("market_cap", using: Transform.stringToDecimalTransform)
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension CategoryMarketPoint: CustomStringConvertible {
     public var description: String {

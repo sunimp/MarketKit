@@ -8,14 +8,15 @@
 import Foundation
 
 public enum WWChartHelper {
+    
     static func pointInterval(_ interval: WWTimePeriod) -> WWPointTimePeriod {
         switch interval {
-        case .day1, .hour24: return .minute30
-        case .week1: return .hour4
-        case .week2: return .hour8
-        case .month1, .month3, .month6: return .day1
-        case .year1, .year2: return .week1
-        case .year5: return .month1
+        case .day1, .hour24: .minute30
+        case .week1: .hour4
+        case .week2: .hour8
+        case .month1, .month3, .month6: .day1
+        case .year1, .year2: .week1
+        case .year5: .month1
         }
     }
 

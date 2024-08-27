@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - CoinHistoricalPriceManager
+
 class CoinHistoricalPriceManager {
     private let storage: CoinHistoricalPriceStorage
     private let provider: WWProvider
@@ -29,11 +31,18 @@ extension CoinHistoricalPriceManager {
             throw ResponseError.returnedTimestampIsTooInaccurate
         }
 
-        try? storage.save(coinHistoricalPrice: CoinHistoricalPrice(coinUid: coinUid, currencyCode: currencyCode, value: response.price, timestamp: timestamp))
+        try? storage.save(coinHistoricalPrice: CoinHistoricalPrice(
+            coinUid: coinUid,
+            currencyCode: currencyCode,
+            value: response.price,
+            timestamp: timestamp
+        ))
 
         return response.price
     }
 }
+
+// MARK: CoinHistoricalPriceManager.ResponseError
 
 extension CoinHistoricalPriceManager {
     enum ResponseError: Error {

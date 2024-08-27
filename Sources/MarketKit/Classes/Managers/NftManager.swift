@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - NftManager
+
 class NftManager {
     private let coinManager: CoinManager
     private let provider: WWNftProvider
@@ -27,7 +29,8 @@ class NftManager {
     private func baseTokenMap(blockchainTypes: [BlockchainType]) -> [BlockchainType: Token] {
         do {
             var map = [BlockchainType: Token]()
-            let tokens = try coinManager.tokens(queries: blockchainTypes.map { TokenQuery(blockchainType: $0, tokenType: .native) })
+            let tokens = try coinManager
+                .tokens(queries: blockchainTypes.map { TokenQuery(blockchainType: $0, tokenType: .native) })
 
             for token in tokens {
                 map[token.blockchainType] = token
@@ -59,7 +62,7 @@ class NftManager {
             blockchainType: blockchainType,
             providerUid: response.providerUid,
             name: response.name,
-            thumbnailImageUrl: response.thumbnailImageUrl,
+            thumbnailImageURL: response.thumbnailImageURL,
             floorPrice: nftPrice(token: baseToken, value: response.floorPrice),
             volumes: volumes.compactMapValues { $0 },
             changes: changes.compactMapValues { $0 }

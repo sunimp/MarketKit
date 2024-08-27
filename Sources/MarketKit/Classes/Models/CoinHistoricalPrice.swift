@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - CoinHistoricalPrice
+
 public class CoinHistoricalPrice: Record {
     public let coinUid: String
     public let currencyCode: String
@@ -48,6 +50,8 @@ public class CoinHistoricalPrice: Record {
         container[Columns.timestamp] = timestamp
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension CoinHistoricalPrice: CustomStringConvertible {
     public var description: String {

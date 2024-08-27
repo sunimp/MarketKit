@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - TechnicalAdvice
+
 public struct TechnicalAdvice: ImmutableMappable {
     public let ema: Decimal?
     public let rsi: Decimal?
@@ -36,6 +38,8 @@ public struct TechnicalAdvice: ImmutableMappable {
     }
 }
 
+// MARK: TechnicalAdvice.Advice
+
 extension TechnicalAdvice {
     public enum Advice: String, CaseIterable {
         case oversold
@@ -48,8 +52,8 @@ extension TechnicalAdvice {
 
         public var isRisky: Bool {
             switch self {
-            case .oversold, .overbought: return true
-            default: return false
+            case .oversold, .overbought: true
+            default: false
             }
         }
     }

@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - TokenQuery
+
 public struct TokenQuery {
     public let blockchainType: BlockchainType
     public let tokenType: TokenType
@@ -34,12 +36,16 @@ public struct TokenQuery {
     }
 }
 
+// MARK: Hashable
+
 extension TokenQuery: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(blockchainType)
         hasher.combine(tokenType)
     }
 }
+
+// MARK: Equatable
 
 extension TokenQuery: Equatable {
     public static func == (lhs: TokenQuery, rhs: TokenQuery) -> Bool {

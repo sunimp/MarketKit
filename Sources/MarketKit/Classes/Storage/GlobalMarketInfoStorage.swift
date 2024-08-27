@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - GlobalMarketInfoStorage
+
 class GlobalMarketInfoStorage {
     private let dbPool: DatabasePool
 
@@ -28,7 +30,10 @@ class GlobalMarketInfoStorage {
                 t.column(GlobalMarketInfo.Columns.points.name, .text).notNull()
                 t.column(GlobalMarketInfo.Columns.timestamp.name, .double)
 
-                t.primaryKey([GlobalMarketInfo.Columns.currencyCode.name, GlobalMarketInfo.Columns.timePeriod.name], onConflict: .replace)
+                t.primaryKey(
+                    [GlobalMarketInfo.Columns.currencyCode.name, GlobalMarketInfo.Columns.timePeriod.name],
+                    onConflict: .replace
+                )
             }
         }
 
@@ -40,7 +45,10 @@ extension GlobalMarketInfoStorage {
     func globalMarketInfo(currencyCode: String, timePeriod: WWTimePeriod) throws -> GlobalMarketInfo? {
         try dbPool.read { db in
             try GlobalMarketInfo
-                .filter(GlobalMarketInfo.Columns.currencyCode == currencyCode && GlobalMarketInfo.Columns.timePeriod == timePeriod.rawValue)
+                .filter(
+                    GlobalMarketInfo.Columns.currencyCode == currencyCode && GlobalMarketInfo.Columns.timePeriod == timePeriod
+                        .rawValue
+                )
                 .fetchOne(db)
         }
     }

@@ -64,12 +64,16 @@ class TokenRecord: Record, Decodable, ImmutableMappable {
 
         switch type {
         case "eip20": reference >>> map["address"]
+
         case "bep2": reference >>> map["symbol"]
+
         case "spl": reference >>> map["address"]
+
         case "unsupported":
             if let reference {
                 reference >>> map["address"]
             }
+
         default: ()
         }
     }

@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - Analytics
+
 public struct Analytics: ImmutableMappable {
     public let cexVolume: ExVolume?
     public let dexVolume: ExVolume?
@@ -214,18 +216,20 @@ public struct Analytics: ImmutableMappable {
         public let name: String
         public let date: String
         public let techIssues: Int?
-        public let auditUrl: String?
+        public let auditURL: String?
         public let partnerName: String?
 
         public init(map: Map) throws {
             name = try map.value("name")
             date = try map.value("date")
             techIssues = try? map.value("tech_issues")
-            auditUrl = try? map.value("audit_url")
+            auditURL = try? map.value("audit_url")
             partnerName = try? map.value("partner_name")
         }
     }
 }
+
+// MARK: - AnalyticsPreview
 
 public struct AnalyticsPreview: ImmutableMappable {
     public let cexVolume: Bool
@@ -295,6 +299,8 @@ public struct AnalyticsPreview: ImmutableMappable {
     }
 }
 
+// MARK: - VolumePoint
+
 public struct VolumePoint: ImmutableMappable {
     public let timestamp: TimeInterval
     public let volume: Decimal
@@ -309,6 +315,8 @@ public struct VolumePoint: ImmutableMappable {
     }
 }
 
+// MARK: - CountPoint
+
 public struct CountPoint: ImmutableMappable {
     public let timestamp: TimeInterval
     public let count: Decimal
@@ -322,6 +330,8 @@ public struct CountPoint: ImmutableMappable {
         ChartPoint(timestamp: timestamp, value: count)
     }
 }
+
+// MARK: - CountVolumePoint
 
 public struct CountVolumePoint: ImmutableMappable {
     public let timestamp: TimeInterval
@@ -339,6 +349,8 @@ public struct CountVolumePoint: ImmutableMappable {
     }
 }
 
+// MARK: - RankMultiValue
+
 public struct RankMultiValue: ImmutableMappable {
     public let uid: String
     public let value1d: Decimal?
@@ -353,6 +365,8 @@ public struct RankMultiValue: ImmutableMappable {
     }
 }
 
+// MARK: - RankValue
+
 public struct RankValue: ImmutableMappable {
     public let uid: String
     public let value: Decimal?
@@ -362,6 +376,8 @@ public struct RankValue: ImmutableMappable {
         value = try? map.value("value", using: Transform.stringToDecimalTransform)
     }
 }
+
+// MARK: - ProSubscription
 
 public struct ProSubscription: ImmutableMappable {
     public let address: String

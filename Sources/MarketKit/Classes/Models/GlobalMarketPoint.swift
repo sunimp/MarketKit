@@ -9,6 +9,8 @@ import Foundation
 
 import ObjectMapper
 
+// MARK: - GlobalMarketPoint
+
 public class GlobalMarketPoint: ImmutableMappable {
     public let timestamp: TimeInterval
     public let marketCap: Decimal
@@ -35,6 +37,8 @@ public class GlobalMarketPoint: ImmutableMappable {
         btcDominance >>> (map["btc_dominance"], Transform.stringToDecimalTransform)
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension GlobalMarketPoint: CustomStringConvertible {
     public var description: String {

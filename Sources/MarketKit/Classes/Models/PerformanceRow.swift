@@ -7,10 +7,14 @@
 
 import Foundation
 
+// MARK: - PerformanceRow
+
 public struct PerformanceRow {
     public let base: PerformanceBase
     public let changes: [WWTimePeriod: Decimal]
 }
+
+// MARK: - PerformanceBase
 
 public enum PerformanceBase: String, CaseIterable {
     case usd
@@ -19,12 +23,14 @@ public enum PerformanceBase: String, CaseIterable {
 
     private var index: Int {
         switch self {
-        case .usd: return 0
-        case .btc: return 1
-        case .eth: return 2
+        case .usd: 0
+        case .btc: 1
+        case .eth: 2
         }
     }
 }
+
+// MARK: Comparable
 
 extension PerformanceBase: Comparable {
     public static func < (lhs: PerformanceBase, rhs: PerformanceBase) -> Bool {

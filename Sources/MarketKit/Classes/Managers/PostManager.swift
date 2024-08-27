@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - PostManager
+
 class PostManager {
     private let provider: CryptoCompareProvider
 

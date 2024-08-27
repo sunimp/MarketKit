@@ -10,8 +10,10 @@ import Foundation
 import Alamofire
 import WWToolKit
 
+// MARK: - CryptoCompareProvider
+
 class CryptoCompareProvider {
-    private let baseUrl = "https://min-api.cryptocompare.com"
+    private let baseURL = "https://min-api.cryptocompare.com"
 
     private let networkManager: NetworkManager
     private let apiKey: String?
@@ -32,10 +34,18 @@ extension CryptoCompareProvider {
 
         parameters["api_key"] = apiKey
 
-        let postsResponse: PostsResponse = try await networkManager.fetch(url: "\(baseUrl)/data/v2/news/", method: .get, parameters: parameters, interceptor: RateLimitRetrier(), responseCacherBehavior: .doNotCache)
+        let postsResponse: PostsResponse = try await networkManager.fetch(
+            url: "\(baseURL)/data/v2/news/",
+            method: .get,
+            parameters: parameters,
+            interceptor: RateLimitRetrier(),
+            responseCacherBehavior: .doNotCache
+        )
         return postsResponse.posts
     }
 }
+
+// MARK: CryptoCompareProvider.RateLimitRetrier
 
 extension CryptoCompareProvider {
     class RateLimitRetrier: RequestInterceptor {
@@ -61,6 +71,8 @@ extension CryptoCompareProvider {
         }
     }
 }
+
+// MARK: CryptoCompareProvider.RequestError
 
 extension CryptoCompareProvider {
     enum RequestError: Error {

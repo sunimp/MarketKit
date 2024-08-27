@@ -7,17 +7,21 @@
 
 import Foundation
 
+// MARK: - ICoinPriceCoinUidDataSource
+
 protocol ICoinPriceCoinUidDataSource: AnyObject {
     func allCoinUids(currencyCode: String) -> [String]
     func combinedCoinUids(currencyCode: String) -> ([String], [String])
 }
+
+// MARK: - CoinPriceSchedulerProvider
 
 class CoinPriceSchedulerProvider {
     private let currencyCode: String
     private let manager: CoinPriceManager
     private let provider: WWProvider
 
-    weak var dataSource: ICoinPriceCoinUidDataSource?
+    weak var dataSource: ICoinPriceCoinUidDataSource? = nil
 
     init(manager: CoinPriceManager, provider: WWProvider, currencyCode: String) {
         self.manager = manager
@@ -33,6 +37,8 @@ class CoinPriceSchedulerProvider {
         manager.handleUpdated(coinPrices: updatedCoinPrices, currencyCode: currencyCode)
     }
 }
+
+// MARK: ISchedulerProvider
 
 extension CoinPriceSchedulerProvider: ISchedulerProvider {
     var id: String {
@@ -52,7 +58,11 @@ extension CoinPriceSchedulerProvider: ISchedulerProvider {
             return
         }
 
-        let coinPrices = try await provider.coinPrices(coinUids: coinUids, walletCoinUids: walletCoinUids, currencyCode: currencyCode)
+        let coinPrices = try await provider.coinPrices(
+            coinUids: coinUids,
+            walletCoinUids: walletCoinUids,
+            currencyCode: currencyCode
+        )
         handle(updatedCoinPrices: coinPrices)
     }
 

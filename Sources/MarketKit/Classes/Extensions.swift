@@ -9,8 +9,9 @@ import Foundation
 
 extension Decimal {
     init?(convertibleValue: Any?) {
-        guard let convertibleValue = convertibleValue as? CustomStringConvertible,
-              let value = Decimal(string: convertibleValue.description)
+        guard
+            let convertibleValue = convertibleValue as? CustomStringConvertible,
+            let value = Decimal(string: convertibleValue.description)
         else {
             return nil
         }

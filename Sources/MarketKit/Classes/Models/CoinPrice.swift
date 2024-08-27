@@ -9,6 +9,8 @@ import Foundation
 
 import GRDB
 
+// MARK: - CoinPrice
+
 public class CoinPrice: Record {
     static let expirationInterval: TimeInterval = 240
 
@@ -62,6 +64,8 @@ public class CoinPrice: Record {
         Date().timeIntervalSince1970 - timestamp > Self.expirationInterval
     }
 }
+
+// MARK: CustomStringConvertible
 
 extension CoinPrice: CustomStringConvertible {
     public var description: String {

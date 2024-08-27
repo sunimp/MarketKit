@@ -7,6 +7,8 @@
 
 import Foundation
 
+// MARK: - BlockchainType
+
 public enum BlockchainType {
     case bitcoin
     case bitcoinCash
@@ -54,34 +56,38 @@ public enum BlockchainType {
 
     public var uid: String {
         switch self {
-        case .bitcoin: return "bitcoin"
-        case .bitcoinCash: return "bitcoin-cash"
-        case .ecash: return "ecash"
-        case .litecoin: return "litecoin"
-        case .dash: return "dash"
-        case .zcash: return "zcash"
-        case .ethereum: return "ethereum"
-        case .binanceSmartChain: return "binance-smart-chain"
-        case .binanceChain: return "binancecoin"
-        case .polygon: return "polygon-pos"
-        case .avalanche: return "avalanche"
-        case .optimism: return "optimistic-ethereum"
-        case .arbitrumOne: return "arbitrum-one"
-        case .gnosis: return "gnosis"
-        case .fantom: return "fantom"
-        case .tron: return "tron"
-        case .solana: return "solana"
-        case .ton: return "the-open-network"
-        case let .unsupported(uid): return uid
+        case .bitcoin: "bitcoin"
+        case .bitcoinCash: "bitcoin-cash"
+        case .ecash: "ecash"
+        case .litecoin: "litecoin"
+        case .dash: "dash"
+        case .zcash: "zcash"
+        case .ethereum: "ethereum"
+        case .binanceSmartChain: "binance-smart-chain"
+        case .binanceChain: "binancecoin"
+        case .polygon: "polygon-pos"
+        case .avalanche: "avalanche"
+        case .optimism: "optimistic-ethereum"
+        case .arbitrumOne: "arbitrum-one"
+        case .gnosis: "gnosis"
+        case .fantom: "fantom"
+        case .tron: "tron"
+        case .solana: "solana"
+        case .ton: "the-open-network"
+        case .unsupported(let uid): uid
         }
     }
 }
+
+// MARK: Hashable
 
 extension BlockchainType: Hashable {
     public func hash(into hasher: inout Hasher) {
         hasher.combine(uid)
     }
 }
+
+// MARK: Equatable
 
 extension BlockchainType: Equatable {
     public static func == (lhs: BlockchainType, rhs: BlockchainType) -> Bool {

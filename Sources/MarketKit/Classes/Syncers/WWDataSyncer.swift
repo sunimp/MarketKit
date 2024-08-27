@@ -9,6 +9,8 @@ import Foundation
 
 import WWExtensions
 
+// MARK: - WWDataSyncer
+
 class WWDataSyncer {
     private let coinSyncer: CoinSyncer
     private let provider: WWProvider
@@ -26,7 +28,11 @@ extension WWDataSyncer {
         Task { [provider, coinSyncer] in
             do {
                 let status = try await provider.status()
-                coinSyncer.sync(coinsTimestamp: status.coins, blockchainsTimestamp: status.blockchains, tokensTimestamp: status.tokens)
+                coinSyncer.sync(
+                    coinsTimestamp: status.coins,
+                    blockchainsTimestamp: status.blockchains,
+                    tokensTimestamp: status.tokens
+                )
             } catch {
                 print("WW Status sync error: \(error)")
             }
