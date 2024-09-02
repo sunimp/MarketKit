@@ -1,8 +1,7 @@
 //
 //  GlobalMarketPoint.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/13.
 //
 
 import Foundation
@@ -12,12 +11,16 @@ import ObjectMapper
 // MARK: - GlobalMarketPoint
 
 public class GlobalMarketPoint: ImmutableMappable {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let marketCap: Decimal
     public let volume24h: Decimal
     public let defiMarketCap: Decimal
     public let tvl: Decimal
     public let btcDominance: Decimal
+
+    // MARK: Lifecycle
 
     public required init(map: Map) throws {
         timestamp = try map.value("date")
@@ -27,6 +30,8 @@ public class GlobalMarketPoint: ImmutableMappable {
         tvl = try map.value("tvl", using: Transform.stringToDecimalTransform)
         btcDominance = try map.value("btc_dominance", using: Transform.stringToDecimalTransform)
     }
+
+    // MARK: Functions
 
     public func mapping(map: Map) {
         timestamp >>> map["date"]

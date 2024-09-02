@@ -1,8 +1,7 @@
 //
 //  Extensions.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -21,7 +20,6 @@ extension Decimal {
 }
 
 extension TimeInterval {
-    
     public static func minutes(_ count: Self) -> Self {
         count * 60
     }

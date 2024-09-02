@@ -1,8 +1,7 @@
 //
-//  CoinPriceKey.swift
-//  MarketKit
+//  CoinPriceSyncManager.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Combine
@@ -11,12 +10,24 @@ import Foundation
 // MARK: - CoinPriceKey
 
 struct CoinPriceKey: Hashable {
+    // MARK: Properties
+
     let coinUids: [String]
     let currencyCode: String
+
+    // MARK: Computed Properties
 
     var ids: [String] {
         coinUids.sorted()
     }
+
+    // MARK: Static Functions
+
+    static func == (lhs: CoinPriceKey, rhs: CoinPriceKey) -> Bool {
+        lhs.ids == rhs.ids && lhs.currencyCode == rhs.currencyCode
+    }
+
+    // MARK: Functions
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(currencyCode)
@@ -24,24 +35,36 @@ struct CoinPriceKey: Hashable {
             hasher.combine(id)
         }
     }
-
-    static func == (lhs: CoinPriceKey, rhs: CoinPriceKey) -> Bool {
-        lhs.ids == rhs.ids && lhs.currencyCode == rhs.currencyCode
-    }
 }
 
 // MARK: - CoinPriceSyncManager
 
 class CoinPriceSyncManager {
+    // MARK: Properties
+
     private let queue = DispatchQueue(label: "com.sunimp.market_kit.coin_price_sync_manager", qos: .userInitiated)
 
     private let schedulerFactory: CoinPriceSchedulerFactory
     private var schedulers = [String: Scheduler]()
     private var subjects = [CoinPriceKey: CountedPassthroughSubject<[String: CoinPrice], Never>]()
 
+    // MARK: Computed Properties
+
+    private var observingCurrencies: Set<String> {
+        var currencyCodes = Set<String>()
+        for (existKey, _) in subjects {
+            currencyCodes.insert(existKey.currencyCode)
+        }
+        return currencyCodes
+    }
+
+    // MARK: Lifecycle
+
     init(schedulerFactory: CoinPriceSchedulerFactory) {
         self.schedulerFactory = schedulerFactory
     }
+
+    // MARK: Functions
 
     private func _cleanUp(key: CoinPriceKey) {
         if let subject = subjects[key], subject.subscribersCount > 0 {
@@ -70,14 +93,6 @@ class CoinPriceSyncManager {
         }
 
         return coinUids
-    }
-
-    private var observingCurrencies: Set<String> {
-        var currencyCodes = Set<String>()
-        for (existKey, _) in subjects {
-            currencyCodes.insert(existKey.currencyCode)
-        }
-        return currencyCodes
     }
 
     private func needForceUpdate(key: CoinPriceKey) -> Bool {
@@ -193,8 +208,13 @@ extension CoinPriceSyncManager: ICoinPriceManagerDelegate {
 // MARK: - CountedPassthroughSubject
 
 class CountedPassthroughSubject<Output, Failure>: Subject where Failure: Error {
+    // MARK: Properties
+
     private(set) var subscribersCount = 0
+
     private let subject = PassthroughSubject<Output, Failure>()
+
+    // MARK: Functions
 
     func send(_ value: Output) {
         subject.send(value)

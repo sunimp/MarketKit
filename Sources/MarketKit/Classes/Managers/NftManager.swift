@@ -1,8 +1,7 @@
 //
 //  NftManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/24.
 //
 
 import Foundation
@@ -10,13 +9,19 @@ import Foundation
 // MARK: - NftManager
 
 class NftManager {
+    // MARK: Properties
+
     private let coinManager: CoinManager
     private let provider: WWNftProvider
+
+    // MARK: Lifecycle
 
     init(coinManager: CoinManager, provider: WWNftProvider) {
         self.coinManager = coinManager
         self.provider = provider
     }
+
+    // MARK: Functions
 
     private func nftPrice(token: Token?, value: Decimal?) -> NftPrice? {
         guard let token, let value else {
@@ -42,7 +47,11 @@ class NftManager {
         }
     }
 
-    private func collection(response: NftTopCollectionResponse, baseTokenMap: [BlockchainType: Token]) -> NftTopCollection {
+    private func collection(
+        response: NftTopCollectionResponse,
+        baseTokenMap: [BlockchainType: Token]
+    )
+        -> NftTopCollection {
         let blockchainType = BlockchainType(uid: response.blockchainUid)
         let baseToken = baseTokenMap[blockchainType]
 
@@ -62,7 +71,7 @@ class NftManager {
             blockchainType: blockchainType,
             providerUid: response.providerUid,
             name: response.name,
-            thumbnailImageUrl: response.thumbnailImageUrl,
+            thumbnailImageURL: response.thumbnailImageURL,
             floorPrice: nftPrice(token: baseToken, value: response.floorPrice),
             volumes: volumes.compactMapValues { $0 },
             changes: changes.compactMapValues { $0 }

@@ -1,8 +1,7 @@
 //
 //  WWPointTimePeriod.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/3/1.
 //
 
 import Foundation
@@ -15,6 +14,8 @@ public enum WWPointTimePeriod: String, CaseIterable {
     case day1 = "1d"
     case week1 = "1w"
     case month1 = "1M"
+
+    // MARK: Computed Properties
 
     var interval: TimeInterval {
         switch self {

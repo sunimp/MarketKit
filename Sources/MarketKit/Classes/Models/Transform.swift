@@ -1,8 +1,7 @@
 //
 //  Transform.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/1.
 //
 
 import Foundation
@@ -10,23 +9,20 @@ import Foundation
 import ObjectMapper
 
 public enum Transform {
-    private static let dateFormatter: DateFormatter = {
-        let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy-MM-dd"
-        return formatter
-    }()
-
-    public static let stringToDecimalTransform: TransformOf<Decimal, String> = TransformOf(fromJSON: { string -> Decimal? in
-        guard let string else {
-            return nil
+    public static let stringToDecimalTransform: TransformOf<Decimal, String> = TransformOf(
+        fromJSON: { string -> Decimal? in
+            guard let string else {
+                return nil
+            }
+            return Decimal(string: string)
+        },
+        toJSON: { (value: Decimal?) in
+            guard let value else {
+                return nil
+            }
+            return value.description
         }
-        return Decimal(string: string)
-    }, toJSON: { (value: Decimal?) in
-        guard let value else {
-            return nil
-        }
-        return value.description
-    })
+    )
 
     public static let stringToIntTransform: TransformOf<Int, String> = TransformOf(fromJSON: { string -> Int? in
         guard let string else {
@@ -40,17 +36,20 @@ public enum Transform {
         return value.description
     })
 
-    public static let doubleToDecimalTransform: TransformOf<Decimal, Double> = TransformOf(fromJSON: { double -> Decimal? in
-        guard let double else {
-            return nil
+    public static let doubleToDecimalTransform: TransformOf<Decimal, Double> = TransformOf(
+        fromJSON: { double -> Decimal? in
+            guard let double else {
+                return nil
+            }
+            return Decimal(double)
+        },
+        toJSON: { (value: Decimal?) in
+            guard let value else {
+                return nil
+            }
+            return (value as NSDecimalNumber).doubleValue
         }
-        return Decimal(double)
-    }, toJSON: { (value: Decimal?) in
-        guard let value else {
-            return nil
-        }
-        return (value as NSDecimalNumber).doubleValue
-    })
+    )
 
     public static let stringToDateTransform: TransformOf<Date, String> = TransformOf(fromJSON: { string -> Date? in
         guard let string else {
@@ -63,4 +62,10 @@ public enum Transform {
         }
         return dateFormatter.string(from: value)
     })
+
+    private static let dateFormatter: DateFormatter = {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyy-MM-dd"
+        return formatter
+    }()
 }

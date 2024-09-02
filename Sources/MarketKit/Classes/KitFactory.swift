@@ -1,8 +1,7 @@
 //
 //  KitFactory.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/16.
 //
 
 import Foundation
@@ -11,29 +10,33 @@ import GRDB
 import WWToolKit
 
 extension Kit {
-    
     private static let dataDirectoryName = "market-kit"
     private static let databaseFileName = "market-kit"
 
     public static func instance(
-        hsApiBaseUrl: String,
+        apiBaseURL: String,
         cryptoCompareApiKey: String? = nil,
-        hsProviderApiKey: String? = nil,
+        providerApiKey: String? = nil,
         minLogLevel: Logger.Level = .error
-    ) throws -> Kit {
+    ) throws
+        -> Kit {
         let logger = Logger(minLogLevel: minLogLevel)
         let reachabilityManager = ReachabilityManager()
         let networkManager = NetworkManager(logger: logger)
 
-        let databaseUrl = try dataDirectoryUrl().appendingPathComponent("\(databaseFileName).sqlite")
-        let dbPool = try DatabasePool(path: databaseUrl.path)
+        let databaseURL = try dataDirectoryURL().appendingPathComponent("\(databaseFileName).sqlite")
+        let dbPool = try DatabasePool(path: databaseURL.path)
         let coinStorage = try CoinStorage(dbPool: dbPool)
 
         let syncerStateStorage = try SyncerStateStorage(dbPool: dbPool)
 
         let cryptoCompareProvider = CryptoCompareProvider(networkManager: networkManager, apiKey: cryptoCompareApiKey)
-        let provider = WWProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
-        let hsNftProvider = WWNftProvider(baseUrl: hsApiBaseUrl, networkManager: networkManager, apiKey: hsProviderApiKey)
+        let provider = WWProvider(baseURL: apiBaseURL, networkManager: networkManager, apiKey: providerApiKey)
+        let hsNftProvider = WWNftProvider(
+            baseURL: apiBaseURL,
+            networkManager: networkManager,
+            apiKey: providerApiKey
+        )
 
         let coinManager = CoinManager(storage: coinStorage, provider: provider)
         let nftManager = NftManager(coinManager: coinManager, provider: hsNftProvider)
@@ -54,7 +57,10 @@ extension Kit {
         coinPriceManager.delegate = coinPriceSyncManager
 
         let coinHistoricalPriceStorage = try CoinHistoricalPriceStorage(dbPool: dbPool)
-        let coinHistoricalPriceManager = CoinHistoricalPriceManager(storage: coinHistoricalPriceStorage, provider: provider)
+        let coinHistoricalPriceManager = CoinHistoricalPriceManager(
+            storage: coinHistoricalPriceStorage,
+            provider: provider
+        )
 
         let postManager = PostManager(provider: cryptoCompareProvider)
 
@@ -76,7 +82,7 @@ extension Kit {
         )
     }
 
-    private static func dataDirectoryUrl() throws -> URL {
+    private static func dataDirectoryURL() throws -> URL {
         let fileManager = FileManager.default
 
         let url = try fileManager

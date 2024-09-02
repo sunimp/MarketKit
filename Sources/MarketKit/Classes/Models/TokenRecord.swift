@@ -1,8 +1,7 @@
 //
 //  TokenRecord.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/6.
 //
 
 import Foundation
@@ -11,8 +10,28 @@ import GRDB
 import ObjectMapper
 
 class TokenRecord: Record, Decodable, ImmutableMappable {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression {
+        case coinUid
+        case blockchainUid
+        case type
+        case decimals
+        case reference
+    }
+
+    // MARK: Static Properties
+
     static let coin = belongsTo(Coin.self)
     static let blockchain = belongsTo(BlockchainRecord.self)
+
+    // MARK: Overridden Properties
+
+    override class var databaseTableName: String {
+        "token"
+    }
+
+    // MARK: Properties
 
     let coinUid: String
     let blockchainUid: String
@@ -20,13 +39,7 @@ class TokenRecord: Record, Decodable, ImmutableMappable {
     let decimals: Int?
     let reference: String?
 
-    override class var databaseTableName: String {
-        "token"
-    }
-
-    enum Columns: String, ColumnExpression {
-        case coinUid, blockchainUid, type, decimals, reference
-    }
+    // MARK: Lifecycle
 
     init(coinUid: String, blockchainUid: String, type: String, decimals: Int? = nil, reference: String? = nil) {
         self.coinUid = coinUid
@@ -56,6 +69,28 @@ class TokenRecord: Record, Decodable, ImmutableMappable {
         super.init()
     }
 
+    required init(row: Row) throws {
+        coinUid = row[Columns.coinUid]
+        blockchainUid = row[Columns.blockchainUid]
+        type = row[Columns.type]
+        decimals = row[Columns.decimals]
+        reference = row[Columns.reference]
+
+        try super.init(row: row)
+    }
+
+    // MARK: Overridden Functions
+
+    override func encode(to container: inout PersistenceContainer) throws {
+        container[Columns.coinUid] = coinUid
+        container[Columns.blockchainUid] = blockchainUid
+        container[Columns.type] = type
+        container[Columns.decimals] = decimals
+        container[Columns.reference] = reference
+    }
+
+    // MARK: Functions
+
     func mapping(map: Map) {
         coinUid >>> map["coin_uid"]
         blockchainUid >>> map["blockchain_uid"]
@@ -76,23 +111,5 @@ class TokenRecord: Record, Decodable, ImmutableMappable {
 
         default: ()
         }
-    }
-
-    required init(row: Row) throws {
-        coinUid = row[Columns.coinUid]
-        blockchainUid = row[Columns.blockchainUid]
-        type = row[Columns.type]
-        decimals = row[Columns.decimals]
-        reference = row[Columns.reference]
-
-        try super.init(row: row)
-    }
-
-    override func encode(to container: inout PersistenceContainer) throws {
-        container[Columns.coinUid] = coinUid
-        container[Columns.blockchainUid] = blockchainUid
-        container[Columns.type] = type
-        container[Columns.decimals] = decimals
-        container[Columns.reference] = reference
     }
 }

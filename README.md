@@ -1,10 +1,16 @@
 # MarketKit.Swift
 
+## Requirements
+
+* Xcode 15.4+
+* Swift 5.10+
+* iOS 14.0+
+
 ## Installation
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.1.2"))
+    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.2.0"))
 ]
 ```
 

@@ -1,8 +1,7 @@
 //
 //  CryptoCompareProvider.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/29.
 //
 
 import Foundation
@@ -13,10 +12,14 @@ import WWToolKit
 // MARK: - CryptoCompareProvider
 
 class CryptoCompareProvider {
-    private let baseUrl = "https://min-api.cryptocompare.com"
+    // MARK: Properties
+
+    private let baseURL = "https://min-api.cryptocompare.com"
 
     private let networkManager: NetworkManager
     private let apiKey: String?
+
+    // MARK: Lifecycle
 
     init(networkManager: NetworkManager, apiKey: String?) {
         self.networkManager = networkManager
@@ -35,7 +38,7 @@ extension CryptoCompareProvider {
         parameters["api_key"] = apiKey
 
         let postsResponse: PostsResponse = try await networkManager.fetch(
-            url: "\(baseUrl)/data/v2/news/",
+            url: "\(baseURL)/data/v2/news/",
             method: .get,
             parameters: parameters,
             interceptor: RateLimitRetrier(),
@@ -49,7 +52,11 @@ extension CryptoCompareProvider {
 
 extension CryptoCompareProvider {
     class RateLimitRetrier: RequestInterceptor {
+        // MARK: Properties
+
         private var attempt = 0
+
+        // MARK: Functions
 
         func retry(_: Request, for _: Session, dueTo error: Error, completion: @escaping (RetryResult) -> Void) {
             let error = NetworkManager.unwrap(error: error)
@@ -64,8 +71,12 @@ extension CryptoCompareProvider {
         private func resolveResult() -> RetryResult {
             attempt += 1
 
-            if attempt == 1 { return .retryWithDelay(3) }
-            if attempt == 2 { return .retryWithDelay(6) }
+            if attempt == 1 {
+                return .retryWithDelay(3)
+            }
+            if attempt == 2 {
+                return .retryWithDelay(6)
+            }
 
             return .doNotRetry
         }

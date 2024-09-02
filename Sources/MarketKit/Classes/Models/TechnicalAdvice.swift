@@ -1,8 +1,7 @@
 //
 //  TechnicalAdvice.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2024/3/7.
 //
 
 import Foundation
@@ -12,6 +11,8 @@ import ObjectMapper
 // MARK: - TechnicalAdvice
 
 public struct TechnicalAdvice: ImmutableMappable {
+    // MARK: Properties
+
     public let ema: Decimal?
     public let rsi: Decimal?
     public let macd: Decimal?
@@ -22,6 +23,8 @@ public struct TechnicalAdvice: ImmutableMappable {
     public let timestamp: TimeInterval?
     public let advice: Advice?
     public let signalTimestamp: TimeInterval?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         ema = try? map.value("ema", using: Transform.stringToDecimalTransform)
@@ -50,9 +53,12 @@ extension TechnicalAdvice {
         case strongSell = "sell_signal"
         case overbought
 
+        // MARK: Computed Properties
+
         public var isRisky: Bool {
             switch self {
-            case .oversold, .overbought: true
+            case .oversold,
+                 .overbought: true
             default: false
             }
         }

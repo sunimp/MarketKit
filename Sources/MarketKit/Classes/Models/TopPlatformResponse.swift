@@ -1,8 +1,7 @@
 //
 //  TopPlatformResponse.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/4.
 //
 
 import Foundation
@@ -12,6 +11,8 @@ import ObjectMapper
 // MARK: - TopPlatformResponse
 
 struct TopPlatformResponse: ImmutableMappable {
+    // MARK: Properties
+
     let uid: String
     let name: String
     let rank: Int?
@@ -19,14 +20,7 @@ struct TopPlatformResponse: ImmutableMappable {
     let marketCap: Decimal?
     let stats: StatsResponse
 
-    init(map: Map) throws {
-        uid = try map.value("uid")
-        name = try map.value("name")
-        rank = try? map.value("rank")
-        protocolsCount = try? map.value("protocols")
-        marketCap = try? map.value("market_cap", using: Transform.stringToDecimalTransform)
-        stats = try map.value("stats")
-    }
+    // MARK: Computed Properties
 
     var topPlatform: TopPlatform {
         var ranks = [WWTimePeriod: Int]()
@@ -40,7 +34,7 @@ struct TopPlatformResponse: ImmutableMappable {
         changes[.month3] = stats.change3m
 
         return TopPlatform(
-            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerUrl: nil),
+            blockchain: Blockchain(type: BlockchainType(uid: uid), name: name, explorerURL: nil),
             rank: rank,
             protocolsCount: protocolsCount,
             marketCap: marketCap,
@@ -48,18 +42,33 @@ struct TopPlatformResponse: ImmutableMappable {
             changes: changes
         )
     }
+
+    // MARK: Lifecycle
+
+    init(map: Map) throws {
+        uid = try map.value("uid")
+        name = try map.value("name")
+        rank = try? map.value("rank")
+        protocolsCount = try? map.value("protocols")
+        marketCap = try? map.value("market_cap", using: Transform.stringToDecimalTransform)
+        stats = try map.value("stats")
+    }
 }
 
 // MARK: TopPlatformResponse.StatsResponse
 
 extension TopPlatformResponse {
     struct StatsResponse: ImmutableMappable {
+        // MARK: Properties
+
         let rank1w: Int?
         let rank1m: Int?
         let rank3m: Int?
         let change1w: Decimal?
         let change1m: Decimal?
         let change3m: Decimal?
+
+        // MARK: Lifecycle
 
         init(map: Map) throws {
             rank1w = try? map.value("rank_1w", using: Transform.stringToIntTransform)

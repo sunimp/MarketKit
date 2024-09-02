@@ -1,8 +1,7 @@
 //
 //  VerifiedExchange.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2023/11/10.
 //
 
 import Foundation
@@ -11,19 +10,27 @@ import GRDB
 import ObjectMapper
 
 class VerifiedExchange: Record, ImmutableMappable {
-    let uid: String
+    // MARK: Nested Types
 
-    init(uid: String) {
-        self.uid = uid
-        super.init()
+    enum Columns: String, ColumnExpression {
+        case uid
     }
+
+    // MARK: Overridden Properties
 
     override open class var databaseTableName: String {
         "VerifiedExchange"
     }
 
-    enum Columns: String, ColumnExpression {
-        case uid
+    // MARK: Properties
+
+    let uid: String
+
+    // MARK: Lifecycle
+
+    init(uid: String) {
+        self.uid = uid
+        super.init()
     }
 
     required init(map: Map) throws {
@@ -37,6 +44,8 @@ class VerifiedExchange: Record, ImmutableMappable {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.uid] = uid

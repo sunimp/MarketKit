@@ -1,8 +1,7 @@
 //
 //  MarketInfo.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/27.
 //
 
 import Foundation

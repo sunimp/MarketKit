@@ -1,8 +1,7 @@
 //
 //  CoinHistoricalPriceManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/20.
 //
 
 import Foundation
@@ -10,8 +9,12 @@ import Foundation
 // MARK: - CoinHistoricalPriceManager
 
 class CoinHistoricalPriceManager {
+    // MARK: Properties
+
     private let storage: CoinHistoricalPriceStorage
     private let provider: WWProvider
+
+    // MARK: Lifecycle
 
     init(storage: CoinHistoricalPriceStorage, provider: WWProvider) {
         self.storage = storage
@@ -24,8 +27,17 @@ extension CoinHistoricalPriceManager {
         try? storage.coinHistoricalPrice(coinUid: coinUid, currencyCode: currencyCode, timestamp: timestamp)?.value
     }
 
-    func coinHistoricalPriceValue(coinUid: String, currencyCode: String, timestamp: TimeInterval) async throws -> Decimal {
-        let response = try await provider.historicalCoinPrice(coinUid: coinUid, currencyCode: currencyCode, timestamp: timestamp)
+    func coinHistoricalPriceValue(
+        coinUid: String,
+        currencyCode: String,
+        timestamp: TimeInterval
+    ) async throws
+        -> Decimal {
+        let response = try await provider.historicalCoinPrice(
+            coinUid: coinUid,
+            currencyCode: currencyCode,
+            timestamp: timestamp
+        )
 
         guard abs(Int(timestamp) - response.timestamp) < 24 * 60 * 60 else { // 1 day
             throw ResponseError.returnedTimestampIsTooInaccurate

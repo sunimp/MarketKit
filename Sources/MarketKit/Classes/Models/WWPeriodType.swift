@@ -1,18 +1,32 @@
 //
 //  WWPeriodType.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2023/1/26.
 //
 
 import Foundation
 
 public enum WWPeriodType: Hashable {
-    static let keyAll = "all"
-
     case byPeriod(WWTimePeriod)
     case byCustomPoints(WWTimePeriod, Int)
     case byStartTime(TimeInterval)
+
+    // MARK: Static Properties
+
+    static let keyAll = "all"
+
+    // MARK: Computed Properties
+
+    public var rawValue: String {
+        switch self {
+        case let .byPeriod(interval): interval.rawValue
+        case let .byStartTime(timeStart): [Self.keyAll, Int(timeStart).description].joined(separator: "_")
+        case let .byCustomPoints(interval, pointCount): [interval.rawValue, pointCount.description]
+            .joined(separator: "_")
+        }
+    }
+
+    // MARK: Lifecycle
 
     public init?(rawValue: String) {
         if let period = WWTimePeriod(rawValue: rawValue) {
@@ -23,14 +37,12 @@ public enum WWPeriodType: Hashable {
         if chunks.count == 2 {
             if
                 chunks[0] == Self.keyAll,
-                let timestamp = Int(chunks[1])
-            {
+                let timestamp = Int(chunks[1]) {
                 self = .byStartTime(TimeInterval(timestamp))
                 return
             } else if
                 let period = WWTimePeriod(rawValue: String(chunks[0])),
-                let pointCount = Int(chunks[1])
-            {
+                let pointCount = Int(chunks[1]) {
                 self = .byCustomPoints(period, pointCount)
                 return
             }
@@ -38,30 +50,26 @@ public enum WWPeriodType: Hashable {
         self = .byPeriod(.day1)
     }
 
-    public var rawValue: String {
-        switch self {
-        case .byPeriod(let interval): interval.rawValue
-        case .byStartTime(let timeStart): [Self.keyAll, Int(timeStart).description].joined(separator: "_")
-        case .byCustomPoints(let interval, let pointCount): [interval.rawValue, pointCount.description].joined(separator: "_")
-        }
-    }
-
-    public func hash(into hasher: inout Hasher) {
-        switch self {
-        case .byPeriod(let interval): hasher.combine(interval)
-        case .byStartTime(let startTime): hasher.combine(startTime)
-        case .byCustomPoints(let interval, let pointCount):
-            hasher.combine(interval)
-            hasher.combine(pointCount)
-        }
-    }
+    // MARK: Static Functions
 
     public static func == (lhs: WWPeriodType, rhs: WWPeriodType) -> Bool {
         switch (lhs, rhs) {
-        case (.byPeriod(let lhsPeriod), .byPeriod(let rhsPeriod)): lhsPeriod == rhsPeriod
-        case (.byStartTime(let lhsStartTime), .byStartTime(let rhsStartTime)): lhsStartTime == rhsStartTime
-        case (.byCustomPoints(let lhsI, let lhsC), .byCustomPoints(let rhsI, let rhsC)): lhsI == rhsI && lhsC == rhsC
+        case let (.byPeriod(lhsPeriod), .byPeriod(rhsPeriod)): lhsPeriod == rhsPeriod
+        case let (.byStartTime(lhsStartTime), .byStartTime(rhsStartTime)): lhsStartTime == rhsStartTime
+        case let (.byCustomPoints(lhsI, lhsC), .byCustomPoints(rhsI, rhsC)): lhsI == rhsI && lhsC == rhsC
         default: false
+        }
+    }
+
+    // MARK: Functions
+
+    public func hash(into hasher: inout Hasher) {
+        switch self {
+        case let .byPeriod(interval): hasher.combine(interval)
+        case let .byStartTime(startTime): hasher.combine(startTime)
+        case let .byCustomPoints(interval, pointCount):
+            hasher.combine(interval)
+            hasher.combine(pointCount)
         }
     }
 }

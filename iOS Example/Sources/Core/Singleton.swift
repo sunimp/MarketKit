@@ -17,7 +17,7 @@ class Singleton {
 
     init() {
         kit = try! Kit.instance(
-            hsApiBaseUrl: "https://api-dev.blocksdecoded.com",
+            apiBaseURL: "https://api-dev.blocksdecoded.com",
             minLogLevel: .error
         )
 

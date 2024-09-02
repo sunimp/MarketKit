@@ -1,8 +1,7 @@
 //
 //  MarketOverviewManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/24.
 //
 
 import Foundation
@@ -10,8 +9,12 @@ import Foundation
 // MARK: - MarketOverviewManager
 
 class MarketOverviewManager {
+    // MARK: Properties
+
     private let nftManager: NftManager
     private let provider: WWProvider
+
+    // MARK: Lifecycle
 
     init(nftManager: NftManager, provider: WWProvider) {
         self.nftManager = nftManager

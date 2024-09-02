@@ -1,8 +1,7 @@
 //
 //  ChartPoint.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -12,9 +11,13 @@ import GRDB
 // MARK: - ChartPoint
 
 public class ChartPoint {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let value: Decimal
     public var volume: Decimal?
+
+    // MARK: Lifecycle
 
     public init(timestamp: TimeInterval, value: Decimal, volume: Decimal? = nil) {
         self.timestamp = timestamp
@@ -34,8 +37,12 @@ extension ChartPoint: Equatable {
 // MARK: - AggregatedChartPoints
 
 public struct AggregatedChartPoints {
+    // MARK: Properties
+
     public let points: [ChartPoint]
     public let aggregatedValue: Decimal?
+
+    // MARK: Lifecycle
 
     public init(points: [ChartPoint], aggregatedValue: Decimal?) {
         self.points = points

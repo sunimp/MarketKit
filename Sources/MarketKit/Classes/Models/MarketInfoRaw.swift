@@ -1,8 +1,7 @@
 //
 //  MarketInfoRaw.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import ObjectMapper
 
 struct MarketInfoRaw: ImmutableMappable {
+    // MARK: Properties
+
     let uid: String
     let price: Decimal?
     let priceChange24h: Decimal?
@@ -30,6 +31,14 @@ struct MarketInfoRaw: ImmutableMappable {
     let solidDex: Bool?
     let goodDistribution: Bool?
     let indicatorsResult: String?
+
+    // MARK: Computed Properties
+
+    private var advice: TechnicalAdvice.Advice? {
+        indicatorsResult.flatMap { .init(rawValue: $0) }
+    }
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         uid = try map.value("uid")
@@ -54,9 +63,7 @@ struct MarketInfoRaw: ImmutableMappable {
         indicatorsResult = try? map.value("indicators_result")
     }
 
-    private var advice: TechnicalAdvice.Advice? {
-        indicatorsResult.flatMap { .init(rawValue: $0) }
-    }
+    // MARK: Functions
 
     func marketInfo(fullCoin: FullCoin) -> MarketInfo {
         MarketInfo(

@@ -1,8 +1,7 @@
 //
 //  GlobalMarketInfoManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/13.
 //
 
 import Foundation
@@ -10,10 +9,14 @@ import Foundation
 // MARK: - GlobalMarketInfoManager
 
 class GlobalMarketInfoManager {
+    // MARK: Properties
+
     private let expirationInterval: TimeInterval = 600 // 6 mins
 
     private let provider: WWProvider
     private let storage: GlobalMarketInfoStorage
+
+    // MARK: Lifecycle
 
     init(provider: WWProvider, storage: GlobalMarketInfoStorage) {
         self.provider = provider
@@ -27,8 +30,7 @@ extension GlobalMarketInfoManager {
 
         if
             let storedInfo = try? storage.globalMarketInfo(currencyCode: currencyCode, timePeriod: timePeriod),
-            currentTimestamp - storedInfo.timestamp < expirationInterval
-        {
+            currentTimestamp - storedInfo.timestamp < expirationInterval {
             return storedInfo.points
         }
 

@@ -1,8 +1,7 @@
 //
 //  EtfPoint.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2024/5/22.
 //
 
 import Foundation
@@ -10,10 +9,14 @@ import Foundation
 import ObjectMapper
 
 public struct EtfPoint: ImmutableMappable {
+    // MARK: Properties
+
     public let date: Date
     public let totalAssets: Decimal
     public let totalInflow: Decimal
     public let dailyInflow: Decimal
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         date = try map.value("date", using: Etf.dateTransform)

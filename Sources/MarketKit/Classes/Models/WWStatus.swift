@@ -1,8 +1,7 @@
 //
 //  WWStatus.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/3/23.
 //
 
 import Foundation
@@ -10,9 +9,13 @@ import Foundation
 import ObjectMapper
 
 struct WWStatus: ImmutableMappable {
+    // MARK: Properties
+
     let coins: Int
     let blockchains: Int
     let tokens: Int
+
+    // MARK: Lifecycle
 
     init(map: Map) throws {
         coins = try map.value("coins")

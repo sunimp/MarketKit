@@ -1,8 +1,7 @@
 //
 //  CoinPriceStorage.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -12,13 +11,11 @@ import GRDB
 // MARK: - CoinPriceStorage
 
 class CoinPriceStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(dbPool: DatabasePool) throws {
-        self.dbPool = dbPool
-
-        try migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -31,7 +28,10 @@ class CoinPriceStorage {
                 t.column(CoinPrice.Columns.diff24h.name, .double)
                 t.column(CoinPrice.Columns.timestamp.name, .double)
 
-                t.primaryKey([CoinPrice.Columns.coinUid.name, CoinPrice.Columns.currencyCode.name], onConflict: .replace)
+                t.primaryKey(
+                    [CoinPrice.Columns.coinUid.name, CoinPrice.Columns.currencyCode.name],
+                    onConflict: .replace
+                )
             }
         }
 
@@ -45,11 +45,22 @@ class CoinPriceStorage {
                 t.column(CoinPrice.Columns.diff1d.name, .double)
                 t.column(CoinPrice.Columns.timestamp.name, .double)
 
-                t.primaryKey([CoinPrice.Columns.coinUid.name, CoinPrice.Columns.currencyCode.name], onConflict: .replace)
+                t.primaryKey(
+                    [CoinPrice.Columns.coinUid.name, CoinPrice.Columns.currencyCode.name],
+                    onConflict: .replace
+                )
             }
         }
 
         return migrator
+    }
+
+    // MARK: Lifecycle
+
+    init(dbPool: DatabasePool) throws {
+        self.dbPool = dbPool
+
+        try migrator.migrate(dbPool)
     }
 }
 
@@ -63,7 +74,8 @@ extension CoinPriceStorage {
 
     func coinPrices(coinUids: [String], currencyCode: String) throws -> [CoinPrice] {
         try dbPool.read { db in
-            try CoinPrice.filter(coinUids.contains(CoinPrice.Columns.coinUid) && CoinPrice.Columns.currencyCode == currencyCode)
+            try CoinPrice
+                .filter(coinUids.contains(CoinPrice.Columns.coinUid) && CoinPrice.Columns.currencyCode == currencyCode)
                 .fetchAll(db)
         }
     }

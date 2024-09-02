@@ -1,8 +1,7 @@
 //
 //  CoinHistoricalPrice.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -12,14 +11,29 @@ import GRDB
 // MARK: - CoinHistoricalPrice
 
 public class CoinHistoricalPrice: Record {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression, CaseIterable {
+        case coinUid
+        case currencyCode
+        case value
+        case timestamp
+    }
+
+    // MARK: Overridden Properties
+
+    override open class var databaseTableName: String {
+        "coinHistoricalPrice"
+    }
+
+    // MARK: Properties
+
     public let coinUid: String
     public let currencyCode: String
     public let value: Decimal
     public let timestamp: TimeInterval
 
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case coinUid, currencyCode, value, timestamp
-    }
+    // MARK: Lifecycle
 
     init(coinUid: String, currencyCode: String, value: Decimal, timestamp: TimeInterval) {
         self.coinUid = coinUid
@@ -30,10 +44,6 @@ public class CoinHistoricalPrice: Record {
         super.init()
     }
 
-    override open class var databaseTableName: String {
-        "coinHistoricalPrice"
-    }
-
     required init(row: Row) throws {
         coinUid = row[Columns.coinUid]
         currencyCode = row[Columns.currencyCode]
@@ -42,6 +52,8 @@ public class CoinHistoricalPrice: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.coinUid] = coinUid

@@ -1,8 +1,7 @@
 //
 //  CoinCategory.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/26.
 //
 
 import Foundation
@@ -12,6 +11,8 @@ import ObjectMapper
 // MARK: - CoinCategory
 
 public class CoinCategory: ImmutableMappable {
+    // MARK: Properties
+
     public let uid: String
     public let name: String
     public let descriptions: [String: String]
@@ -19,6 +20,8 @@ public class CoinCategory: ImmutableMappable {
     public let diff24H: Decimal?
     public let diff1W: Decimal?
     public let diff1M: Decimal?
+
+    // MARK: Lifecycle
 
     public required init(map: Map) throws {
         uid = try map.value("uid")
@@ -33,7 +36,6 @@ public class CoinCategory: ImmutableMappable {
 }
 
 extension CoinCategory {
-    
     public func diff(timePeriod: WWTimePeriod) -> Decimal? {
         switch timePeriod {
         case .day1: diff24H

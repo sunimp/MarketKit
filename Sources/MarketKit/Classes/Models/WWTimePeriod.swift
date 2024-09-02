@@ -1,8 +1,7 @@
 //
 //  WWTimePeriod.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/2/8.
 //
 
 import Foundation
@@ -21,6 +20,17 @@ public enum WWTimePeriod: String, CaseIterable {
     case year2 = "2y"
     case year5 = "5y"
 
+    // MARK: Computed Properties
+
+    var startTimestamp: TimeInterval {
+        switch self {
+        case .day1:
+            .midnightUTC() + .minutes(1)
+        default:
+            Date().timeIntervalSince1970 - range
+        }
+    }
+
     private var range: TimeInterval {
         switch self {
         case .hour24: .days(1)
@@ -33,15 +43,6 @@ public enum WWTimePeriod: String, CaseIterable {
         case .year1: .days(365)
         case .year2: 2 * .days(365)
         case .year5: 5 * .days(365)
-        }
-    }
-
-    var startTimestamp: TimeInterval {
-        switch self {
-        case .day1:
-            .midnightUTC() + .minutes(1)
-        default:
-            Date().timeIntervalSince1970 - range
         }
     }
 }

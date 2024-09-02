@@ -1,8 +1,7 @@
 //
 //  Etf.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2024/5/22.
 //
 
 import Foundation
@@ -12,12 +11,16 @@ import ObjectMapper
 // MARK: - Etf
 
 public struct Etf: ImmutableMappable {
+    // MARK: Properties
+
     public let ticker: String
     public let name: String
     public let date: Date?
     public let totalAssets: Decimal?
     public let totalInflow: Decimal?
     public let inflows: [WWTimePeriod: Decimal]
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         ticker = try map.value("ticker")
@@ -48,11 +51,15 @@ extension Etf {
 
     static let dateTransform: TransformOf<Date, String> = TransformOf(
         fromJSON: { string -> Date? in
-            guard let string else { return nil }
+            guard let string else {
+                return nil
+            }
             return dateFormatter.date(from: string)
         },
         toJSON: { (value: Date?) in
-            guard let value else { return nil }
+            guard let value else {
+                return nil
+            }
             return dateFormatter.string(from: value)
         }
     )

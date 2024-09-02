@@ -1,8 +1,7 @@
 //
 //  MarketInfoOverviewResponse.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/6.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import ObjectMapper
 
 class MarketInfoOverviewResponse: ImmutableMappable {
+    // MARK: Properties
+
     let marketCap: Decimal?
     let marketCapRank: Int?
     let totalSupply: Decimal?
@@ -22,19 +23,40 @@ class MarketInfoOverviewResponse: ImmutableMappable {
     let description: String
     let links: [String: String?]
 
+    // MARK: Lifecycle
+
     required init(map: Map) throws {
         marketCap = try? map.value("market_data.market_cap", using: Transform.stringToDecimalTransform)
         marketCapRank = try? map.value("market_data.market_cap_rank")
         totalSupply = try? map.value("market_data.total_supply", using: Transform.stringToDecimalTransform)
         circulatingSupply = try? map.value("market_data.circulating_supply", using: Transform.stringToDecimalTransform)
         volume24h = try? map.value("market_data.total_volume", using: Transform.stringToDecimalTransform)
-        dilutedMarketCap = try? map.value("market_data.fully_diluted_valuation", using: Transform.stringToDecimalTransform)
+        dilutedMarketCap = try? map.value(
+            "market_data.fully_diluted_valuation",
+            using: Transform.stringToDecimalTransform
+        )
         performance = try map.value("performance")
         genesisDate = try? map.value("genesis_date", using: Transform.stringToDateTransform)
         categories = try map.value("categories")
         description = (try? map.value("description")) ?? ""
         links = (try? map.value("links")) ?? [:]
     }
+
+    // MARK: Static Functions
+
+    static func timePeriod(_ timePeriod: String) -> WWTimePeriod? {
+        switch timePeriod {
+        case "24h": .day1
+        case "7d": .week1
+        case "14d": .week2
+        case "30d": .month1
+        case "200d": .month6
+        case "1y": .year1
+        default: nil
+        }
+    }
+
+    // MARK: Functions
 
     func marketInfoOverview(fullCoin: FullCoin) -> MarketInfoOverview {
         var convertedLinks = [LinkType: String]()
@@ -55,8 +77,7 @@ class MarketInfoOverviewResponse: ImmutableMappable {
                 if
                     let changeStr = change,
                     let changeDecimal = Decimal(string: changeStr),
-                    let timePeriod = Self.timePeriod(timePeriodStr)
-                {
+                    let timePeriod = Self.timePeriod(timePeriodStr) {
                     performanceChanges[timePeriod] = changeDecimal
                 }
             }
@@ -82,17 +103,5 @@ class MarketInfoOverviewResponse: ImmutableMappable {
             description: description,
             links: convertedLinks
         )
-    }
-
-    static func timePeriod(_ timePeriod: String) -> WWTimePeriod? {
-        switch timePeriod {
-        case "24h": .day1
-        case "7d": .week1
-        case "14d": .week2
-        case "30d": .month1
-        case "200d": .month6
-        case "1y": .year1
-        default: nil
-        }
     }
 }

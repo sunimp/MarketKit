@@ -1,8 +1,7 @@
 //
 //  CoinPriceResponse.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -11,11 +10,15 @@ import ObjectMapper
 import WWToolKit
 
 struct CoinPriceResponse: ImmutableMappable {
+    // MARK: Properties
+
     let uid: String
     let price: Decimal
     let priceChange24h: Decimal?
     let priceChange1d: Decimal?
     let lastUpdated: TimeInterval
+
+    // MARK: Lifecycle
 
     init(
         uid: String,
@@ -39,6 +42,8 @@ struct CoinPriceResponse: ImmutableMappable {
         priceChange1d = try? map.value("price_change_1d", using: Transform.stringToDecimalTransform)
         lastUpdated = try map.value("last_updated")
     }
+
+    // MARK: Functions
 
     func coinPrice(currencyCode: String) -> CoinPrice {
         CoinPrice(

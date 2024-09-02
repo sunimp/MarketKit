@@ -1,8 +1,7 @@
 //
 //  CoinStorage.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/16.
 //
 
 import Foundation
@@ -12,13 +11,11 @@ import GRDB
 // MARK: - CoinStorage
 
 class CoinStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(dbPool: DatabasePool) throws {
-        self.dbPool = dbPool
-
-        try migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -36,7 +33,7 @@ class CoinStorage {
                 t.column(Coin.Columns.name.name, .text).notNull()
                 t.column(Coin.Columns.code.name, .text).notNull()
                 t.column(Coin.Columns.marketCapRank.name, .integer)
-                t.column(Coin.Columns.coinGeckoId.name, .text)
+                t.column(Coin.Columns.coinGeckoID.name, .text)
             }
 
             try db.create(table: BlockchainRecord.databaseTableName) { t in
@@ -58,7 +55,11 @@ class CoinStorage {
                 t.column(TokenRecord.Columns.reference.name, .text)
 
                 t.primaryKey(
-                    [TokenRecord.Columns.coinUid.name, TokenRecord.Columns.blockchainUid.name, TokenRecord.Columns.type.name],
+                    [
+                        TokenRecord.Columns.coinUid.name,
+                        TokenRecord.Columns.blockchainUid.name,
+                        TokenRecord.Columns.type.name,
+                    ],
                     onConflict: .replace
                 )
             }
@@ -78,7 +79,7 @@ class CoinStorage {
 
         migrator.registerMigration("Rename 'eip3091url' column to 'explorerUrl' in Blockchains") { db in
             try db.alter(table: BlockchainRecord.databaseTableName) { t in
-                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerUrl.name)
+                t.rename(column: "eip3091url", to: BlockchainRecord.Columns.explorerURL.name)
             }
         }
 
@@ -87,10 +88,12 @@ class CoinStorage {
                 if
                     let record = try TokenRecord
                         .filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native")
-                        .fetchOne(db)
-                {
+                        .fetchOne(db) {
                     try TokenRecord
-                        .filter(TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns.type == "native")
+                        .filter(
+                            TokenRecord.Columns.blockchainUid == blockchainUid && TokenRecord.Columns
+                                .type == "native"
+                        )
                         .deleteAll(db)
                     for derivation in ["bip44", "bip49", "bip84", "bip86"] {
                         let newRecord = TokenRecord(
@@ -107,8 +110,7 @@ class CoinStorage {
             if
                 let record = try TokenRecord
                     .filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native")
-                    .fetchOne(db)
-            {
+                    .fetchOne(db) {
                 try TokenRecord
                     .filter(TokenRecord.Columns.blockchainUid == "bitcoin-cash" && TokenRecord.Columns.type == "native")
                     .deleteAll(db)
@@ -132,6 +134,16 @@ class CoinStorage {
 
         return migrator
     }
+
+    // MARK: Lifecycle
+
+    init(dbPool: DatabasePool) throws {
+        self.dbPool = dbPool
+
+        try migrator.migrate(dbPool)
+    }
+
+    // MARK: Functions
 
     private func searchOrder(filter: String) -> SQL {
         SQL(
@@ -331,8 +343,12 @@ extension CoinStorage {
 // MARK: - CoinTokensRecord
 
 struct CoinTokensRecord: FetchableRecord, Decodable {
+    // MARK: Properties
+
     let coin: Coin
     let tokens: [TokenBlockchainRecord]
+
+    // MARK: Computed Properties
 
     var fullCoin: FullCoin {
         FullCoin(
@@ -366,9 +382,13 @@ struct TokenBlockchainRecord: FetchableRecord, Decodable {
 // MARK: - TokenInfoRecord
 
 struct TokenInfoRecord: FetchableRecord, Decodable {
+    // MARK: Properties
+
     let tokenRecord: TokenRecord
     let coin: Coin
     let blockchain: BlockchainRecord
+
+    // MARK: Computed Properties
 
     var token: Token {
         let tokenType: TokenType =

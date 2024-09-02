@@ -1,8 +1,7 @@
 //
 //  PerformanceRow.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/10.
 //
 
 import Foundation
@@ -20,6 +19,8 @@ public enum PerformanceBase: String, CaseIterable {
     case usd
     case btc
     case eth
+
+    // MARK: Computed Properties
 
     private var index: Int {
         switch self {

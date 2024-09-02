@@ -1,8 +1,7 @@
 //
 //  SyncerState.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/15.
 //
 
 import Foundation
@@ -12,12 +11,25 @@ import GRDB
 // MARK: - SyncerState
 
 class SyncerState: Record {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression, CaseIterable {
+        case key
+        case value
+    }
+
+    // MARK: Overridden Properties
+
+    override class var databaseTableName: String {
+        "syncerStates"
+    }
+
+    // MARK: Properties
+
     let key: String
     let value: String
 
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case key, value
-    }
+    // MARK: Lifecycle
 
     init(key: String, value: String) {
         self.key = key
@@ -26,16 +38,14 @@ class SyncerState: Record {
         super.init()
     }
 
-    override class var databaseTableName: String {
-        "syncerStates"
-    }
-
     required init(row: Row) throws {
         key = row[Columns.key]
         value = row[Columns.value]
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override func encode(to container: inout PersistenceContainer) throws {
         container[Columns.key] = key

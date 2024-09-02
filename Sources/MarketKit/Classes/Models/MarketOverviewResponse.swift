@@ -1,8 +1,7 @@
 //
 //  MarketOverviewResponse.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/24.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import ObjectMapper
 
 struct MarketOverviewResponse: ImmutableMappable {
+    // MARK: Properties
+
     let globalMarketPoints: [GlobalMarketPoint]
     let coinCategories: [CoinCategory]
     let topPairs: [MarketPair]
@@ -17,6 +18,8 @@ struct MarketOverviewResponse: ImmutableMappable {
     let collections1d: [NftTopCollectionResponse]
     let collections1w: [NftTopCollectionResponse]
     let collections1m: [NftTopCollectionResponse]
+
+    // MARK: Lifecycle
 
     init(map: Map) throws {
         globalMarketPoints = try map.value("global")

@@ -1,8 +1,7 @@
 //
-//  CoinPriceKey.swift
-//  MarketKit
+//  WWProvider.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/16.
 //
 
 import Foundation
@@ -14,17 +13,15 @@ import WWToolKit
 // MARK: - WWProvider
 
 class WWProvider {
-    private let baseUrl: String
-    private let networkManager: NetworkManager
-    private let apiKey: String?
+    // MARK: Properties
 
     var proAuthToken: String?
 
-    init(baseUrl: String, networkManager: NetworkManager, apiKey: String?) {
-        self.baseUrl = baseUrl
-        self.networkManager = networkManager
-        self.apiKey = apiKey
-    }
+    private let baseURL: String
+    private let networkManager: NetworkManager
+    private let apiKey: String?
+
+    // MARK: Computed Properties
 
     var headers: HTTPHeaders {
         var headers = HTTPHeaders()
@@ -45,6 +42,14 @@ class WWProvider {
 
         return headers
     }
+
+    // MARK: Lifecycle
+
+    init(baseURL: String, networkManager: NetworkManager, apiKey: String?) {
+        self.baseURL = baseURL
+        self.networkManager = networkManager
+        self.apiKey = apiKey
+    }
 }
 
 extension WWProvider {
@@ -54,7 +59,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/markets/overview-simple",
+            url: "\(baseURL)/v1/markets/overview-simple",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -68,7 +73,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/markets/overview",
+            url: "\(baseURL)/v1/markets/overview",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -81,7 +86,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/top-movers",
+            url: "\(baseURL)/v1/coins/top-movers",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -91,21 +96,21 @@ extension WWProvider {
     // Status
 
     func status() async throws -> WWStatus {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/status/updates", method: .get, headers: headers)
+        try await networkManager.fetch(url: "\(baseURL)/v1/status/updates", method: .get, headers: headers)
     }
 
     // Coins
 
     func allCoins() async throws -> [Coin] {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/coins/list", method: .get, headers: headers)
+        try await networkManager.fetch(url: "\(baseURL)/v1/coins/list", method: .get, headers: headers)
     }
 
     func allBlockchainRecords() async throws -> [BlockchainRecord] {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/blockchains/list", method: .get, headers: headers)
+        try await networkManager.fetch(url: "\(baseURL)/v1/blockchains/list", method: .get, headers: headers)
     }
 
     func allTokenRecords() async throws -> [TokenRecord] {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/tokens/list", method: .get, headers: headers)
+        try await networkManager.fetch(url: "\(baseURL)/v1/tokens/list", method: .get, headers: headers)
     }
 
     // Market Infos
@@ -122,7 +127,12 @@ extension WWProvider {
             parameters["defi"] = "true"
         }
 
-        return try await networkManager.fetch(url: "\(baseUrl)/v1/coins", method: .get, parameters: parameters, headers: headers)
+        return try await networkManager.fetch(
+            url: "\(baseURL)/v1/coins",
+            method: .get,
+            parameters: parameters,
+            headers: headers
+        )
     }
 
     func topCoinsMarketInfos(top: Int, currencyCode: String) async throws -> [MarketInfoRaw] {
@@ -133,7 +143,12 @@ extension WWProvider {
             "order_by_rank": "true",
         ]
 
-        return try await networkManager.fetch(url: "\(baseUrl)/v1/coins", method: .get, parameters: parameters, headers: headers)
+        return try await networkManager.fetch(
+            url: "\(baseURL)/v1/coins",
+            method: .get,
+            parameters: parameters,
+            headers: headers
+        )
     }
 
     func advancedMarketInfos(top: Int, currencyCode: String) async throws -> [MarketInfoRaw] {
@@ -144,7 +159,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/filter",
+            url: "\(baseURL)/v1/coins/filter",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -158,7 +173,12 @@ extension WWProvider {
             "currency": currencyCode.lowercased(),
         ]
 
-        return try await networkManager.fetch(url: "\(baseUrl)/v1/coins", method: .get, parameters: parameters, headers: headers)
+        return try await networkManager.fetch(
+            url: "\(baseURL)/v1/coins",
+            method: .get,
+            parameters: parameters,
+            headers: headers
+        )
     }
 
     func marketInfos(categoryUid: String, currencyCode: String) async throws -> [MarketInfoRaw] {
@@ -167,7 +187,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/categories/\(categoryUid)/coins",
+            url: "\(baseURL)/v1/categories/\(categoryUid)/coins",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -178,14 +198,15 @@ extension WWProvider {
         coinUid: String,
         currencyCode: String,
         languageCode: String
-    ) async throws -> MarketInfoOverviewResponse {
+    ) async throws
+        -> MarketInfoOverviewResponse {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "language": languageCode.lowercased(),
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/\(coinUid)",
+            url: "\(baseURL)/v1/coins/\(coinUid)",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -199,7 +220,7 @@ extension WWProvider {
         ]
 
         let response: [MarketInfoTvlRaw] = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/defi-protocols/\(coinUid)/tvls",
+            url: "\(baseURL)/v1/defi-protocols/\(coinUid)/tvls",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -207,7 +228,12 @@ extension WWProvider {
         return response.compactMap(\.marketInfoTvl)
     }
 
-    func marketInfoGlobalTvl(platform: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [ChartPoint] {
+    func marketInfoGlobalTvl(
+        platform: String,
+        currencyCode: String,
+        timePeriod: WWTimePeriod
+    ) async throws
+        -> [ChartPoint] {
         var parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
@@ -218,7 +244,7 @@ extension WWProvider {
         }
 
         let response: [MarketInfoTvlRaw] = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/global-markets/tvls",
+            url: "\(baseURL)/v1/global-markets/tvls",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -232,7 +258,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/defi-protocols/list",
+            url: "\(baseURL)/v1/defi-protocols/list",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -248,7 +274,7 @@ extension WWProvider {
         }
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/categories",
+            url: "\(baseURL)/v1/categories",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -259,7 +285,8 @@ extension WWProvider {
         category: String,
         currencyCode: String?,
         timePeriod: WWTimePeriod
-    ) async throws -> [CategoryMarketPoint] {
+    ) async throws
+        -> [CategoryMarketPoint] {
         var parameters: Parameters = [:]
         if let currencyCode {
             parameters["currency"] = currencyCode.lowercased()
@@ -267,7 +294,7 @@ extension WWProvider {
         parameters["interval"] = timePeriod.rawValue
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/categories/\(category)/market_cap",
+            url: "\(baseURL)/v1/categories/\(category)/market_cap",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -288,7 +315,7 @@ extension WWProvider {
         }
 
         let responses: [CoinPriceResponse] = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins",
+            url: "\(baseURL)/v1/coins",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -300,14 +327,15 @@ extension WWProvider {
         coinUid: String,
         currencyCode: String,
         timestamp: TimeInterval
-    ) async throws -> HistoricalCoinPriceResponse {
+    ) async throws
+        -> HistoricalCoinPriceResponse {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "timestamp": Int(timestamp),
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/\(coinUid)/price_history",
+            url: "\(baseURL)/v1/coins/\(coinUid)/price_history",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -315,12 +343,16 @@ extension WWProvider {
     }
 
     func coinPriceChartStart(coinUid: String) async throws -> ChartStart {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/coins/\(coinUid)/price_chart_start", method: .get, headers: headers)
+        try await networkManager.fetch(
+            url: "\(baseURL)/v1/coins/\(coinUid)/price_chart_start",
+            method: .get,
+            headers: headers
+        )
     }
 
     func topPlatformMarketCapStart(platform: String) async throws -> ChartStart {
         try await networkManager.fetch(
-            url: "\(baseUrl)/v1/top-platforms/\(platform)/market_chart_start",
+            url: "\(baseURL)/v1/top-platforms/\(platform)/market_chart_start",
             method: .get,
             headers: headers
         )
@@ -331,7 +363,8 @@ extension WWProvider {
         currencyCode: String,
         interval: WWPointTimePeriod,
         fromTimestamp: TimeInterval? = nil
-    ) async throws -> [ChartCoinPriceResponse] {
+    ) async throws
+        -> [ChartCoinPriceResponse] {
         var parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": interval.rawValue,
@@ -342,7 +375,7 @@ extension WWProvider {
         }
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/\(coinUid)/price_chart",
+            url: "\(baseURL)/v1/coins/\(coinUid)/price_chart",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -357,7 +390,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/\(coinUid)/holders",
+            url: "\(baseURL)/v1/analytics/\(coinUid)/holders",
             method: .get,
             parameters: parameters,
             headers: proHeaders
@@ -372,7 +405,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/funds/investments",
+            url: "\(baseURL)/v1/funds/investments",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -386,7 +419,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/funds/treasuries",
+            url: "\(baseURL)/v1/funds/treasuries",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -399,7 +432,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/reports",
+            url: "\(baseURL)/v1/reports",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -408,7 +441,7 @@ extension WWProvider {
 
     func twitterUsername(coinUid: String) async throws -> String? {
         let response: TwitterUsernameResponse = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/\(coinUid)/twitter",
+            url: "\(baseURL)/v1/coins/\(coinUid)/twitter",
             method: .get,
             headers: headers
         )
@@ -422,7 +455,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/global-markets",
+            url: "\(baseURL)/v1/global-markets",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -437,7 +470,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/exchanges/top-market-pairs",
+            url: "\(baseURL)/v1/exchanges/top-market-pairs",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -452,7 +485,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/top-platforms",
+            url: "\(baseURL)/v1/top-platforms",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -465,7 +498,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/top-platforms/\(blockchain)/list",
+            url: "\(baseURL)/v1/top-platforms/\(blockchain)/list",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -477,7 +510,8 @@ extension WWProvider {
         currencyCode: String?,
         interval: WWPointTimePeriod,
         fromTimestamp: TimeInterval? = nil
-    ) async throws -> [CategoryMarketPoint] {
+    ) async throws
+        -> [CategoryMarketPoint] {
         var parameters: Parameters = [
             "interval": interval.rawValue,
         ]
@@ -489,7 +523,7 @@ extension WWProvider {
         }
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/top-platforms/\(platform)/market_chart",
+            url: "\(baseURL)/v1/top-platforms/\(platform)/market_chart",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -503,7 +537,12 @@ extension WWProvider {
             "currency": currencyCode.lowercased(),
         ]
 
-        return try await networkManager.fetch(url: "\(baseUrl)/v1/etfs", method: .get, parameters: parameters, headers: headers)
+        return try await networkManager.fetch(
+            url: "\(baseURL)/v1/etfs",
+            method: .get,
+            parameters: parameters,
+            headers: headers
+        )
     }
 
     func etfPoints(currencyCode: String) async throws -> [EtfPoint] {
@@ -512,7 +551,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/etfs/total",
+            url: "\(baseURL)/v1/etfs/total",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -521,14 +560,19 @@ extension WWProvider {
 
     // Pro Charts
 
-    private func proData<T: ImmutableMappable>(path: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [T] {
+    private func proData<T: ImmutableMappable>(
+        path: String,
+        currencyCode: String,
+        timePeriod: WWTimePeriod
+    ) async throws
+        -> [T] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/\(path)",
+            url: "\(baseURL)/v1/analytics/\(path)",
             method: .get,
             parameters: parameters,
             headers: proHeaders
@@ -541,7 +585,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/\(path)",
+            url: "\(baseURL)/v1/analytics/\(path)",
             method: .get,
             parameters: parameters,
             headers: proHeaders
@@ -558,7 +602,7 @@ extension WWProvider {
         }
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/ranks",
+            url: "\(baseURL)/v1/analytics/ranks",
             method: .get,
             parameters: parameters,
             headers: proHeaders
@@ -570,7 +614,7 @@ extension WWProvider {
             "currency": currencyCode.lowercased(),
         ]
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/\(coinUid)",
+            url: "\(baseURL)/v1/analytics/\(coinUid)",
             method: .get,
             parameters: parameters,
             headers: proHeaders
@@ -578,7 +622,11 @@ extension WWProvider {
     }
 
     func analyticsPreview(coinUid: String) async throws -> AnalyticsPreview {
-        try await networkManager.fetch(url: "\(baseUrl)/v1/analytics/\(coinUid)/preview", method: .get, headers: headers)
+        try await networkManager.fetch(
+            url: "\(baseURL)/v1/analytics/\(coinUid)/preview",
+            method: .get,
+            headers: headers
+        )
     }
 
     func dexVolumes(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [VolumePoint] {
@@ -637,7 +685,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/analytics/subscriptions",
+            url: "\(baseURL)/v1/analytics/subscriptions",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -650,7 +698,7 @@ extension WWProvider {
         ]
 
         let response: SignMessageResponse = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/auth/get-sign-message",
+            url: "\(baseURL)/v1/auth/get-sign-message",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -666,7 +714,7 @@ extension WWProvider {
         ]
 
         let response: AuthenticateResponse = try await networkManager.fetch(
-            url: "\(baseUrl)/v1/auth/authenticate",
+            url: "\(baseURL)/v1/auth/authenticate",
             method: .post,
             parameters: parameters,
             headers: headers
@@ -683,7 +731,7 @@ extension WWProvider {
         ]
 
         _ = try await networkManager.fetchJson(
-            url: "\(baseUrl)/v1/support/start-chat",
+            url: "\(baseURL)/v1/support/start-chat",
             method: .post,
             parameters: parameters,
             headers: proHeaders
@@ -698,7 +746,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/exchanges/tickers/\(coinUid)",
+            url: "\(baseURL)/v1/exchanges/tickers/\(coinUid)",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -713,7 +761,7 @@ extension WWProvider {
         ]
 
         return try await networkManager.fetch(
-            url: "\(baseUrl)/v1/coins/signals",
+            url: "\(baseURL)/v1/coins/signals",
             method: .get,
             parameters: parameters,
             headers: headers
@@ -722,18 +770,18 @@ extension WWProvider {
 
     // Stats
 
-    func send(stats: Any, appVersion: String, appId: String?) async throws {
+    func send(stats: Any, appVersion: String, appID: String?) async throws {
         var headers = headers
 
         headers.add(name: "app_platform", value: "ios")
         headers.add(name: "app_version", value: appVersion)
 
-        if let appId {
-            headers.add(name: "app_id", value: appId)
+        if let appID {
+            headers.add(name: "app_id", value: appID)
         }
 
         _ = try await networkManager.fetchJson(
-            url: "\(baseUrl)/v1/stats",
+            url: "\(baseURL)/v1/stats",
             method: .post,
             encoding: HttpBodyEncoding(jsonObject: stats),
             headers: headers
@@ -743,8 +791,12 @@ extension WWProvider {
 
 extension WWProvider {
     struct SignalResponse: ImmutableMappable {
+        // MARK: Properties
+
         let uid: String
         let signal: TechnicalAdvice.Advice?
+
+        // MARK: Lifecycle
 
         init(map: Map) throws {
             uid = try map.value("uid")
@@ -753,8 +805,12 @@ extension WWProvider {
     }
 
     struct HistoricalCoinPriceResponse: ImmutableMappable {
+        // MARK: Properties
+
         let timestamp: Int
         let price: Decimal
+
+        // MARK: Lifecycle
 
         init(map: Map) throws {
             timestamp = try map.value("timestamp")
@@ -763,15 +819,13 @@ extension WWProvider {
     }
 
     struct ChartCoinPriceResponse: ImmutableMappable {
+        // MARK: Properties
+
         let timestamp: Int
         let price: Decimal
         let totalVolume: Decimal?
 
-        init(map: Map) throws {
-            timestamp = try map.value("timestamp")
-            price = try map.value("price", using: Transform.stringToDecimalTransform)
-            totalVolume = try? map.value("volume", using: Transform.stringToDecimalTransform)
-        }
+        // MARK: Computed Properties
 
         var chartPoint: ChartPoint {
             ChartPoint(
@@ -788,10 +842,22 @@ extension WWProvider {
 
             return ChartPoint(timestamp: TimeInterval(timestamp), value: totalVolume)
         }
+
+        // MARK: Lifecycle
+
+        init(map: Map) throws {
+            timestamp = try map.value("timestamp")
+            price = try map.value("price", using: Transform.stringToDecimalTransform)
+            totalVolume = try? map.value("volume", using: Transform.stringToDecimalTransform)
+        }
     }
 
     struct SignMessageResponse: ImmutableMappable {
+        // MARK: Properties
+
         let message: String
+
+        // MARK: Lifecycle
 
         init(map: Map) throws {
             message = try map.value("message")
@@ -799,7 +865,11 @@ extension WWProvider {
     }
 
     struct AuthenticateResponse: ImmutableMappable {
+        // MARK: Properties
+
         let token: String
+
+        // MARK: Lifecycle
 
         init(map: Map) throws {
             token = try map.value("token")
@@ -807,11 +877,17 @@ extension WWProvider {
     }
 
     private struct HttpBodyEncoding: ParameterEncoding {
+        // MARK: Properties
+
         private let jsonObject: Any
+
+        // MARK: Lifecycle
 
         init(jsonObject: Any) {
             self.jsonObject = jsonObject
         }
+
+        // MARK: Functions
 
         func encode(_ urlRequest: URLRequestConvertible, with _: Parameters?) throws -> URLRequest {
             var urlRequest = try urlRequest.asURLRequest()

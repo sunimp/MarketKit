@@ -1,27 +1,16 @@
 //
 //  WWChartHelper.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2023/1/26.
 //
 
 import Foundation
 
 public enum WWChartHelper {
-    
-    static func pointInterval(_ interval: WWTimePeriod) -> WWPointTimePeriod {
-        switch interval {
-        case .day1, .hour24: .minute30
-        case .week1: .hour4
-        case .week2: .hour8
-        case .month1, .month3, .month6: .day1
-        case .year1, .year2: .week1
-        case .year5: .month1
-        }
-    }
-
     public static func validIntervals(startTime: TimeInterval?) -> [WWTimePeriod] {
-        guard let startTime else { return WWTimePeriod.allCases }
+        guard let startTime else {
+            return WWTimePeriod.allCases
+        }
         let genesisDate = Date(timeIntervalSince1970: startTime)
         let dayCount = Calendar.current.dateComponents([.day], from: genesisDate, to: Date()).day
         let monthCount = Calendar.current.dateComponents([.month], from: genesisDate, to: Date()).month
@@ -60,6 +49,21 @@ public enum WWChartHelper {
         }
 
         return intervals
+    }
+
+    static func pointInterval(_ interval: WWTimePeriod) -> WWPointTimePeriod {
+        switch interval {
+        case .day1,
+             .hour24: .minute30
+        case .week1: .hour4
+        case .week2: .hour8
+        case .month1,
+             .month3,
+             .month6: .day1
+        case .year1,
+             .year2: .week1
+        case .year5: .month1
+        }
     }
 
     static func intervalForAll(genesisTime: TimeInterval) -> WWPointTimePeriod {

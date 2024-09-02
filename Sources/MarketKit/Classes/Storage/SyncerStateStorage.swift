@@ -1,8 +1,7 @@
 //
 //  SyncerStateStorage.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/15.
 //
 
 import Foundation
@@ -12,13 +11,11 @@ import GRDB
 // MARK: - SyncerStateStorage
 
 class SyncerStateStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(dbPool: DatabasePool) throws {
-        self.dbPool = dbPool
-
-        try migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -31,6 +28,14 @@ class SyncerStateStorage {
         }
 
         return migrator
+    }
+
+    // MARK: Lifecycle
+
+    init(dbPool: DatabasePool) throws {
+        self.dbPool = dbPool
+
+        try migrator.migrate(dbPool)
     }
 }
 

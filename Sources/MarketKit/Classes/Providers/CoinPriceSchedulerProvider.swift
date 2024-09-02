@@ -1,8 +1,7 @@
 //
 //  CoinPriceSchedulerProvider.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -17,11 +16,21 @@ protocol ICoinPriceCoinUidDataSource: AnyObject {
 // MARK: - CoinPriceSchedulerProvider
 
 class CoinPriceSchedulerProvider {
+    // MARK: Properties
+
+    weak var dataSource: ICoinPriceCoinUidDataSource?
+
     private let currencyCode: String
     private let manager: CoinPriceManager
     private let provider: WWProvider
 
-    weak var dataSource: ICoinPriceCoinUidDataSource?
+    // MARK: Computed Properties
+
+    private var allCoinUids: [String] {
+        dataSource?.allCoinUids(currencyCode: currencyCode) ?? []
+    }
+
+    // MARK: Lifecycle
 
     init(manager: CoinPriceManager, provider: WWProvider, currencyCode: String) {
         self.manager = manager
@@ -29,9 +38,7 @@ class CoinPriceSchedulerProvider {
         self.currencyCode = currencyCode
     }
 
-    private var allCoinUids: [String] {
-        dataSource?.allCoinUids(currencyCode: currencyCode) ?? []
-    }
+    // MARK: Functions
 
     private func handle(updatedCoinPrices: [CoinPrice]) {
         manager.handleUpdated(coinPrices: updatedCoinPrices, currencyCode: currencyCode)
@@ -54,7 +61,10 @@ extension CoinPriceSchedulerProvider: ISchedulerProvider {
     }
 
     func sync() async throws {
-        guard let (coinUids, walletCoinUids) = dataSource?.combinedCoinUids(currencyCode: currencyCode), !coinUids.isEmpty else {
+        guard
+            let (coinUids, walletCoinUids) = dataSource?.combinedCoinUids(currencyCode: currencyCode),
+            !coinUids.isEmpty
+        else {
             return
         }
 

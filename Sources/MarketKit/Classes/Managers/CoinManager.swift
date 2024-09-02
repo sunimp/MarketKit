@@ -1,8 +1,7 @@
 //
 //  CoinManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/16.
 //
 
 import Foundation
@@ -10,8 +9,12 @@ import Foundation
 // MARK: - CoinManager
 
 class CoinManager {
+    // MARK: Properties
+
     private let storage: CoinStorage
     private let provider: WWProvider
+
+    // MARK: Lifecycle
 
     init(storage: CoinStorage, provider: WWProvider) {
         self.storage = storage

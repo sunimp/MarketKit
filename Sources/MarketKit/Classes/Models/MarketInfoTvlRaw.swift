@@ -1,8 +1,7 @@
 //
 //  MarketInfoTvlRaw.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/4.
 //
 
 import Foundation
@@ -10,14 +9,12 @@ import Foundation
 import ObjectMapper
 
 class MarketInfoTvlRaw: ImmutableMappable {
+    // MARK: Properties
+
     let timestamp: TimeInterval
     let tvl: Decimal?
 
-    required init(map: Map) throws {
-        let timestampInt: Int = try map.value("date")
-        timestamp = TimeInterval(timestampInt)
-        tvl = try? map.value("tvl", using: Transform.stringToDecimalTransform)
-    }
+    // MARK: Computed Properties
 
     var marketInfoTvl: ChartPoint? {
         guard let tvl else {
@@ -25,5 +22,13 @@ class MarketInfoTvlRaw: ImmutableMappable {
         }
 
         return ChartPoint(timestamp: timestamp, value: tvl)
+    }
+
+    // MARK: Lifecycle
+
+    required init(map: Map) throws {
+        let timestampInt: Int = try map.value("date")
+        timestamp = TimeInterval(timestampInt)
+        tvl = try? map.value("tvl", using: Transform.stringToDecimalTransform)
     }
 }

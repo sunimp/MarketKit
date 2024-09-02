@@ -1,8 +1,7 @@
 //
 //  CoinPriceManager.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -16,13 +15,19 @@ protocol ICoinPriceManagerDelegate: AnyObject {
 // MARK: - CoinPriceManager
 
 class CoinPriceManager {
+    // MARK: Properties
+
     weak var delegate: ICoinPriceManagerDelegate?
 
     private let storage: CoinPriceStorage
 
+    // MARK: Lifecycle
+
     init(storage: CoinPriceStorage) {
         self.storage = storage
     }
+
+    // MARK: Functions
 
     private func notify(coinPrices: [CoinPrice], currencyCode: String) {
         var coinPriceMap = [String: CoinPrice]()

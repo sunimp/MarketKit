@@ -1,8 +1,7 @@
 //
 //  CoinHistoricalPriceStorage.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/20.
 //
 
 import Foundation
@@ -12,13 +11,11 @@ import GRDB
 // MARK: - CoinHistoricalPriceStorage
 
 class CoinHistoricalPriceStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(dbPool: DatabasePool) throws {
-        self.dbPool = dbPool
-
-        try migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -43,10 +40,23 @@ class CoinHistoricalPriceStorage {
 
         return migrator
     }
+
+    // MARK: Lifecycle
+
+    init(dbPool: DatabasePool) throws {
+        self.dbPool = dbPool
+
+        try migrator.migrate(dbPool)
+    }
 }
 
 extension CoinHistoricalPriceStorage {
-    func coinHistoricalPrice(coinUid: String, currencyCode: String, timestamp: TimeInterval) throws -> CoinHistoricalPrice? {
+    func coinHistoricalPrice(
+        coinUid: String,
+        currencyCode: String,
+        timestamp: TimeInterval
+    ) throws
+        -> CoinHistoricalPrice? {
         try dbPool.read { db in
             try CoinHistoricalPrice
                 .filter(

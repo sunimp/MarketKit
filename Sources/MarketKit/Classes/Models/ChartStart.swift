@@ -1,8 +1,7 @@
 //
 //  ChartStart.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2023/1/26.
 //
 
 import Foundation
@@ -10,7 +9,11 @@ import Foundation
 import ObjectMapper
 
 class ChartStart: ImmutableMappable {
+    // MARK: Properties
+
     let timestamp: TimeInterval
+
+    // MARK: Lifecycle
 
     init(timestamp: TimeInterval) {
         self.timestamp = timestamp

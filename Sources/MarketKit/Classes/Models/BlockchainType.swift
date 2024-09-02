@@ -1,8 +1,7 @@
 //
 //  BlockchainType.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/6.
 //
 
 import Foundation
@@ -30,29 +29,7 @@ public enum BlockchainType {
     case ton
     case unsupported(uid: String)
 
-    public init(uid: String) {
-        switch uid {
-        case "bitcoin": self = .bitcoin
-        case "bitcoin-cash": self = .bitcoinCash
-        case "ecash": self = .ecash
-        case "litecoin": self = .litecoin
-        case "dash": self = .dash
-        case "zcash": self = .zcash
-        case "ethereum": self = .ethereum
-        case "binance-smart-chain": self = .binanceSmartChain
-        case "binancecoin": self = .binanceChain
-        case "polygon-pos": self = .polygon
-        case "avalanche": self = .avalanche
-        case "optimistic-ethereum": self = .optimism
-        case "arbitrum-one": self = .arbitrumOne
-        case "gnosis": self = .gnosis
-        case "fantom": self = .fantom
-        case "tron": self = .tron
-        case "solana": self = .solana
-        case "the-open-network": self = .ton
-        default: self = .unsupported(uid: uid)
-        }
-    }
+    // MARK: Computed Properties
 
     public var uid: String {
         switch self {
@@ -74,7 +51,33 @@ public enum BlockchainType {
         case .tron: "tron"
         case .solana: "solana"
         case .ton: "the-open-network"
-        case .unsupported(let uid): uid
+        case let .unsupported(uid): uid
+        }
+    }
+
+    // MARK: Lifecycle
+
+    public init(uid: String) {
+        switch uid {
+        case "bitcoin": self = .bitcoin
+        case "bitcoin-cash": self = .bitcoinCash
+        case "ecash": self = .ecash
+        case "litecoin": self = .litecoin
+        case "dash": self = .dash
+        case "zcash": self = .zcash
+        case "ethereum": self = .ethereum
+        case "binance-smart-chain": self = .binanceSmartChain
+        case "binancecoin": self = .binanceChain
+        case "polygon-pos": self = .polygon
+        case "avalanche": self = .avalanche
+        case "optimistic-ethereum": self = .optimism
+        case "arbitrum-one": self = .arbitrumOne
+        case "gnosis": self = .gnosis
+        case "fantom": self = .fantom
+        case "tron": self = .tron
+        case "solana": self = .solana
+        case "the-open-network": self = .ton
+        default: self = .unsupported(uid: uid)
         }
     }
 }

@@ -1,8 +1,7 @@
 //
-//  Analytics.swift
-//  MarketKit
+//  WWProChartModels.swift
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/6.
 //
 
 import Foundation
@@ -12,6 +11,250 @@ import ObjectMapper
 // MARK: - Analytics
 
 public struct Analytics: ImmutableMappable {
+    // MARK: Nested Types
+
+    public struct ExVolume: ImmutableMappable {
+        // MARK: Properties
+
+        public let points: [VolumePoint]
+        public let rank30d: Int?
+        public let rating: String?
+
+        // MARK: Computed Properties
+
+        public var aggregatedChartPoints: AggregatedChartPoints {
+            AggregatedChartPoints(
+                points: points.map(\.chartPoint),
+                aggregatedValue: points.map(\.volume).reduce(0, +)
+            )
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            points = try map.value("points")
+            rank30d = try? map.value("rank_30d")
+            rating = try? map.value("rating")
+        }
+    }
+
+    public struct DexLiquidity: ImmutableMappable {
+        // MARK: Properties
+
+        public let points: [VolumePoint]
+        public let rank: Int?
+        public let rating: String?
+
+        // MARK: Computed Properties
+
+        public var chartPoints: [ChartPoint] {
+            points.map(\.chartPoint)
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            points = try map.value("points")
+            rank = try? map.value("rank")
+            rating = try? map.value("rating")
+        }
+    }
+
+    public struct Addresses: ImmutableMappable {
+        // MARK: Properties
+
+        public let points: [CountPoint]
+        public let rank30d: Int?
+        public let count30d: Int?
+        public let rating: String?
+
+        // MARK: Computed Properties
+
+        public var chartPoints: [ChartPoint] {
+            points.map(\.chartPoint)
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            points = try map.value("points")
+            rank30d = try? map.value("rank_30d")
+            count30d = try? map.value("count_30d")
+            rating = try? map.value("rating")
+        }
+    }
+
+    public struct Transactions: ImmutableMappable {
+        // MARK: Properties
+
+        public let points: [CountPoint]
+        public let rank30d: Int?
+        public let volume30d: Decimal?
+        public let rating: String?
+
+        // MARK: Computed Properties
+
+        public var aggregatedChartPoints: AggregatedChartPoints {
+            AggregatedChartPoints(
+                points: points.map(\.chartPoint),
+                aggregatedValue: points.map(\.count).reduce(0, +)
+            )
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            points = try map.value("points")
+            rank30d = try? map.value("rank_30d")
+            volume30d = try? map.value("volume_30d", using: Transform.stringToDecimalTransform)
+            rating = try? map.value("rating")
+        }
+    }
+
+    public struct HolderBlockchain: ImmutableMappable {
+        // MARK: Properties
+
+        public let uid: String
+        public let holdersCount: Decimal
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            uid = try map.value("blockchain_uid")
+            holdersCount = try map.value("holders_count", using: Transform.stringToDecimalTransform)
+        }
+    }
+
+    public struct Tvl: ImmutableMappable {
+        // MARK: Properties
+
+        public let points: [TvlPoint]
+        public let rank: Int?
+        public let ratio: Decimal?
+        public let rating: String?
+
+        // MARK: Computed Properties
+
+        public var chartPoints: [ChartPoint] {
+            points.map(\.chartPoint)
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            points = try map.value("points")
+            rank = try? map.value("rank")
+            ratio = try? map.value("ratio", using: Transform.stringToDecimalTransform)
+            rating = try? map.value("rating")
+        }
+    }
+
+    public struct ValueRank: ImmutableMappable {
+        // MARK: Properties
+
+        public let value30d: Decimal?
+        public let rank30d: Int?
+        public let description: String?
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            value30d = try? map.value("value_30d", using: Transform.stringToDecimalTransform)
+            rank30d = try? map.value("rank_30d")
+            description = try? map.value("description")
+        }
+    }
+
+    public struct TvlPoint: ImmutableMappable {
+        // MARK: Properties
+
+        public let timestamp: TimeInterval
+        public let tvl: Decimal
+
+        // MARK: Computed Properties
+
+        public var chartPoint: ChartPoint {
+            ChartPoint(timestamp: timestamp, value: tvl)
+        }
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            timestamp = try map.value("timestamp")
+            tvl = try map.value("tvl", using: Transform.stringToDecimalTransform)
+        }
+    }
+
+    public struct IssueBlockchain: ImmutableMappable {
+        // MARK: Properties
+
+        public let blockchain: String
+        public let issues: [Issue]
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            blockchain = try map.value("blockchain")
+            issues = try map.value("issues")
+        }
+    }
+
+    public struct Issue: ImmutableMappable {
+        // MARK: Nested Types
+
+        public struct Issue: ImmutableMappable {
+            // MARK: Properties
+
+            public let impact: String?
+            public let description: String?
+
+            // MARK: Lifecycle
+
+            public init(map: Map) throws {
+                impact = try map.value("impact")
+                description = try? map.value("description")
+            }
+        }
+
+        // MARK: Properties
+
+        public let issue: String?
+        public let title: String?
+        public let description: String?
+        public let issues: [Issue]?
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            issue = try? map.value("issue")
+            title = try? map.value("title")
+            description = try? map.value("description")
+            issues = try? map.value("issues")
+        }
+    }
+
+    public struct Audit: ImmutableMappable {
+        // MARK: Properties
+
+        public let name: String
+        public let date: String
+        public let techIssues: Int?
+        public let auditURL: String?
+        public let partnerName: String?
+
+        // MARK: Lifecycle
+
+        public init(map: Map) throws {
+            name = try map.value("name")
+            date = try map.value("date")
+            techIssues = try? map.value("tech_issues")
+            auditURL = try? map.value("audit_url")
+            partnerName = try? map.value("partner_name")
+        }
+    }
+
+    // MARK: Properties
+
     public let cexVolume: ExVolume?
     public let dexVolume: ExVolume?
     public let dexLiquidity: DexLiquidity?
@@ -29,6 +272,8 @@ public struct Analytics: ImmutableMappable {
     public let issueBlockchains: [IssueBlockchain]?
     public let technicalAdvice: TechnicalAdvice?
     public let audits: [Audit]?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         cexVolume = try? map.value("cex_volume")
@@ -49,189 +294,13 @@ public struct Analytics: ImmutableMappable {
         technicalAdvice = try? map.value("indicators")
         audits = try? map.value("audits")
     }
-
-    public struct ExVolume: ImmutableMappable {
-        public let points: [VolumePoint]
-        public let rank30d: Int?
-        public let rating: String?
-
-        public init(map: Map) throws {
-            points = try map.value("points")
-            rank30d = try? map.value("rank_30d")
-            rating = try? map.value("rating")
-        }
-
-        public var aggregatedChartPoints: AggregatedChartPoints {
-            AggregatedChartPoints(
-                points: points.map(\.chartPoint),
-                aggregatedValue: points.map(\.volume).reduce(0, +)
-            )
-        }
-    }
-
-    public struct DexLiquidity: ImmutableMappable {
-        public let points: [VolumePoint]
-        public let rank: Int?
-        public let rating: String?
-
-        public init(map: Map) throws {
-            points = try map.value("points")
-            rank = try? map.value("rank")
-            rating = try? map.value("rating")
-        }
-
-        public var chartPoints: [ChartPoint] {
-            points.map(\.chartPoint)
-        }
-    }
-
-    public struct Addresses: ImmutableMappable {
-        public let points: [CountPoint]
-        public let rank30d: Int?
-        public let count30d: Int?
-        public let rating: String?
-
-        public init(map: Map) throws {
-            points = try map.value("points")
-            rank30d = try? map.value("rank_30d")
-            count30d = try? map.value("count_30d")
-            rating = try? map.value("rating")
-        }
-
-        public var chartPoints: [ChartPoint] {
-            points.map(\.chartPoint)
-        }
-    }
-
-    public struct Transactions: ImmutableMappable {
-        public let points: [CountPoint]
-        public let rank30d: Int?
-        public let volume30d: Decimal?
-        public let rating: String?
-
-        public init(map: Map) throws {
-            points = try map.value("points")
-            rank30d = try? map.value("rank_30d")
-            volume30d = try? map.value("volume_30d", using: Transform.stringToDecimalTransform)
-            rating = try? map.value("rating")
-        }
-
-        public var aggregatedChartPoints: AggregatedChartPoints {
-            AggregatedChartPoints(
-                points: points.map(\.chartPoint),
-                aggregatedValue: points.map(\.count).reduce(0, +)
-            )
-        }
-    }
-
-    public struct HolderBlockchain: ImmutableMappable {
-        public let uid: String
-        public let holdersCount: Decimal
-
-        public init(map: Map) throws {
-            uid = try map.value("blockchain_uid")
-            holdersCount = try map.value("holders_count", using: Transform.stringToDecimalTransform)
-        }
-    }
-
-    public struct Tvl: ImmutableMappable {
-        public let points: [TvlPoint]
-        public let rank: Int?
-        public let ratio: Decimal?
-        public let rating: String?
-
-        public init(map: Map) throws {
-            points = try map.value("points")
-            rank = try? map.value("rank")
-            ratio = try? map.value("ratio", using: Transform.stringToDecimalTransform)
-            rating = try? map.value("rating")
-        }
-
-        public var chartPoints: [ChartPoint] {
-            points.map(\.chartPoint)
-        }
-    }
-
-    public struct ValueRank: ImmutableMappable {
-        public let value30d: Decimal?
-        public let rank30d: Int?
-        public let description: String?
-
-        public init(map: Map) throws {
-            value30d = try? map.value("value_30d", using: Transform.stringToDecimalTransform)
-            rank30d = try? map.value("rank_30d")
-            description = try? map.value("description")
-        }
-    }
-
-    public struct TvlPoint: ImmutableMappable {
-        public let timestamp: TimeInterval
-        public let tvl: Decimal
-
-        public init(map: Map) throws {
-            timestamp = try map.value("timestamp")
-            tvl = try map.value("tvl", using: Transform.stringToDecimalTransform)
-        }
-
-        public var chartPoint: ChartPoint {
-            ChartPoint(timestamp: timestamp, value: tvl)
-        }
-    }
-
-    public struct IssueBlockchain: ImmutableMappable {
-        public let blockchain: String
-        public let issues: [Issue]
-
-        public init(map: Map) throws {
-            blockchain = try map.value("blockchain")
-            issues = try map.value("issues")
-        }
-    }
-
-    public struct Issue: ImmutableMappable {
-        public let issue: String?
-        public let title: String?
-        public let description: String?
-        public let issues: [Issue]?
-
-        public init(map: Map) throws {
-            issue = try? map.value("issue")
-            title = try? map.value("title")
-            description = try? map.value("description")
-            issues = try? map.value("issues")
-        }
-
-        public struct Issue: ImmutableMappable {
-            public let impact: String?
-            public let description: String?
-
-            public init(map: Map) throws {
-                impact = try map.value("impact")
-                description = try? map.value("description")
-            }
-        }
-    }
-
-    public struct Audit: ImmutableMappable {
-        public let name: String
-        public let date: String
-        public let techIssues: Int?
-        public let auditUrl: String?
-        public let partnerName: String?
-
-        public init(map: Map) throws {
-            name = try map.value("name")
-            date = try map.value("date")
-            techIssues = try? map.value("tech_issues")
-            auditUrl = try? map.value("audit_url")
-            partnerName = try? map.value("partner_name")
-        }
-    }
 }
 
 // MARK: - AnalyticsPreview
 
 public struct AnalyticsPreview: ImmutableMappable {
+    // MARK: Properties
+
     public let cexVolume: Bool
     public let cexVolumeRank30d: Bool
     public let cexVolumeRating: Bool
@@ -263,6 +332,8 @@ public struct AnalyticsPreview: ImmutableMappable {
     public let reports: Bool
     public let fundsInvested: Bool
     public let treasuries: Bool
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         cexVolume = (try? map.value("cex_volume.points")) ?? false
@@ -302,60 +373,82 @@ public struct AnalyticsPreview: ImmutableMappable {
 // MARK: - VolumePoint
 
 public struct VolumePoint: ImmutableMappable {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let volume: Decimal
+
+    // MARK: Computed Properties
+
+    public var chartPoint: ChartPoint {
+        ChartPoint(timestamp: timestamp, value: volume)
+    }
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         timestamp = try map.value("timestamp")
         volume = try map.value("volume", using: Transform.stringToDecimalTransform)
-    }
-
-    public var chartPoint: ChartPoint {
-        ChartPoint(timestamp: timestamp, value: volume)
     }
 }
 
 // MARK: - CountPoint
 
 public struct CountPoint: ImmutableMappable {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let count: Decimal
+
+    // MARK: Computed Properties
+
+    public var chartPoint: ChartPoint {
+        ChartPoint(timestamp: timestamp, value: count)
+    }
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         timestamp = try map.value("timestamp")
         count = try map.value("count", using: Transform.stringToDecimalTransform)
-    }
-
-    public var chartPoint: ChartPoint {
-        ChartPoint(timestamp: timestamp, value: count)
     }
 }
 
 // MARK: - CountVolumePoint
 
 public struct CountVolumePoint: ImmutableMappable {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let count: Decimal
     public let volume: Decimal
+
+    // MARK: Computed Properties
+
+    public var chartPoint: ChartPoint {
+        ChartPoint(timestamp: timestamp, value: count, volume: volume)
+    }
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         timestamp = try map.value("timestamp")
         count = try map.value("count", using: Transform.stringToDecimalTransform)
         volume = try map.value("volume", using: Transform.stringToDecimalTransform)
     }
-
-    public var chartPoint: ChartPoint {
-        ChartPoint(timestamp: timestamp, value: count, volume: volume)
-    }
 }
 
 // MARK: - RankMultiValue
 
 public struct RankMultiValue: ImmutableMappable {
+    // MARK: Properties
+
     public let uid: String
     public let value1d: Decimal?
     public let value7d: Decimal?
     public let value30d: Decimal?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         uid = try map.value("uid")
@@ -368,8 +461,12 @@ public struct RankMultiValue: ImmutableMappable {
 // MARK: - RankValue
 
 public struct RankValue: ImmutableMappable {
+    // MARK: Properties
+
     public let uid: String
     public let value: Decimal?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         uid = try map.value("uid")
@@ -380,8 +477,12 @@ public struct RankValue: ImmutableMappable {
 // MARK: - ProSubscription
 
 public struct ProSubscription: ImmutableMappable {
+    // MARK: Properties
+
     public let address: String
     public let deadline: TimeInterval
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         address = try map.value("address")

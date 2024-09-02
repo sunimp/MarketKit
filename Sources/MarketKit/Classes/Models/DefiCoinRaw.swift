@@ -1,8 +1,7 @@
 //
 //  DefiCoinRaw.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/8.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import ObjectMapper
 
 class DefiCoinRaw: ImmutableMappable {
+    // MARK: Properties
+
     let uid: String
     let coinUid: String?
     let name: String
@@ -25,6 +26,8 @@ class DefiCoinRaw: ImmutableMappable {
     let tvlChange1y: Decimal?
     let chains: [String]
     let chainTvls: [String: Decimal]
+
+    // MARK: Lifecycle
 
     required init(map: Map) throws {
         uid = try map.value("uid")
@@ -43,6 +46,8 @@ class DefiCoinRaw: ImmutableMappable {
         chains = try map.value("chains")
         chainTvls = (try? map.value("chain_tvls", using: Transform.stringToDecimalTransform)) ?? [:]
     }
+
+    // MARK: Functions
 
     func defiCoin(uid: String, fullCoin: FullCoin?) -> DefiCoin {
         let type: DefiCoin.DefiCoinType =

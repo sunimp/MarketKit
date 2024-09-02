@@ -1,8 +1,7 @@
 //
 //  CoinPrice.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Foundation
@@ -12,7 +11,28 @@ import GRDB
 // MARK: - CoinPrice
 
 public class CoinPrice: Record {
+    // MARK: Nested Types
+
+    enum Columns: String, ColumnExpression, CaseIterable {
+        case coinUid
+        case currencyCode
+        case value
+        case diff24h
+        case diff1d
+        case timestamp
+    }
+
+    // MARK: Static Properties
+
     static let expirationInterval: TimeInterval = 240
+
+    // MARK: Overridden Properties
+
+    override open class var databaseTableName: String {
+        "coinPrice"
+    }
+
+    // MARK: Properties
 
     public let coinUid: String
     public let currencyCode: String
@@ -21,11 +41,22 @@ public class CoinPrice: Record {
     public let diff1d: Decimal?
     public let timestamp: TimeInterval
 
-    enum Columns: String, ColumnExpression, CaseIterable {
-        case coinUid, currencyCode, value, diff24h, diff1d, timestamp
+    // MARK: Computed Properties
+
+    public var expired: Bool {
+        Date().timeIntervalSince1970 - timestamp > Self.expirationInterval
     }
 
-    init(coinUid: String, currencyCode: String, value: Decimal, diff24h: Decimal?, diff1d: Decimal?, timestamp: TimeInterval) {
+    // MARK: Lifecycle
+
+    init(
+        coinUid: String,
+        currencyCode: String,
+        value: Decimal,
+        diff24h: Decimal?,
+        diff1d: Decimal?,
+        timestamp: TimeInterval
+    ) {
         self.coinUid = coinUid
         self.currencyCode = currencyCode
         self.value = value
@@ -34,10 +65,6 @@ public class CoinPrice: Record {
         self.timestamp = timestamp
 
         super.init()
-    }
-
-    override open class var databaseTableName: String {
-        "coinPrice"
     }
 
     required init(row: Row) throws {
@@ -51,6 +78,8 @@ public class CoinPrice: Record {
         try super.init(row: row)
     }
 
+    // MARK: Overridden Functions
+
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.coinUid] = coinUid
         container[Columns.currencyCode] = currencyCode
@@ -58,10 +87,6 @@ public class CoinPrice: Record {
         container[Columns.diff24h] = diff24h
         container[Columns.diff1d] = diff1d
         container[Columns.timestamp] = timestamp
-    }
-
-    public var expired: Bool {
-        Date().timeIntervalSince1970 - timestamp > Self.expirationInterval
     }
 }
 

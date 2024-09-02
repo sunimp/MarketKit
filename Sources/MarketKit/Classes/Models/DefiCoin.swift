@@ -1,13 +1,21 @@
 //
 //  DefiCoin.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/11/8.
 //
 
 import Foundation
 
 public struct DefiCoin {
+    // MARK: Nested Types
+
+    public enum DefiCoinType {
+        case fullCoin(fullCoin: FullCoin)
+        case defiCoin(name: String, logo: String)
+    }
+
+    // MARK: Properties
+
     public let uid: String
     public let type: DefiCoinType
     public let tvl: Decimal
@@ -21,9 +29,4 @@ public struct DefiCoin {
     public let tvlChange1y: Decimal?
     public let chains: [String]
     public let chainTvls: [String: Decimal]
-
-    public enum DefiCoinType {
-        case fullCoin(fullCoin: FullCoin)
-        case defiCoin(name: String, logo: String)
-    }
 }

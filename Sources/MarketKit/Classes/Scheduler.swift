@@ -1,8 +1,7 @@
 //
 //  Scheduler.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/9/22.
 //
 
 import Combine
@@ -24,7 +23,11 @@ protocol ISchedulerProvider {
 // MARK: - Scheduler
 
 class Scheduler {
+    // MARK: Static Properties
+
     private static let retryInterval: TimeInterval = 5
+
+    // MARK: Properties
 
     private let bufferInterval: TimeInterval
 
@@ -40,6 +43,8 @@ class Scheduler {
     private var expirationNotified = false
 
     private let queue = DispatchQueue(label: "com.sunimp.market_kit.scheduler", qos: .utility)
+
+    // MARK: Lifecycle
 
     init(
         provider: ISchedulerProvider,
@@ -64,6 +69,8 @@ class Scheduler {
     deinit {
         logger?.debug("Deinit Scheduler: \(provider.id)")
     }
+
+    // MARK: Functions
 
     private func sync() {
         queue.async {
@@ -124,7 +131,7 @@ class Scheduler {
 
         // schedule new timer
         scheduledTask = Task<Void, Error> { [weak self] in
-            try await Task.sleep(nanoseconds: UInt64(intDelay) * 1_000_000_000)
+            try await Task.sleep(nanoseconds: UInt64(intDelay) * 1000000000)
             self?.sync()
         }
 
@@ -139,8 +146,7 @@ class Scheduler {
         let currentTimestamp = Date().timeIntervalSince1970
         if
             let lastSyncTimestamp = provider.lastSyncTimestamp,
-            currentTimestamp - lastSyncTimestamp < provider.expirationInterval
-        {
+            currentTimestamp - lastSyncTimestamp < provider.expirationInterval {
             return
         }
 

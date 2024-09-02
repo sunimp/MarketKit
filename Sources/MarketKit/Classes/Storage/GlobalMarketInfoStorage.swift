@@ -1,8 +1,7 @@
 //
 //  GlobalMarketInfoStorage.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/13.
 //
 
 import Foundation
@@ -12,13 +11,11 @@ import GRDB
 // MARK: - GlobalMarketInfoStorage
 
 class GlobalMarketInfoStorage {
+    // MARK: Properties
+
     private let dbPool: DatabasePool
 
-    init(dbPool: DatabasePool) throws {
-        self.dbPool = dbPool
-
-        try migrator.migrate(dbPool)
-    }
+    // MARK: Computed Properties
 
     private var migrator: DatabaseMigrator {
         var migrator = DatabaseMigrator()
@@ -39,6 +36,14 @@ class GlobalMarketInfoStorage {
 
         return migrator
     }
+
+    // MARK: Lifecycle
+
+    init(dbPool: DatabasePool) throws {
+        self.dbPool = dbPool
+
+        try migrator.migrate(dbPool)
+    }
 }
 
 extension GlobalMarketInfoStorage {
@@ -46,7 +51,8 @@ extension GlobalMarketInfoStorage {
         try dbPool.read { db in
             try GlobalMarketInfo
                 .filter(
-                    GlobalMarketInfo.Columns.currencyCode == currencyCode && GlobalMarketInfo.Columns.timePeriod == timePeriod
+                    GlobalMarketInfo.Columns.currencyCode == currencyCode && GlobalMarketInfo.Columns
+                        .timePeriod == timePeriod
                         .rawValue
                 )
                 .fetchOne(db)

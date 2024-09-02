@@ -1,8 +1,7 @@
 //
 //  CategoryMarketPoint.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/5/19.
 //
 
 import Foundation
@@ -12,8 +11,12 @@ import ObjectMapper
 // MARK: - CategoryMarketPoint
 
 public class CategoryMarketPoint: ImmutableMappable {
+    // MARK: Properties
+
     public let timestamp: TimeInterval
     public let marketCap: Decimal
+
+    // MARK: Lifecycle
 
     public required init(map: Map) throws {
         timestamp = try map.value("timestamp")

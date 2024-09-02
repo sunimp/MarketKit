@@ -1,8 +1,7 @@
 //
 //  MarketGlobal.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2024/5/28.
 //
 
 import Foundation
@@ -10,6 +9,8 @@ import Foundation
 import ObjectMapper
 
 public struct MarketGlobal: ImmutableMappable {
+    // MARK: Properties
+
     public let marketCap: Decimal?
     public let marketCapChange: Decimal?
     public let defiMarketCap: Decimal?
@@ -22,6 +23,8 @@ public struct MarketGlobal: ImmutableMappable {
     public let tvlChange: Decimal?
     public let etfTotalInflow: Decimal?
     public let etfDailyInflow: Decimal?
+
+    // MARK: Lifecycle
 
     public init(map: Map) throws {
         marketCap = try? map.value("market_cap", using: Transform.stringToDecimalTransform)

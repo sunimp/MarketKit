@@ -1,8 +1,7 @@
 //
 //  Token.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/6.
 //
 
 import Foundation
@@ -10,17 +9,14 @@ import Foundation
 // MARK: - Token
 
 public struct Token {
+    // MARK: Properties
+
     public let coin: Coin
     public let blockchain: Blockchain
     public let type: TokenType
     public let decimals: Int
 
-    public init(coin: Coin, blockchain: Blockchain, type: TokenType, decimals: Int) {
-        self.coin = coin
-        self.blockchain = blockchain
-        self.type = type
-        self.decimals = decimals
-    }
+    // MARK: Computed Properties
 
     public var blockchainType: BlockchainType {
         blockchain.type
@@ -32,6 +28,15 @@ public struct Token {
 
     public var fullCoin: FullCoin {
         FullCoin(coin: coin, tokens: [self])
+    }
+
+    // MARK: Lifecycle
+
+    public init(coin: Coin, blockchain: Blockchain, type: TokenType, decimals: Int) {
+        self.coin = coin
+        self.blockchain = blockchain
+        self.type = type
+        self.decimals = decimals
     }
 }
 

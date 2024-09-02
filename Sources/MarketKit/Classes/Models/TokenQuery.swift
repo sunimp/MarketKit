@@ -1,8 +1,7 @@
 //
 //  TokenQuery.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/6.
 //
 
 import Foundation
@@ -10,8 +9,18 @@ import Foundation
 // MARK: - TokenQuery
 
 public struct TokenQuery {
+    // MARK: Properties
+
     public let blockchainType: BlockchainType
     public let tokenType: TokenType
+
+    // MARK: Computed Properties
+
+    public var id: String {
+        [blockchainType.uid, tokenType.id].joined(separator: "|")
+    }
+
+    // MARK: Lifecycle
 
     public init(blockchainType: BlockchainType, tokenType: TokenType) {
         self.blockchainType = blockchainType
@@ -29,10 +38,6 @@ public struct TokenQuery {
             blockchainType: BlockchainType(uid: chunks[0]),
             tokenType: tokenType
         )
-    }
-
-    public var id: String {
-        [blockchainType.uid, tokenType.id].joined(separator: "|")
     }
 }
 

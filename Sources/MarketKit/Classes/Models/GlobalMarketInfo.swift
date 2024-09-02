@@ -1,8 +1,7 @@
 //
 //  GlobalMarketInfo.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/10/13.
 //
 
 import Foundation
@@ -11,18 +10,30 @@ import GRDB
 import ObjectMapper
 
 public class GlobalMarketInfo: Record {
-    let currencyCode: String
-    let timePeriod: WWTimePeriod
-    public let points: [GlobalMarketPoint]
-    let timestamp: TimeInterval
+    // MARK: Nested Types
 
     enum Columns: String, ColumnExpression {
-        case currencyCode, timePeriod, points, timestamp
+        case currencyCode
+        case timePeriod
+        case points
+        case timestamp
     }
+
+    // MARK: Overridden Properties
 
     override open class var databaseTableName: String {
         "globalMarketInfo"
     }
+
+    // MARK: Properties
+
+    public let points: [GlobalMarketPoint]
+
+    let currencyCode: String
+    let timePeriod: WWTimePeriod
+    let timestamp: TimeInterval
+
+    // MARK: Lifecycle
 
     init(currencyCode: String, timePeriod: WWTimePeriod, points: [GlobalMarketPoint]) {
         self.currencyCode = currencyCode
@@ -41,6 +52,8 @@ public class GlobalMarketInfo: Record {
 
         try super.init(row: row)
     }
+
+    // MARK: Overridden Functions
 
     override open func encode(to container: inout PersistenceContainer) throws {
         container[Columns.currencyCode] = currencyCode

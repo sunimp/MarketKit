@@ -1,8 +1,7 @@
 //
 //  CoinSyncer.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2021/8/16.
 //
 
 import Combine
@@ -13,7 +12,8 @@ import WWExtensions
 // MARK: - CoinSyncer
 
 class CoinSyncer {
-    
+    // MARK: Properties
+
     private let keyCoinsLastSyncTimestamp = "coin-syncer-coins-last-sync-timestamp"
     private let keyBlockchainsLastSyncTimestamp = "coin-syncer-blockchains-last-sync-timestamp"
     private let keyTokensLastSyncTimestamp = "coin-syncer-tokens-last-sync-timestamp"
@@ -28,11 +28,15 @@ class CoinSyncer {
 
     private let fullCoinsUpdatedSubject = PassthroughSubject<Void, Never>()
 
+    // MARK: Lifecycle
+
     init(storage: CoinStorage, provider: WWProvider, syncerStateStorage: SyncerStateStorage) {
         self.storage = storage
         self.provider = provider
         self.syncerStateStorage = syncerStateStorage
     }
+
+    // MARK: Functions
 
     private func saveLastSyncTimestamps(coins: Int, blockchains: Int, tokens: Int) {
         try? syncerStateStorage.save(value: String(coins), key: keyCoinsLastSyncTimestamp)
@@ -85,7 +89,11 @@ class CoinSyncer {
             blockchainUid: BlockchainType.bitcoin.uid,
             types: derivationTypes
         )
-        tokenRecords = transform(tokenRecords: tokenRecords, blockchainUid: BlockchainType.litecoin.uid, types: derivationTypes)
+        tokenRecords = transform(
+            tokenRecords: tokenRecords,
+            blockchainUid: BlockchainType.litecoin.uid,
+            types: derivationTypes
+        )
         return transform(tokenRecords: tokenRecords, blockchainUid: BlockchainType.bitcoinCash.uid, types: addressTypes)
     }
 }
@@ -98,13 +106,14 @@ extension CoinSyncer {
     func initialSync() {
         do {
             if
-                let versionString = try syncerStateStorage.value(key: keyInitialSyncVersion), let version = Int(versionString),
-                currentVersion == version
-            {
+                let versionString = try syncerStateStorage.value(key: keyInitialSyncVersion),
+                let version = Int(versionString),
+                currentVersion == version {
                 return
             }
 
-            guard let coinsPath = Bundle.module.url(forResource: "coins", withExtension: "json", subdirectory: "Dumps") else {
+            guard let coinsPath = Bundle.module.url(forResource: "coins", withExtension: "json", subdirectory: "Dumps")
+            else {
                 return
             }
             guard
@@ -113,7 +122,10 @@ extension CoinSyncer {
             else {
                 return
             }
-            guard let tokensPath = Bundle.module.url(forResource: "tokens", withExtension: "json", subdirectory: "Dumps") else {
+            guard
+                let tokensPath = Bundle.module
+                    .url(forResource: "tokens", withExtension: "json", subdirectory: "Dumps")
+            else {
                 return
             }
 
@@ -126,7 +138,8 @@ extension CoinSyncer {
             else {
                 return
             }
-            guard let tokenRecords = try [TokenRecord](JSONString: String(contentsOf: tokensPath, encoding: .utf8)) else {
+            guard let tokenRecords = try [TokenRecord](JSONString: String(contentsOf: tokensPath, encoding: .utf8))
+            else {
                 return
             }
 
@@ -167,20 +180,17 @@ extension CoinSyncer {
 
         if
             let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyCoinsLastSyncTimestamp),
-            let lastSyncTimestamp = Int(rawLastSyncTimestamp), coinsTimestamp == lastSyncTimestamp
-        {
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), coinsTimestamp == lastSyncTimestamp {
             coinsOutdated = false
         }
         if
             let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyBlockchainsLastSyncTimestamp),
-            let lastSyncTimestamp = Int(rawLastSyncTimestamp), blockchainsTimestamp == lastSyncTimestamp
-        {
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), blockchainsTimestamp == lastSyncTimestamp {
             blockchainsOutdated = false
         }
         if
             let rawLastSyncTimestamp = try? syncerStateStorage.value(key: keyTokensLastSyncTimestamp),
-            let lastSyncTimestamp = Int(rawLastSyncTimestamp), tokensTimestamp == lastSyncTimestamp
-        {
+            let lastSyncTimestamp = Int(rawLastSyncTimestamp), tokensTimestamp == lastSyncTimestamp {
             tokensOutdated = false
         }
 
@@ -194,8 +204,16 @@ extension CoinSyncer {
                 async let blockchainRecords = try provider.allBlockchainRecords()
                 async let tokenRecords = try provider.allTokenRecords()
 
-                try await self?.handleFetched(coins: coins, blockchainRecords: blockchainRecords, tokenRecords: tokenRecords)
-                self?.saveLastSyncTimestamps(coins: coinsTimestamp, blockchains: blockchainsTimestamp, tokens: tokensTimestamp)
+                try await self?.handleFetched(
+                    coins: coins,
+                    blockchainRecords: blockchainRecords,
+                    tokenRecords: tokenRecords
+                )
+                self?.saveLastSyncTimestamps(
+                    coins: coinsTimestamp,
+                    blockchains: blockchainsTimestamp,
+                    tokens: tokensTimestamp
+                )
             } catch {
                 print("Market data fetch error: \(error)")
             }

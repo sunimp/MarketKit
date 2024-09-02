@@ -1,8 +1,7 @@
 //
 //  TokenType.swift
-//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2022/6/6.
 //
 
 import Foundation
@@ -10,6 +9,16 @@ import Foundation
 // MARK: - TokenType
 
 public enum TokenType {
+    case native
+    case derived(derivation: Derivation)
+    case addressType(type: AddressType)
+    case eip20(address: String)
+    case bep2(symbol: String)
+    case spl(address: String)
+    case unsupported(type: String, reference: String?)
+
+    // MARK: Nested Types
+
     public enum Derivation: String, CaseIterable {
         case bip44
         case bip49
@@ -22,13 +31,46 @@ public enum TokenType {
         case type145
     }
 
-    case native
-    case derived(derivation: Derivation)
-    case addressType(type: AddressType)
-    case eip20(address: String)
-    case bep2(symbol: String)
-    case spl(address: String)
-    case unsupported(type: String, reference: String?)
+    // MARK: Properties
+
+    public var values: (type: String, reference: String?) {
+        switch self {
+        case .native: (type: "native", reference: nil)
+        case let .derived(derivation): (type: "derived:\(derivation.rawValue)", reference: nil)
+        case let .addressType(type): (type: "address_type:\(type.rawValue)", reference: nil)
+        case let .eip20(address): (type: "eip20", reference: address)
+        case let .bep2(symbol): (type: "bep2", reference: symbol)
+        case let .spl(address): (type: "spl", reference: address)
+        case let .unsupported(type, reference): (type: type, reference: reference)
+        }
+    }
+
+    // MARK: Computed Properties
+
+    public var id: String {
+        switch self {
+        case .native:
+            "native"
+        case let .derived(derivation):
+            ["derived", derivation.rawValue].joined(separator: ":")
+        case let .addressType(type):
+            ["address_type", type.rawValue].joined(separator: ":")
+        case let .eip20(address):
+            ["eip20", address].joined(separator: ":")
+        case let .bep2(symbol):
+            ["bep2", symbol].joined(separator: ":")
+        case let .spl(address):
+            ["spl", address].joined(separator: ":")
+        case let .unsupported(type, reference):
+            if let reference {
+                ["unsupported", type, reference].joined(separator: ":")
+            } else {
+                ["unsupported", type].joined(separator: ":")
+            }
+        }
+    }
+
+    // MARK: Lifecycle
 
     public init(type: String, reference: String? = nil) {
         let chunks = type.split(separator: ":").map { String($0) }
@@ -123,41 +165,6 @@ public enum TokenType {
 
         default:
             return nil
-        }
-    }
-
-    public var id: String {
-        switch self {
-        case .native:
-            "native"
-        case .derived(let derivation):
-            ["derived", derivation.rawValue].joined(separator: ":")
-        case .addressType(let type):
-            ["address_type", type.rawValue].joined(separator: ":")
-        case .eip20(let address):
-            ["eip20", address].joined(separator: ":")
-        case .bep2(let symbol):
-            ["bep2", symbol].joined(separator: ":")
-        case .spl(let address):
-            ["spl", address].joined(separator: ":")
-        case .unsupported(let type, let reference):
-            if let reference {
-                ["unsupported", type, reference].joined(separator: ":")
-            } else {
-                ["unsupported", type].joined(separator: ":")
-            }
-        }
-    }
-
-    public var values: (type: String, reference: String?) {
-        switch self {
-        case .native: (type: "native", reference: nil)
-        case .derived(let derivation): (type: "derived:\(derivation.rawValue)", reference: nil)
-        case .addressType(let type): (type: "address_type:\(type.rawValue)", reference: nil)
-        case .eip20(let address): (type: "eip20", reference: address)
-        case .bep2(let symbol): (type: "bep2", reference: symbol)
-        case .spl(let address): (type: "spl", reference: address)
-        case .unsupported(let type, let reference): (type: type, reference: reference)
         }
     }
 }
