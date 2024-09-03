@@ -11,5 +11,5 @@ public struct MarketOverview {
     public let coinCategories: [CoinCategory]
     public let topPairs: [MarketPair]
     public let topPlatforms: [TopPlatform]
-    public let collections: [WWTimePeriod: [NftTopCollection]]
+    public let collections: [WWTimePeriod: [NFTTopCollection]]
 }

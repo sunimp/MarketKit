@@ -110,12 +110,12 @@ extension CoinManager {
         }
     }
 
-    func defiCoins(rawDefiCoins: [DefiCoinRaw]) -> [DefiCoin] {
+    func defiCoins(rawDeFiCoins: [DeFiCoinRaw]) -> [DeFiCoin] {
         do {
-            let fullCoins = try fullCoins(coinUids: rawDefiCoins.compactMap(\.coinUid))
+            let fullCoins = try fullCoins(coinUids: rawDeFiCoins.compactMap(\.coinUid))
             let dictionary = fullCoins.reduce(into: [String: FullCoin]()) { $0[$1.coin.uid] = $1 }
 
-            return rawDefiCoins.map { raw in
+            return rawDeFiCoins.map { raw in
                 raw.defiCoin(uid: raw.uid, fullCoin: raw.coinUid.flatMap { dictionary[$0] })
             }
         } catch {

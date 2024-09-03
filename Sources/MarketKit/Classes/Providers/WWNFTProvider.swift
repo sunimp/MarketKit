@@ -1,5 +1,5 @@
 //
-//  WWNftProvider.swift
+//  WWNFTProvider.swift
 //
 //  Created by Sun on 2022/5/24.
 //
@@ -10,9 +10,9 @@ import Alamofire
 import ObjectMapper
 import WWToolKit
 
-// MARK: - WWNftProvider
+// MARK: - WWNFTProvider
 
-class WWNftProvider {
+class WWNFTProvider {
     // MARK: Properties
 
     private let baseURL: String
@@ -30,8 +30,8 @@ class WWNftProvider {
     }
 }
 
-extension WWNftProvider {
-    func topCollections() async throws -> [NftTopCollectionResponse] {
+extension WWNFTProvider {
+    func topCollections() async throws -> [NFTTopCollectionResponse] {
         let parameters: Parameters = [
             "simplified": true,
         ]
@@ -45,9 +45,9 @@ extension WWNftProvider {
     }
 }
 
-// MARK: - NftTopCollectionResponse
+// MARK: - NFTTopCollectionResponse
 
-struct NftTopCollectionResponse: ImmutableMappable {
+struct NFTTopCollectionResponse: ImmutableMappable {
     // MARK: Properties
 
     let blockchainUid: String

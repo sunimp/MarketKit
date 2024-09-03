@@ -1,34 +1,34 @@
 //
-//  NftManager.swift
+//  NFTManager.swift
 //
 //  Created by Sun on 2022/5/24.
 //
 
 import Foundation
 
-// MARK: - NftManager
+// MARK: - NFTManager
 
-class NftManager {
+class NFTManager {
     // MARK: Properties
 
     private let coinManager: CoinManager
-    private let provider: WWNftProvider
+    private let provider: WWNFTProvider
 
     // MARK: Lifecycle
 
-    init(coinManager: CoinManager, provider: WWNftProvider) {
+    init(coinManager: CoinManager, provider: WWNFTProvider) {
         self.coinManager = coinManager
         self.provider = provider
     }
 
     // MARK: Functions
 
-    private func nftPrice(token: Token?, value: Decimal?) -> NftPrice? {
+    private func nftPrice(token: Token?, value: Decimal?) -> NFTPrice? {
         guard let token, let value else {
             return nil
         }
 
-        return NftPrice(token: token, value: value)
+        return NFTPrice(token: token, value: value)
     }
 
     private func baseTokenMap(blockchainTypes: [BlockchainType]) -> [BlockchainType: Token] {
@@ -48,14 +48,14 @@ class NftManager {
     }
 
     private func collection(
-        response: NftTopCollectionResponse,
+        response: NFTTopCollectionResponse,
         baseTokenMap: [BlockchainType: Token]
     )
-        -> NftTopCollection {
+        -> NFTTopCollection {
         let blockchainType = BlockchainType(uid: response.blockchainUid)
         let baseToken = baseTokenMap[blockchainType]
 
-        let volumes: [WWTimePeriod: NftPrice?] = [
+        let volumes: [WWTimePeriod: NFTPrice?] = [
             .day1: nftPrice(token: baseToken, value: response.volume1d),
             .week1: nftPrice(token: baseToken, value: response.volume7d),
             .month1: nftPrice(token: baseToken, value: response.volume30d),
@@ -67,7 +67,7 @@ class NftManager {
             .month1: response.change30d,
         ]
 
-        return NftTopCollection(
+        return NFTTopCollection(
             blockchainType: blockchainType,
             providerUid: response.providerUid,
             name: response.name,
@@ -79,8 +79,8 @@ class NftManager {
     }
 }
 
-extension NftManager {
-    func topCollections(responses: [NftTopCollectionResponse]) -> [NftTopCollection] {
+extension NFTManager {
+    func topCollections(responses: [NFTTopCollectionResponse]) -> [NFTTopCollection] {
         let blockchainUids = Array(Set(responses.map(\.blockchainUid)))
         let blockchainTypes = blockchainUids.map { BlockchainType(uid: $0) }
         let baseTokenMap = baseTokenMap(blockchainTypes: blockchainTypes)
@@ -90,7 +90,7 @@ extension NftManager {
         }
     }
 
-    func topCollections() async throws -> [NftTopCollection] {
+    func topCollections() async throws -> [NFTTopCollection] {
         let responses = try await provider.topCollections()
         return topCollections(responses: responses)
     }

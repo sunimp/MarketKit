@@ -252,7 +252,7 @@ extension WWProvider {
         return response.compactMap(\.marketInfoTvl)
     }
 
-    func defiCoins(currencyCode: String) async throws -> [DefiCoinRaw] {
+    func defiCoins(currencyCode: String) async throws -> [DeFiCoinRaw] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
         ]
@@ -530,9 +530,9 @@ extension WWProvider {
         )
     }
 
-    // Etf
+    // ETF
 
-    func etfs(currencyCode: String) async throws -> [Etf] {
+    func etfs(currencyCode: String) async throws -> [ETF] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
         ]
@@ -545,7 +545,7 @@ extension WWProvider {
         )
     }
 
-    func etfPoints(currencyCode: String) async throws -> [EtfPoint] {
+    func etfPoints(currencyCode: String) async throws -> [ETFPoint] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
         ]

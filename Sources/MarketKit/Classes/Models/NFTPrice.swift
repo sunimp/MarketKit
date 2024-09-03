@@ -1,12 +1,12 @@
 //
-//  NftPrice.swift
+//  NFTPrice.swift
 //
 //  Created by Sun on 2022/5/24.
 //
 
 import Foundation
 
-public struct NftPrice {
+public struct NFTPrice {
     // MARK: Properties
 
     public let token: Token

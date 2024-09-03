@@ -11,12 +11,12 @@ import Foundation
 class MarketOverviewManager {
     // MARK: Properties
 
-    private let nftManager: NftManager
+    private let nftManager: NFTManager
     private let provider: WWProvider
 
     // MARK: Lifecycle
 
-    init(nftManager: NftManager, provider: WWProvider) {
+    init(nftManager: NFTManager, provider: WWProvider) {
         self.nftManager = nftManager
         self.provider = provider
     }

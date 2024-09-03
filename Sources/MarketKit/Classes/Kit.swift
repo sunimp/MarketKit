@@ -13,7 +13,7 @@ public class Kit {
     // MARK: Properties
 
     private let coinManager: CoinManager
-    private let nftManager: NftManager
+    private let nftManager: NFTManager
     private let marketOverviewManager: MarketOverviewManager
     private let dataSyncer: WWDataSyncer
     private let coinSyncer: CoinSyncer
@@ -28,7 +28,7 @@ public class Kit {
 
     init(
         coinManager: CoinManager,
-        nftManager: NftManager,
+        nftManager: NFTManager,
         marketOverviewManager: MarketOverviewManager,
         dataSyncer: WWDataSyncer,
         coinSyncer: CoinSyncer,
@@ -201,9 +201,9 @@ extension Kit {
         try await provider.marketInfoGlobalTvl(platform: platform, currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
-    public func defiCoins(currencyCode: String) async throws -> [DefiCoin] {
-        let rawDefiCoins = try await provider.defiCoins(currencyCode: currencyCode)
-        return coinManager.defiCoins(rawDefiCoins: rawDefiCoins)
+    public func defiCoins(currencyCode: String) async throws -> [DeFiCoin] {
+        let rawDeFiCoins = try await provider.defiCoins(currencyCode: currencyCode)
+        return coinManager.defiCoins(rawDeFiCoins: rawDeFiCoins)
     }
 
     public func twitterUsername(coinUid: String) async throws -> String? {
@@ -424,13 +424,13 @@ extension Kit {
         )
     }
 
-    // Etf
+    // ETF
 
-    public func etfs(currencyCode: String) async throws -> [Etf] {
+    public func etfs(currencyCode: String) async throws -> [ETF] {
         try await provider.etfs(currencyCode: currencyCode)
     }
 
-    public func etfPoints(currencyCode: String) async throws -> [EtfPoint] {
+    public func etfPoints(currencyCode: String) async throws -> [ETFPoint] {
         try await provider.etfPoints(currencyCode: currencyCode)
     }
 
@@ -566,7 +566,7 @@ extension Kit {
 
     // NFT
 
-    public func nftTopCollections() async throws -> [NftTopCollection] {
+    public func nftTopCollections() async throws -> [NFTTopCollection] {
         try await nftManager.topCollections()
     }
 

@@ -32,14 +32,14 @@ extension Kit {
 
         let cryptoCompareProvider = CryptoCompareProvider(networkManager: networkManager, apiKey: cryptoCompareApiKey)
         let provider = WWProvider(baseURL: apiBaseURL, networkManager: networkManager, apiKey: providerApiKey)
-        let hsNftProvider = WWNftProvider(
+        let nftProvider = WWNFTProvider(
             baseURL: apiBaseURL,
             networkManager: networkManager,
             apiKey: providerApiKey
         )
 
         let coinManager = CoinManager(storage: coinStorage, provider: provider)
-        let nftManager = NftManager(coinManager: coinManager, provider: hsNftProvider)
+        let nftManager = NFTManager(coinManager: coinManager, provider: nftProvider)
         let marketOverviewManager = MarketOverviewManager(nftManager: nftManager, provider: provider)
 
         let coinSyncer = CoinSyncer(storage: coinStorage, provider: provider, syncerStateStorage: syncerStateStorage)

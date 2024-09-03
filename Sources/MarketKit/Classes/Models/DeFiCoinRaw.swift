@@ -1,5 +1,5 @@
 //
-//  DefiCoinRaw.swift
+//  DeFiCoinRaw.swift
 //
 //  Created by Sun on 2021/11/8.
 //
@@ -8,7 +8,7 @@ import Foundation
 
 import ObjectMapper
 
-class DefiCoinRaw: ImmutableMappable {
+class DeFiCoinRaw: ImmutableMappable {
     // MARK: Properties
 
     let uid: String
@@ -49,15 +49,15 @@ class DefiCoinRaw: ImmutableMappable {
 
     // MARK: Functions
 
-    func defiCoin(uid: String, fullCoin: FullCoin?) -> DefiCoin {
-        let type: DefiCoin.DefiCoinType =
+    func defiCoin(uid: String, fullCoin: FullCoin?) -> DeFiCoin {
+        let type: DeFiCoin.DeFiCoinType =
             if let fullCoin {
                 .fullCoin(fullCoin: fullCoin)
             } else {
                 .defiCoin(name: name, logo: logo)
             }
 
-        return DefiCoin(
+        return DeFiCoin(
             uid: uid,
             type: type,
             tvl: tvl,

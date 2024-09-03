@@ -15,9 +15,9 @@ struct MarketOverviewResponse: ImmutableMappable {
     let coinCategories: [CoinCategory]
     let topPairs: [MarketPair]
     let topPlatforms: [TopPlatformResponse]
-    let collections1d: [NftTopCollectionResponse]
-    let collections1w: [NftTopCollectionResponse]
-    let collections1m: [NftTopCollectionResponse]
+    let collections1d: [NFTTopCollectionResponse]
+    let collections1w: [NFTTopCollectionResponse]
+    let collections1m: [NFTTopCollectionResponse]
 
     // MARK: Lifecycle
 

@@ -1,5 +1,5 @@
 //
-//  Etf.swift
+//  ETF.swift
 //
 //  Created by Sun on 2024/5/22.
 //
@@ -8,9 +8,9 @@ import Foundation
 
 import ObjectMapper
 
-// MARK: - Etf
+// MARK: - ETF
 
-public struct Etf: ImmutableMappable {
+public struct ETF: ImmutableMappable {
     // MARK: Properties
 
     public let ticker: String
@@ -40,7 +40,7 @@ public struct Etf: ImmutableMappable {
     }
 }
 
-extension Etf {
+extension ETF {
     private static let dateFormatter: DateFormatter = {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd"
