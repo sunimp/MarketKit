@@ -10,7 +10,7 @@
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.2.0"))
+    .package(url: "https://github.com/sunimp/MarketKit.Swift.git", .upToNextMajor(from: "3.3.0"))
 ]
 ```
 
