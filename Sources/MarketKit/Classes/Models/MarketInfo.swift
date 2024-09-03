@@ -23,8 +23,8 @@ public struct MarketInfo {
     public let athPercentage: Decimal?
     public let atlPercentage: Decimal?
     public let listedOnTopExchanges: Bool?
-    public let solidCex: Bool?
-    public let solidDex: Bool?
+    public let solidCEX: Bool?
+    public let solidDEX: Bool?
     public let goodDistribution: Bool?
     public let indicatorsResult: TechnicalAdvice.Advice?
 }

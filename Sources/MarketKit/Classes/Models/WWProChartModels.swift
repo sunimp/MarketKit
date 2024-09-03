@@ -38,7 +38,7 @@ public struct Analytics: ImmutableMappable {
         }
     }
 
-    public struct DexLiquidity: ImmutableMappable {
+    public struct DEXLiquidity: ImmutableMappable {
         // MARK: Properties
 
         public let points: [VolumePoint]
@@ -257,7 +257,7 @@ public struct Analytics: ImmutableMappable {
 
     public let cexVolume: ExVolume?
     public let dexVolume: ExVolume?
-    public let dexLiquidity: DexLiquidity?
+    public let dexLiquidity: DEXLiquidity?
     public let addresses: Addresses?
     public let transactions: Transactions?
     public let holders: [HolderBlockchain]?

@@ -27,8 +27,8 @@ struct MarketInfoRaw: ImmutableMappable {
     let athPercentage: Decimal?
     let atlPercentage: Decimal?
     let listedOnTopExchanges: Bool?
-    let solidCex: Bool?
-    let solidDex: Bool?
+    let solidCEX: Bool?
+    let solidDEX: Bool?
     let goodDistribution: Bool?
     let indicatorsResult: String?
 
@@ -57,8 +57,8 @@ struct MarketInfoRaw: ImmutableMappable {
         athPercentage = try? map.value("ath_percentage", using: Transform.stringToDecimalTransform)
         atlPercentage = try? map.value("atl_percentage", using: Transform.stringToDecimalTransform)
         listedOnTopExchanges = try? map.value("listed_on_top_exchanges")
-        solidCex = try? map.value("solid_cex")
-        solidDex = try? map.value("solid_dex")
+        solidCEX = try? map.value("solid_cex")
+        solidDEX = try? map.value("solid_dex")
         goodDistribution = try? map.value("good_distribution")
         indicatorsResult = try? map.value("indicators_result")
     }
@@ -83,8 +83,8 @@ struct MarketInfoRaw: ImmutableMappable {
             athPercentage: athPercentage,
             atlPercentage: atlPercentage,
             listedOnTopExchanges: listedOnTopExchanges,
-            solidCex: solidCex,
-            solidDex: solidDex,
+            solidCEX: solidCEX,
+            solidDEX: solidDEX,
             goodDistribution: goodDistribution,
             indicatorsResult: advice
         )
