@@ -1,5 +1,6 @@
 //
 //  CoinPriceResponse.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/9/22.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import ObjectMapper
-import WWToolKit
+import SWToolKit
 
 struct CoinPriceResponse: ImmutableMappable {
     // MARK: Properties

@@ -1,18 +1,19 @@
 //
 //  CoinPriceSchedulerFactory.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/9/22.
 //
 
 import Foundation
 
-import WWToolKit
+import SWToolKit
 
 class CoinPriceSchedulerFactory {
     // MARK: Properties
 
     private let manager: CoinPriceManager
-    private let provider: WWProvider
+    private let provider: SWProvider
     private let reachabilityManager: ReachabilityManager
     private var logger: Logger?
 
@@ -20,7 +21,7 @@ class CoinPriceSchedulerFactory {
 
     init(
         manager: CoinPriceManager,
-        provider: WWProvider,
+        provider: SWProvider,
         reachabilityManager: ReachabilityManager,
         logger: Logger? = nil
     ) {

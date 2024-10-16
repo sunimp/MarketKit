@@ -1,14 +1,15 @@
 //
-//  WWTimePeriod.swift
+//  SWTimePeriod.swift
+//  MarketKit
 //
-//  Created by Sun on 2022/2/8.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
-// MARK: - WWTimePeriod
+// MARK: - SWTimePeriod
 
-public enum WWTimePeriod: String, CaseIterable {
+public enum SWTimePeriod: String, CaseIterable {
     case hour24 = "24h"
     case day1 = "1d"
     case week1 = "1w"
@@ -49,12 +50,12 @@ public enum WWTimePeriod: String, CaseIterable {
 
 // MARK: Comparable
 
-extension WWTimePeriod: Comparable {
-    public static func < (lhs: WWTimePeriod, rhs: WWTimePeriod) -> Bool {
+extension SWTimePeriod: Comparable {
+    public static func < (lhs: SWTimePeriod, rhs: SWTimePeriod) -> Bool {
         lhs.range < rhs.range
     }
 
-    public static func == (lhs: WWTimePeriod, rhs: WWTimePeriod) -> Bool {
+    public static func == (lhs: SWTimePeriod, rhs: SWTimePeriod) -> Bool {
         lhs.range == rhs.range
     }
 }

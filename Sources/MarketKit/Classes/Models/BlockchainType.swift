@@ -1,5 +1,6 @@
 //
 //  BlockchainType.swift
+//  MarketKit
 //
 //  Created by Sun on 2022/6/6.
 //
@@ -27,6 +28,7 @@ public enum BlockchainType {
     case tron
     case solana
     case ton
+    case base
     case unsupported(uid: String)
 
     // MARK: Computed Properties
@@ -51,6 +53,7 @@ public enum BlockchainType {
         case .tron: "tron"
         case .solana: "solana"
         case .ton: "the-open-network"
+        case .base: "base"
         case let .unsupported(uid): uid
         }
     }
@@ -77,6 +80,7 @@ public enum BlockchainType {
         case "tron": self = .tron
         case "solana": self = .solana
         case "the-open-network": self = .ton
+        case "base": self = .base
         default: self = .unsupported(uid: uid)
         }
     }

@@ -1,5 +1,6 @@
 //
 //  Kit.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/8/16.
 //
@@ -15,14 +16,14 @@ public class Kit {
     private let coinManager: CoinManager
     private let nftManager: NFTManager
     private let marketOverviewManager: MarketOverviewManager
-    private let dataSyncer: WWDataSyncer
+    private let dataSyncer: SWDataSyncer
     private let coinSyncer: CoinSyncer
     private let coinPriceManager: CoinPriceManager
     private let coinPriceSyncManager: CoinPriceSyncManager
     private let coinHistoricalPriceManager: CoinHistoricalPriceManager
     private let postManager: PostManager
     private let globalMarketInfoManager: GlobalMarketInfoManager
-    private let provider: WWProvider
+    private let provider: SWProvider
 
     // MARK: Lifecycle
 
@@ -30,14 +31,14 @@ public class Kit {
         coinManager: CoinManager,
         nftManager: NFTManager,
         marketOverviewManager: MarketOverviewManager,
-        dataSyncer: WWDataSyncer,
+        dataSyncer: SWDataSyncer,
         coinSyncer: CoinSyncer,
         coinPriceManager: CoinPriceManager,
         coinPriceSyncManager: CoinPriceSyncManager,
         coinHistoricalPriceManager: CoinHistoricalPriceManager,
         postManager: PostManager,
         globalMarketInfoManager: GlobalMarketInfoManager,
-        provider: WWProvider
+        provider: SWProvider
     ) {
         self.coinManager = coinManager
         self.nftManager = nftManager
@@ -195,7 +196,7 @@ extension Kit {
     public func marketInfoGlobalTvl(
         platform: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [ChartPoint] {
         try await provider.marketInfoGlobalTvl(platform: platform, currencyCode: currencyCode, timePeriod: timePeriod)
@@ -219,7 +220,7 @@ extension Kit {
     public func coinCategoryMarketCapChart(
         category: String,
         currencyCode: String?,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [CategoryMarketPoint] {
         try await provider.coinCategoryMarketCapChart(
@@ -292,7 +293,7 @@ extension Kit {
     public func chartPoints(
         coinUid: String,
         currencyCode: String,
-        interval: WWPointTimePeriod,
+        interval: SWPointTimePeriod,
         pointCount: Int
     ) async throws
         -> [ChartPoint] {
@@ -307,9 +308,9 @@ extension Kit {
         .map(\.chartPoint)
     }
 
-    private func intervalData(periodType: WWPeriodType)
-        -> (interval: WWPointTimePeriod, timestamp: TimeInterval?, visible: TimeInterval) {
-        let interval: WWPointTimePeriod
+    private func intervalData(periodType: SWPeriodType)
+        -> (interval: SWPointTimePeriod, timestamp: TimeInterval?, visible: TimeInterval) {
+        let interval: SWPointTimePeriod
 
         var fromTimestamp: TimeInterval?
         var visibleTimestamp: TimeInterval =
@@ -317,18 +318,18 @@ extension Kit {
 
         switch periodType {
         case let .byPeriod(timePeriod):
-            interval = WWChartHelper.pointInterval(timePeriod)
+            interval = SWChartHelper.pointInterval(timePeriod)
             visibleTimestamp = timePeriod.startTimestamp
             fromTimestamp = visibleTimestamp
 
         case let .byCustomPoints(timePeriod, pointCount): // custom points needed to build chart indicators
-            interval = WWChartHelper.pointInterval(timePeriod)
+            interval = SWChartHelper.pointInterval(timePeriod)
             let customPointInterval = interval.interval * TimeInterval(pointCount)
             visibleTimestamp = timePeriod.startTimestamp
             fromTimestamp = visibleTimestamp - customPointInterval
 
         case let .byStartTime(startTime):
-            interval = WWChartHelper.intervalForAll(genesisTime: startTime)
+            interval = SWChartHelper.intervalForAll(genesisTime: startTime)
             visibleTimestamp = startTime
         }
 
@@ -338,7 +339,7 @@ extension Kit {
     public func chartPoints(
         coinUid: String,
         currencyCode: String,
-        periodType: WWPeriodType
+        periodType: SWPeriodType
     ) async throws
         -> (TimeInterval, [ChartPoint]) {
         let data = intervalData(periodType: periodType)
@@ -362,7 +363,7 @@ extension Kit {
 
     // Global Market Info
 
-    public func globalMarketPoints(currencyCode: String, timePeriod: WWTimePeriod) async throws -> [GlobalMarketPoint] {
+    public func globalMarketPoints(currencyCode: String, timePeriod: SWTimePeriod) async throws -> [GlobalMarketPoint] {
         try await globalMarketInfoManager.globalMarketPoints(currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
@@ -411,7 +412,7 @@ extension Kit {
     public func topPlatformMarketCapChart(
         platform: String,
         currencyCode: String?,
-        periodType: WWPeriodType
+        periodType: SWPeriodType
     ) async throws
         -> [CategoryMarketPoint] {
         let data = intervalData(periodType: periodType)
@@ -447,7 +448,7 @@ extension Kit {
     public func cexVolumes(
         coinUid: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> AggregatedChartPoints {
         let responses = try await provider.coinPriceChart(
@@ -500,7 +501,7 @@ extension Kit {
     public func dexVolumes(
         coinUid: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> AggregatedChartPoints {
         let points = try await provider.dexVolumes(coinUid: coinUid, currencyCode: currencyCode, timePeriod: timePeriod)
@@ -513,19 +514,19 @@ extension Kit {
     public func dexLiquidity(
         coinUid: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [ChartPoint] {
         try await provider.dexLiquidity(coinUid: coinUid, currencyCode: currencyCode, timePeriod: timePeriod)
             .map(\.chartPoint)
     }
 
-    public func activeAddresses(coinUid: String, timePeriod: WWTimePeriod) async throws -> [ChartPoint] {
+    public func activeAddresses(coinUid: String, timePeriod: SWTimePeriod) async throws -> [ChartPoint] {
         try await provider.activeAddresses(coinUid: coinUid, timePeriod: timePeriod)
             .map(\.chartPoint)
     }
 
-    public func transactions(coinUid: String, timePeriod: WWTimePeriod) async throws -> AggregatedChartPoints {
+    public func transactions(coinUid: String, timePeriod: SWTimePeriod) async throws -> AggregatedChartPoints {
         let points = try await provider.transactions(coinUid: coinUid, timePeriod: timePeriod)
         return AggregatedChartPoints(
             points: points.map(\.chartPoint),
@@ -536,7 +537,7 @@ extension Kit {
     public func marketInfoTvl(
         coinUid: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [ChartPoint] {
         try await provider.marketInfoTvl(coinUid: coinUid, currencyCode: currencyCode, timePeriod: timePeriod)

@@ -1,5 +1,6 @@
 //
 //  NFTManager.swift
+//  MarketKit
 //
 //  Created by Sun on 2022/5/24.
 //
@@ -12,11 +13,11 @@ class NFTManager {
     // MARK: Properties
 
     private let coinManager: CoinManager
-    private let provider: WWNFTProvider
+    private let provider: SWNFTProvider
 
     // MARK: Lifecycle
 
-    init(coinManager: CoinManager, provider: WWNFTProvider) {
+    init(coinManager: CoinManager, provider: SWNFTProvider) {
         self.coinManager = coinManager
         self.provider = provider
     }
@@ -55,13 +56,13 @@ class NFTManager {
         let blockchainType = BlockchainType(uid: response.blockchainUid)
         let baseToken = baseTokenMap[blockchainType]
 
-        let volumes: [WWTimePeriod: NFTPrice?] = [
+        let volumes: [SWTimePeriod: NFTPrice?] = [
             .day1: nftPrice(token: baseToken, value: response.volume1d),
             .week1: nftPrice(token: baseToken, value: response.volume7d),
             .month1: nftPrice(token: baseToken, value: response.volume30d),
         ]
 
-        let changes: [WWTimePeriod: Decimal?] = [
+        let changes: [SWTimePeriod: Decimal?] = [
             .day1: response.change1d,
             .week1: response.change7d,
             .month1: response.change30d,

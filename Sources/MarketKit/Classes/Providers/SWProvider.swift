@@ -1,18 +1,19 @@
 //
-//  WWProvider.swift
+//  SWProvider.swift
+//  MarketKit
 //
-//  Created by Sun on 2021/8/16.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
 import Alamofire
 import ObjectMapper
-import WWToolKit
+import SWToolKit
 
-// MARK: - WWProvider
+// MARK: - SWProvider
 
-class WWProvider {
+class SWProvider {
     // MARK: Properties
 
     var proAuthToken: String?
@@ -52,7 +53,7 @@ class WWProvider {
     }
 }
 
-extension WWProvider {
+extension SWProvider {
     func marketGlobal(currencyCode: String) async throws -> MarketGlobal {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
@@ -95,7 +96,7 @@ extension WWProvider {
 
     // Status
 
-    func status() async throws -> WWStatus {
+    func status() async throws -> SWStatus {
         try await networkManager.fetch(url: "\(baseURL)/v1/status/updates", method: .get, headers: headers)
     }
 
@@ -213,7 +214,7 @@ extension WWProvider {
         )
     }
 
-    func marketInfoTvl(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [ChartPoint] {
+    func marketInfoTvl(coinUid: String, currencyCode: String, timePeriod: SWTimePeriod) async throws -> [ChartPoint] {
         let parameters: Parameters = [
             "currency": currencyCode.lowercased(),
             "interval": timePeriod.rawValue,
@@ -231,7 +232,7 @@ extension WWProvider {
     func marketInfoGlobalTvl(
         platform: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [ChartPoint] {
         var parameters: Parameters = [
@@ -284,7 +285,7 @@ extension WWProvider {
     func coinCategoryMarketCapChart(
         category: String,
         currencyCode: String?,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [CategoryMarketPoint] {
         var parameters: Parameters = [:]
@@ -361,7 +362,7 @@ extension WWProvider {
     func coinPriceChart(
         coinUid: String,
         currencyCode: String,
-        interval: WWPointTimePeriod,
+        interval: SWPointTimePeriod,
         fromTimestamp: TimeInterval? = nil
     ) async throws
         -> [ChartCoinPriceResponse] {
@@ -448,7 +449,7 @@ extension WWProvider {
         return response.username
     }
 
-    func globalMarketPoints(currencyCode: String, timePeriod: WWTimePeriod) async throws -> [GlobalMarketPoint] {
+    func globalMarketPoints(currencyCode: String, timePeriod: SWTimePeriod) async throws -> [GlobalMarketPoint] {
         let parameters: Parameters = [
             "interval": timePeriod.rawValue,
             "currency": currencyCode,
@@ -508,7 +509,7 @@ extension WWProvider {
     func topPlatformMarketCapChart(
         platform: String,
         currencyCode: String?,
-        interval: WWPointTimePeriod,
+        interval: SWPointTimePeriod,
         fromTimestamp: TimeInterval? = nil
     ) async throws
         -> [CategoryMarketPoint] {
@@ -563,7 +564,7 @@ extension WWProvider {
     private func proData<T: ImmutableMappable>(
         path: String,
         currencyCode: String,
-        timePeriod: WWTimePeriod
+        timePeriod: SWTimePeriod
     ) async throws
         -> [T] {
         let parameters: Parameters = [
@@ -579,7 +580,7 @@ extension WWProvider {
         )
     }
 
-    private func proData<T: ImmutableMappable>(path: String, timePeriod: WWTimePeriod) async throws -> [T] {
+    private func proData<T: ImmutableMappable>(path: String, timePeriod: SWTimePeriod) async throws -> [T] {
         let parameters: Parameters = [
             "interval": timePeriod.rawValue,
         ]
@@ -629,19 +630,19 @@ extension WWProvider {
         )
     }
 
-    func dexVolumes(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [VolumePoint] {
+    func dexVolumes(coinUid: String, currencyCode: String, timePeriod: SWTimePeriod) async throws -> [VolumePoint] {
         try await proData(path: "\(coinUid)/dex-volumes", currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
-    func dexLiquidity(coinUid: String, currencyCode: String, timePeriod: WWTimePeriod) async throws -> [VolumePoint] {
+    func dexLiquidity(coinUid: String, currencyCode: String, timePeriod: SWTimePeriod) async throws -> [VolumePoint] {
         try await proData(path: "\(coinUid)/dex-liquidity", currencyCode: currencyCode, timePeriod: timePeriod)
     }
 
-    func activeAddresses(coinUid: String, timePeriod: WWTimePeriod) async throws -> [CountPoint] {
+    func activeAddresses(coinUid: String, timePeriod: SWTimePeriod) async throws -> [CountPoint] {
         try await proData(path: "\(coinUid)/addresses", timePeriod: timePeriod)
     }
 
-    func transactions(coinUid: String, timePeriod: WWTimePeriod) async throws -> [CountVolumePoint] {
+    func transactions(coinUid: String, timePeriod: SWTimePeriod) async throws -> [CountVolumePoint] {
         try await proData(path: "\(coinUid)/transactions", timePeriod: timePeriod)
     }
 
@@ -789,7 +790,7 @@ extension WWProvider {
     }
 }
 
-extension WWProvider {
+extension SWProvider {
     struct SignalResponse: ImmutableMappable {
         // MARK: Properties
 
@@ -876,7 +877,7 @@ extension WWProvider {
         }
     }
 
-    private struct HttpBodyEncoding: ParameterEncoding {
+    private struct HttpBodyEncoding: ParameterEncoding, @unchecked Sendable {
         // MARK: Properties
 
         private let jsonObject: Any

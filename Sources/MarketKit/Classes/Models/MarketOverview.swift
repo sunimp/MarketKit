@@ -1,5 +1,6 @@
 //
 //  MarketOverview.swift
+//  MarketKit
 //
 //  Created by Sun on 2022/5/24.
 //
@@ -11,5 +12,5 @@ public struct MarketOverview {
     public let coinCategories: [CoinCategory]
     public let topPairs: [MarketPair]
     public let topPlatforms: [TopPlatform]
-    public let collections: [WWTimePeriod: [NFTTopCollection]]
+    public let collections: [SWTimePeriod: [NFTTopCollection]]
 }

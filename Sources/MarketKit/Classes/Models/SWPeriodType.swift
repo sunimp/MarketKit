@@ -1,14 +1,15 @@
 //
-//  WWPeriodType.swift
+//  SWPeriodType.swift
+//  MarketKit
 //
-//  Created by Sun on 2023/1/26.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
-public enum WWPeriodType: Hashable {
-    case byPeriod(WWTimePeriod)
-    case byCustomPoints(WWTimePeriod, Int)
+public enum SWPeriodType: Hashable {
+    case byPeriod(SWTimePeriod)
+    case byCustomPoints(SWTimePeriod, Int)
     case byStartTime(TimeInterval)
 
     // MARK: Static Properties
@@ -29,7 +30,7 @@ public enum WWPeriodType: Hashable {
     // MARK: Lifecycle
 
     public init?(rawValue: String) {
-        if let period = WWTimePeriod(rawValue: rawValue) {
+        if let period = SWTimePeriod(rawValue: rawValue) {
             self = .byPeriod(period)
             return
         }
@@ -41,7 +42,7 @@ public enum WWPeriodType: Hashable {
                 self = .byStartTime(TimeInterval(timestamp))
                 return
             } else if
-                let period = WWTimePeriod(rawValue: String(chunks[0])),
+                let period = SWTimePeriod(rawValue: String(chunks[0])),
                 let pointCount = Int(chunks[1]) {
                 self = .byCustomPoints(period, pointCount)
                 return
@@ -52,7 +53,7 @@ public enum WWPeriodType: Hashable {
 
     // MARK: Static Functions
 
-    public static func == (lhs: WWPeriodType, rhs: WWPeriodType) -> Bool {
+    public static func == (lhs: SWPeriodType, rhs: SWPeriodType) -> Bool {
         switch (lhs, rhs) {
         case let (.byPeriod(lhsPeriod), .byPeriod(rhsPeriod)): lhsPeriod == rhsPeriod
         case let (.byStartTime(lhsStartTime), .byStartTime(rhsStartTime)): lhsStartTime == rhsStartTime

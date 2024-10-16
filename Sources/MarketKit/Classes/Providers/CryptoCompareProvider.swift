@@ -1,5 +1,6 @@
 //
 //  CryptoCompareProvider.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/9/29.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import Alamofire
-import WWToolKit
+import SWToolKit
 
 // MARK: - CryptoCompareProvider
 
@@ -51,7 +52,7 @@ extension CryptoCompareProvider {
 // MARK: CryptoCompareProvider.RateLimitRetrier
 
 extension CryptoCompareProvider {
-    class RateLimitRetrier: RequestInterceptor {
+    class RateLimitRetrier: RequestInterceptor, @unchecked Sendable {
         // MARK: Properties
 
         private var attempt = 0

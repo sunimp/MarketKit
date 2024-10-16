@@ -1,5 +1,6 @@
 //
 //  CoinCategory.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/8/26.
 //
@@ -36,7 +37,7 @@ public class CoinCategory: ImmutableMappable {
 }
 
 extension CoinCategory {
-    public func diff(timePeriod: WWTimePeriod) -> Decimal? {
+    public func diff(timePeriod: SWTimePeriod) -> Decimal? {
         switch timePeriod {
         case .day1: diff24H
         case .week1: diff1W

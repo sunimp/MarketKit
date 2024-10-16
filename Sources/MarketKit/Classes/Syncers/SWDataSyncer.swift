@@ -1,31 +1,32 @@
 //
-//  WWDataSyncer.swift
+//  SWDataSyncer.swift
+//  MarketKit
 //
-//  Created by Sun on 2024/8/21.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
-// MARK: - WWDataSyncer
+// MARK: - SWDataSyncer
 
-class WWDataSyncer {
+class SWDataSyncer {
     // MARK: Properties
 
     private let coinSyncer: CoinSyncer
-    private let provider: WWProvider
+    private let provider: SWProvider
     private var tasks = Set<AnyTask>()
 
     // MARK: Lifecycle
 
-    init(coinSyncer: CoinSyncer, provider: WWProvider) {
+    init(coinSyncer: CoinSyncer, provider: SWProvider) {
         self.coinSyncer = coinSyncer
         self.provider = provider
     }
 }
 
-extension WWDataSyncer {
+extension SWDataSyncer {
     func sync() {
         Task { [provider, coinSyncer] in
             do {
@@ -36,7 +37,7 @@ extension WWDataSyncer {
                     tokensTimestamp: status.tokens
                 )
             } catch {
-                print("WW Status sync error: \(error)")
+                print("SWStatus sync error: \(error)")
             }
         }.store(in: &tasks)
     }

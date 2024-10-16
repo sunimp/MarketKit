@@ -1,5 +1,6 @@
 //
 //  CoinHistoricalPriceManager.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/10/20.
 //
@@ -12,11 +13,11 @@ class CoinHistoricalPriceManager {
     // MARK: Properties
 
     private let storage: CoinHistoricalPriceStorage
-    private let provider: WWProvider
+    private let provider: SWProvider
 
     // MARK: Lifecycle
 
-    init(storage: CoinHistoricalPriceStorage, provider: WWProvider) {
+    init(storage: CoinHistoricalPriceStorage, provider: SWProvider) {
         self.storage = storage
         self.provider = provider
     }

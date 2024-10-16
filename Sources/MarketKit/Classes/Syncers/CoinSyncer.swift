@@ -1,5 +1,6 @@
 //
 //  CoinSyncer.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/8/16.
 //
@@ -7,7 +8,7 @@
 import Combine
 import Foundation
 
-import WWExtensions
+import SWExtensions
 
 // MARK: - CoinSyncer
 
@@ -22,7 +23,7 @@ class CoinSyncer {
     private let currentVersion = 2
 
     private let storage: CoinStorage
-    private let provider: WWProvider
+    private let provider: SWProvider
     private let syncerStateStorage: SyncerStateStorage
     private var tasks = Set<AnyTask>()
 
@@ -30,7 +31,7 @@ class CoinSyncer {
 
     // MARK: Lifecycle
 
-    init(storage: CoinStorage, provider: WWProvider, syncerStateStorage: SyncerStateStorage) {
+    init(storage: CoinStorage, provider: SWProvider, syncerStateStorage: SyncerStateStorage) {
         self.storage = storage
         self.provider = provider
         self.syncerStateStorage = syncerStateStorage

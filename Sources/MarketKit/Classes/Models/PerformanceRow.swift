@@ -1,5 +1,6 @@
 //
 //  PerformanceRow.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/11/10.
 //
@@ -10,7 +11,7 @@ import Foundation
 
 public struct PerformanceRow {
     public let base: PerformanceBase
-    public let changes: [WWTimePeriod: Decimal]
+    public let changes: [SWTimePeriod: Decimal]
 }
 
 // MARK: - PerformanceBase

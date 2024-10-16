@@ -1,5 +1,6 @@
 //
 //  GlobalMarketInfoManager.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/10/13.
 //
@@ -13,19 +14,19 @@ class GlobalMarketInfoManager {
 
     private let expirationInterval: TimeInterval = 600 // 6 mins
 
-    private let provider: WWProvider
+    private let provider: SWProvider
     private let storage: GlobalMarketInfoStorage
 
     // MARK: Lifecycle
 
-    init(provider: WWProvider, storage: GlobalMarketInfoStorage) {
+    init(provider: SWProvider, storage: GlobalMarketInfoStorage) {
         self.provider = provider
         self.storage = storage
     }
 }
 
 extension GlobalMarketInfoManager {
-    func globalMarketPoints(currencyCode: String, timePeriod: WWTimePeriod) async throws -> [GlobalMarketPoint] {
+    func globalMarketPoints(currencyCode: String, timePeriod: SWTimePeriod) async throws -> [GlobalMarketPoint] {
         let currentTimestamp = Date().timeIntervalSince1970
 
         if

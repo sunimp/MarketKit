@@ -1,5 +1,6 @@
 //
 //  MarketInfoOverviewResponse.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/10/6.
 //
@@ -44,7 +45,7 @@ class MarketInfoOverviewResponse: ImmutableMappable {
 
     // MARK: Static Functions
 
-    static func timePeriod(_ timePeriod: String) -> WWTimePeriod? {
+    static func timePeriod(_ timePeriod: String) -> SWTimePeriod? {
         switch timePeriod {
         case "24h": .day1
         case "7d": .week1
@@ -72,7 +73,7 @@ class MarketInfoOverviewResponse: ImmutableMappable {
                 return nil
             }
 
-            var performanceChanges = [WWTimePeriod: Decimal]()
+            var performanceChanges = [SWTimePeriod: Decimal]()
             for (timePeriodStr, change) in changes {
                 if
                     let changeStr = change,

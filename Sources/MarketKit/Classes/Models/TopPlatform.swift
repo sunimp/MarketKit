@@ -1,5 +1,6 @@
 //
 //  TopPlatform.swift
+//  MarketKit
 //
 //  Created by Sun on 2022/5/4.
 //
@@ -12,6 +13,6 @@ public struct TopPlatform {
     public let protocolsCount: Int?
     public let marketCap: Decimal?
 
-    public let ranks: [WWTimePeriod: Int]
-    public let changes: [WWTimePeriod: Decimal]
+    public let ranks: [SWTimePeriod: Int]
+    public let changes: [SWTimePeriod: Decimal]
 }

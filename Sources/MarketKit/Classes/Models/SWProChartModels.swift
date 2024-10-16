@@ -1,7 +1,8 @@
 //
-//  WWProChartModels.swift
+//  SWProChartModels.swift
+//  MarketKit
 //
-//  Created by Sun on 2022/5/6.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation

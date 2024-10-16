@@ -1,5 +1,6 @@
 //
 //  CoinPriceSchedulerProvider.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/9/22.
 //
@@ -22,7 +23,7 @@ class CoinPriceSchedulerProvider {
 
     private let currencyCode: String
     private let manager: CoinPriceManager
-    private let provider: WWProvider
+    private let provider: SWProvider
 
     // MARK: Computed Properties
 
@@ -32,7 +33,7 @@ class CoinPriceSchedulerProvider {
 
     // MARK: Lifecycle
 
-    init(manager: CoinPriceManager, provider: WWProvider, currencyCode: String) {
+    init(manager: CoinPriceManager, provider: SWProvider, currencyCode: String) {
         self.manager = manager
         self.provider = provider
         self.currencyCode = currencyCode

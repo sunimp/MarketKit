@@ -1,5 +1,6 @@
 //
 //  TokenType.swift
+//  MarketKit
 //
 //  Created by Sun on 2022/6/6.
 //
@@ -15,6 +16,7 @@ public enum TokenType {
     case eip20(address: String)
     case bep2(symbol: String)
     case spl(address: String)
+    case jetton(address: String)
     case unsupported(type: String, reference: String?)
 
     // MARK: Nested Types
@@ -31,7 +33,7 @@ public enum TokenType {
         case type145
     }
 
-    // MARK: Properties
+    // MARK: Computed Properties
 
     public var values: (type: String, reference: String?) {
         switch self {
@@ -41,11 +43,10 @@ public enum TokenType {
         case let .eip20(address): (type: "eip20", reference: address)
         case let .bep2(symbol): (type: "bep2", reference: symbol)
         case let .spl(address): (type: "spl", reference: address)
+        case let .jetton(address): (type: "the-open-network", reference: address)
         case let .unsupported(type, reference): (type: type, reference: reference)
         }
     }
-
-    // MARK: Computed Properties
 
     public var id: String {
         switch self {
@@ -61,6 +62,8 @@ public enum TokenType {
             ["bep2", symbol].joined(separator: ":")
         case let .spl(address):
             ["spl", address].joined(separator: ":")
+        case let .jetton(address):
+            ["the-open-network", address].joined(separator: ":")
         case let .unsupported(type, reference):
             if let reference {
                 ["unsupported", type, reference].joined(separator: ":")
@@ -96,6 +99,12 @@ public enum TokenType {
             case "spl":
                 if let reference {
                     self = .spl(address: reference)
+                    return
+                }
+                
+            case "the-open-network":
+                if let reference {
+                    self = .jetton(address: reference)
                     return
                 }
 
@@ -151,6 +160,8 @@ public enum TokenType {
             case "bep2": self = .bep2(symbol: chunks[1])
 
             case "spl": self = .spl(address: chunks[1])
+                
+            case "the-open-network": self = .jetton(address: chunks[1])
 
             case "unsupported": self = .unsupported(type: chunks[1], reference: nil)
 

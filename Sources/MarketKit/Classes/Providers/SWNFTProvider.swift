@@ -1,18 +1,19 @@
 //
-//  WWNFTProvider.swift
+//  SWNFTProvider.swift
+//  MarketKit
 //
-//  Created by Sun on 2022/5/24.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
 import Alamofire
 import ObjectMapper
-import WWToolKit
+import SWToolKit
 
-// MARK: - WWNFTProvider
+// MARK: - SWNFTProvider
 
-class WWNFTProvider {
+class SWNFTProvider {
     // MARK: Properties
 
     private let baseURL: String
@@ -30,7 +31,7 @@ class WWNFTProvider {
     }
 }
 
-extension WWNFTProvider {
+extension SWNFTProvider {
     func topCollections() async throws -> [NFTTopCollectionResponse] {
         let parameters: Parameters = [
             "simplified": true,

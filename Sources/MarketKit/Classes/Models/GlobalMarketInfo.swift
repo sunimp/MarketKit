@@ -1,5 +1,6 @@
 //
 //  GlobalMarketInfo.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/10/13.
 //
@@ -30,12 +31,12 @@ public class GlobalMarketInfo: Record {
     public let points: [GlobalMarketPoint]
 
     let currencyCode: String
-    let timePeriod: WWTimePeriod
+    let timePeriod: SWTimePeriod
     let timestamp: TimeInterval
 
     // MARK: Lifecycle
 
-    init(currencyCode: String, timePeriod: WWTimePeriod, points: [GlobalMarketPoint]) {
+    init(currencyCode: String, timePeriod: SWTimePeriod, points: [GlobalMarketPoint]) {
         self.currencyCode = currencyCode
         self.timePeriod = timePeriod
         self.points = points
@@ -46,7 +47,7 @@ public class GlobalMarketInfo: Record {
 
     required init(row: Row) throws {
         currencyCode = row[Columns.currencyCode]
-        timePeriod = WWTimePeriod(rawValue: row[Columns.timePeriod]) ?? .day1
+        timePeriod = SWTimePeriod(rawValue: row[Columns.timePeriod]) ?? .day1
         points = [GlobalMarketPoint](JSONString: row[Columns.points]) ?? []
         timestamp = row[Columns.timestamp]
 

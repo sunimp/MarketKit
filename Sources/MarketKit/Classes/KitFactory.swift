@@ -1,5 +1,6 @@
 //
 //  KitFactory.swift
+//  MarketKit
 //
 //  Created by Sun on 2021/8/16.
 //
@@ -7,7 +8,7 @@
 import Foundation
 
 import GRDB
-import WWToolKit
+import SWToolKit
 
 extension Kit {
     private static let dataDirectoryName = "market-kit"
@@ -31,8 +32,8 @@ extension Kit {
         let syncerStateStorage = try SyncerStateStorage(dbPool: dbPool)
 
         let cryptoCompareProvider = CryptoCompareProvider(networkManager: networkManager, apiKey: cryptoCompareApiKey)
-        let provider = WWProvider(baseURL: apiBaseURL, networkManager: networkManager, apiKey: providerApiKey)
-        let nftProvider = WWNFTProvider(
+        let provider = SWProvider(baseURL: apiBaseURL, networkManager: networkManager, apiKey: providerApiKey)
+        let nftProvider = SWNFTProvider(
             baseURL: apiBaseURL,
             networkManager: networkManager,
             apiKey: providerApiKey
@@ -43,7 +44,7 @@ extension Kit {
         let marketOverviewManager = MarketOverviewManager(nftManager: nftManager, provider: provider)
 
         let coinSyncer = CoinSyncer(storage: coinStorage, provider: provider, syncerStateStorage: syncerStateStorage)
-        let dataSyncer = WWDataSyncer(coinSyncer: coinSyncer, provider: provider)
+        let dataSyncer = SWDataSyncer(coinSyncer: coinSyncer, provider: provider)
 
         let coinPriceStorage = try CoinPriceStorage(dbPool: dbPool)
         let coinPriceManager = CoinPriceManager(storage: coinPriceStorage)

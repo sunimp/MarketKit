@@ -1,5 +1,6 @@
 //
 //  ETF.swift
+//  MarketKit
 //
 //  Created by Sun on 2024/5/22.
 //
@@ -18,7 +19,7 @@ public struct ETF: ImmutableMappable {
     public let date: Date?
     public let totalAssets: Decimal?
     public let totalInflow: Decimal?
-    public let inflows: [WWTimePeriod: Decimal]
+    public let inflows: [SWTimePeriod: Decimal]
 
     // MARK: Lifecycle
 
@@ -29,7 +30,7 @@ public struct ETF: ImmutableMappable {
         totalAssets = try? map.value("total_assets", using: Transform.stringToDecimalTransform)
         totalInflow = try? map.value("total_inflow", using: Transform.stringToDecimalTransform)
 
-        var inflows = [WWTimePeriod: Decimal]()
+        var inflows = [SWTimePeriod: Decimal]()
 
         inflows[.day1] = try? map.value("inflow_1d", using: Transform.stringToDecimalTransform)
         inflows[.week1] = try? map.value("inflow_1w", using: Transform.stringToDecimalTransform)

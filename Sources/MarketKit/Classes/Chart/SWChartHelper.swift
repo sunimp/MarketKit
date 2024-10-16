@@ -1,22 +1,23 @@
 //
-//  WWChartHelper.swift
+//  SWChartHelper.swift
+//  MarketKit
 //
-//  Created by Sun on 2023/1/26.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
-public enum WWChartHelper {
-    public static func validIntervals(startTime: TimeInterval?) -> [WWTimePeriod] {
+public enum SWChartHelper {
+    public static func validIntervals(startTime: TimeInterval?) -> [SWTimePeriod] {
         guard let startTime else {
-            return WWTimePeriod.allCases
+            return SWTimePeriod.allCases
         }
         let genesisDate = Date(timeIntervalSince1970: startTime)
         let dayCount = Calendar.current.dateComponents([.day], from: genesisDate, to: Date()).day
         let monthCount = Calendar.current.dateComponents([.month], from: genesisDate, to: Date()).month
         let yearCount = Calendar.current.dateComponents([.year], from: genesisDate, to: Date()).year
 
-        var intervals = [WWTimePeriod.day1]
+        var intervals = [SWTimePeriod.day1]
         if let dayCount {
             if dayCount >= 7 {
                 intervals.append(.week1)
@@ -51,7 +52,7 @@ public enum WWChartHelper {
         return intervals
     }
 
-    static func pointInterval(_ interval: WWTimePeriod) -> WWPointTimePeriod {
+    static func pointInterval(_ interval: SWTimePeriod) -> SWPointTimePeriod {
         switch interval {
         case .day1,
              .hour24: .minute30
@@ -66,7 +67,7 @@ public enum WWChartHelper {
         }
     }
 
-    static func intervalForAll(genesisTime: TimeInterval) -> WWPointTimePeriod {
+    static func intervalForAll(genesisTime: TimeInterval) -> SWPointTimePeriod {
         let seconds = Date().timeIntervalSince1970 - genesisTime
         if seconds <= .days(1) {
             return .minute30

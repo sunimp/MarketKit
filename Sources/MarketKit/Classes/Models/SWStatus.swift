@@ -1,14 +1,15 @@
 //
-//  WWStatus.swift
+//  SWStatus.swift
+//  MarketKit
 //
-//  Created by Sun on 2022/3/23.
+//  Created by Sun on 2024/8/15.
 //
 
 import Foundation
 
 import ObjectMapper
 
-struct WWStatus: ImmutableMappable {
+struct SWStatus: ImmutableMappable {
     // MARK: Properties
 
     let coins: Int
